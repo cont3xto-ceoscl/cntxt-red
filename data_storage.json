@@ -1,0 +1,2498 @@
+﻿{
+  "version": "2.0.26",
+  "updatedAt": "2026-08-19T00:11:08.077Z",
+  "custom_contacts": [],
+  "master_empresas": [
+    {
+      "id": "auto_t7kfls1xq",
+      "nome": "23 Grados Constructora",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_b18v0thhu",
+      "nome": "3D Diseño",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qztxy35h2",
+      "nome": "5 Sueños",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_q98p7kbnk",
+      "nome": "Abetto corte y grabado láser",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_xxp7daadj",
+      "nome": "Academia Antioqueña de Aviación",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_00w5okcrc",
+      "nome": "Accesorios Textiles",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_f42x45cdm",
+      "nome": "Adolfo Tabares Consultoria",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wh5xx7zno",
+      "nome": "Adoquinar",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_blwye5ewj",
+      "nome": "AirPlan",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_oo73efv1u",
+      "nome": "Al Aluminios",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9fc6tpod3",
+      "nome": "Alberto Alvarez",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zks4jfwjn",
+      "nome": "Alex AWG",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nzlwim8hd",
+      "nome": "Alfa Pisos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_xz5s4yql0",
+      "nome": "Aliaddo",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_kv8inoraa",
+      "nome": "Alquiler De Equipos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_q2cd3ag7r",
+      "nome": "Alu divisiones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nw1qizavg",
+      "nome": "Aludivisiones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_819e16992",
+      "nome": "Aluzina",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_eg4sp061g",
+      "nome": "Andres E Padron",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wcgio3ink",
+      "nome": "Andrés Salazar Propiedades",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_we61czuej",
+      "nome": "Antisol Polarizados",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_vf30i3qvf",
+      "nome": "Aqua Consultoría",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_hd8ixrt0z",
+      "nome": "Arez Farma",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nw14frtwq",
+      "nome": "Arquitecto",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_kkg2h2n3l",
+      "nome": "Arquitectura E Ingeniería",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_x5awz6yqr",
+      "nome": "Asend",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8q7eu3rc6",
+      "nome": "Asesora Comercial",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qggo2pb02",
+      "nome": "ASG Construcciones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ru4xullha",
+      "nome": "Asi-soluciones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_oodmdcqbr",
+      "nome": "Astro House",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_q3oc86zyi",
+      "nome": "Astro Montajes",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_89vwp89rv",
+      "nome": "Avíanca Admin",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_08ltfw43a",
+      "nome": "Banco de Bogotá",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8ri2ig5bw",
+      "nome": "Barcelona",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5ugve1hj0",
+      "nome": "Bayano Caves",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ua7h1uw0m",
+      "nome": "Bendita Soda",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_bv027r9t6",
+      "nome": "Biodesign pools",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_txz7alxma",
+      "nome": "Biomédicas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_hdfji6g82",
+      "nome": "Biotectura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_rhl3t8dml",
+      "nome": "Bosques De Galicia",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_uhvxpbnzi",
+      "nome": "Brisas de Tafetanes",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_b6tvbel5d",
+      "nome": "Bubble Sky",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_spjk0ise5",
+      "nome": "C. G. M. S. A. S.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2zupu2jf5",
+      "nome": "C. R. Pietrasanta - Rionegro Bosques de Galicia - Rionegro",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8tzdlmdkk",
+      "nome": "C.A.S.A.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nrtg5v3xq",
+      "nome": "Cámara de Comercio",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8rza2h0mz",
+      "nome": "Campana PEPPER JACK",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ojlt09n6j",
+      "nome": "Carlos Mario Patiño Atehortúa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9puibw3nb",
+      "nome": "Carmen Experimental",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zmrd7a38a",
+      "nome": "Carrito Perritos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_quwylbzko",
+      "nome": "Cartep Arquitectura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_z4wgmcbls",
+      "nome": "Cartep Development",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_6dxczfkuy",
+      "nome": "Casa Redonda",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ss19xrwhq",
+      "nome": "Casa Vélez Gómez",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_6khuijfng",
+      "nome": "CasaYa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_p6dec2sej",
+      "nome": "Castañeda Arquitectos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nr67mnyt2",
+      "nome": "Castropol",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ew1bafkxl",
+      "nome": "Celular",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8sqocj6d3",
+      "nome": "Central de Piedras",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_04x14g05u",
+      "nome": "Centro Plaza",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_7xno6j00f",
+      "nome": "Ceramia",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wqhg024s1",
+      "nome": "Certiprueba",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_1mstfkzq0",
+      "nome": "Chati",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_oqafs0jcg",
+      "nome": "Chef",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_z6mk051kt",
+      "nome": "Chepasteles",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_p93zetg1o",
+      "nome": "Ciubad Del Este",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_kw8o1wocl",
+      "nome": "Ciudad Del Este",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_r2gluqmwh",
+      "nome": "Clara",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5ghw0859i",
+      "nome": "Clay House",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_fvwoj6rvo",
+      "nome": "Cliente Jairo Cuesta",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nbgejyaq2",
+      "nome": "CNTXT",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_unodvro1v",
+      "nome": "CNTXT Arquitectura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_mksj48g3j",
+      "nome": "CNV Construcciones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_v0ky37gal",
+      "nome": "Compustick",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_4eq0fwl9m",
+      "nome": "ConAcel",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_m5awtruvi",
+      "nome": "Condominio La Montoya",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_sy811p56o",
+      "nome": "Conexion Tour",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5yg6gmdow",
+      "nome": "Conexiones Comerciales",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_db2xigpi6",
+      "nome": "Consoiltec",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nq4170sbu",
+      "nome": "Copres",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_sry6i1yac",
+      "nome": "Cotividrios",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_htphgz09l",
+      "nome": "Covidrios",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_y3suemnmn",
+      "nome": "Cube S. A. S.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_7vt8eqg1q",
+      "nome": "Cubiartes S.A.S.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_scbte9i4r",
+      "nome": "Cuñado Hernán Burgos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_dnxf9h1rb",
+      "nome": "Curaduría Envigado",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2a4ogspli",
+      "nome": "DecoInsumos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_4blmec8vs",
+      "nome": "Decorcerámica",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0xnb1zi37",
+      "nome": "Demand frontier",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_gw7rum7qb",
+      "nome": "Depósito Servicarga",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_x6hhc1rbh",
+      "nome": "DiconsCiviles",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2yhg6fhf6",
+      "nome": "Diidoo",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_igd0f56b7",
+      "nome": "Diseven",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_p0t6fsdop",
+      "nome": "Dos Aguas Arquitectura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_n3wenpy4r",
+      "nome": "Dotaciones Y Camisetas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_rrfmycy3l",
+      "nome": "Douglas trade",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_f1nejtqju",
+      "nome": "Dpto Arquitectura Siscon",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_cdetjxa97",
+      "nome": "Dron",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_cs6qcq29r",
+      "nome": "Drones Sky Solutions",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_4lydvgsn1",
+      "nome": "Dulce Cuidado Geriátrico",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_n4fjttae8",
+      "nome": "Ebanistería El Roble",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qglabkkrl",
+      "nome": "ECHO LE BEAU",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_hy187d0hq",
+      "nome": "EDU",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_hkndq4hfv",
+      "nome": "El Boxx",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nnik5p1jt",
+      "nome": "El Tiempo",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ijpenau5o",
+      "nome": "Enlace Operativo",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2oh6jv8l3",
+      "nome": "Entre Estilos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0y6dtmdhu",
+      "nome": "EPM",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_q2i1bm31y",
+      "nome": "Esse Perfumería",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_6a0a9adci",
+      "nome": "Essity",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_b8cxygv1s",
+      "nome": "Estambul LAR",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_re87r1uae",
+      "nome": "Estambul Lote 25",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5qb3cbd2b",
+      "nome": "Estructuramos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_z62o2ttnp",
+      "nome": "Eternit Colombiana",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wxg6t7umi",
+      "nome": "EXP Realty LLC",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5rc77iu5t",
+      "nome": "Explanaciónes Urbanas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_6gwenk6l5",
+      "nome": "Feria Inmobiliaria Oriente Antioqueño",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_28txf7xvo",
+      "nome": "Ferrelab",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5pz5qmjxi",
+      "nome": "Focograma",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wopt7uef7",
+      "nome": "FRUTELA pulpas de fruta naturales 100%",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9to6zvebh",
+      "nome": "Fuerza Inmobiliaria",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_lyk678240",
+      "nome": "Galeria Creativa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_y29lb4okr",
+      "nome": "Geotécnica",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_1uxxa5gn2",
+      "nome": "Gerente",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2vsi5rtvf",
+      "nome": "Gestión Urbana",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_gegtt7e25",
+      "nome": "Globike",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_d0kbafi23",
+      "nome": "Grupo Paseo Del Sendero",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_xt4ef1w53",
+      "nome": "Habi.CO",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zusj2v456",
+      "nome": "Hayat",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_uocs1lfrz",
+      "nome": "HDB Ingeniería",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_vo3ctbepa",
+      "nome": "Helisa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_l86c340j8",
+      "nome": "HELP Comunicaciones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_u4hitxhvn",
+      "nome": "Help Construcciones",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_b9e6d63o8",
+      "nome": "Hijo Luis H.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zks4mwr6q",
+      "nome": "HMA Creativos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_r4lby9nnz",
+      "nome": "HubSpot",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_y9fx4fd0m",
+      "nome": "Huella Arquitectónica",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_xiz0m2lma",
+      "nome": "Hummel Inmobiliaria",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_nw8curcej",
+      "nome": "Ideas Metropolis",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9qsqu2czf",
+      "nome": "IENEL",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_cshgwu0fm",
+      "nome": "ImassD",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_tsg5q3yrn",
+      "nome": "In Situ",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qnhbcc8fr",
+      "nome": "Incubo Asesorias Integrales",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ehysihpeg",
+      "nome": "Independiente",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_sqkuuxb72",
+      "nome": "Infocus group",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_bwox8ebdk",
+      "nome": "Ing. Hidro -",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_1hu5zep51",
+      "nome": "Ingeniería Ambiental Especializada",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_cv7xcpsf6",
+      "nome": "Ingeomapper",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_rbkyp2b2r",
+      "nome": "IngePepa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_3vtz76kb7",
+      "nome": "ISA",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zf48s663x",
+      "nome": "J - System",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_lug5stusv",
+      "nome": "J y D Acabados",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_1c4fjksme",
+      "nome": "Jean Greensus",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_7r957y5b3",
+      "nome": "Jmarq",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ee2digm2q",
+      "nome": "Kavan Grupo Constructor",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_4qav3g99s",
+      "nome": "KUINN Grupo Inmobiliario",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_htv0n1jg0",
+      "nome": "La Casa Redonda",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zr6qztj2e",
+      "nome": "LA FORET",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_f5ce71hwt",
+      "nome": "La Pizza de Alejo",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_bo9pk4fv0",
+      "nome": "Laboratorio Digital",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_rs51np4no",
+      "nome": "LAR PROYECTOS",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_k22x91n10",
+      "nome": "Laura Calderón",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2z9a5loym",
+      "nome": "Lavamuebles Yali",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0nwjjiz3m",
+      "nome": "Lider de Cartera y Cobranza",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_uzf689gyb",
+      "nome": "Loggro",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_njomx595x",
+      "nome": "Lote Castilla",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qyjhcrrow",
+      "nome": "Luis Guillermo González Yepes",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_c9ou8935n",
+      "nome": "Luis H. Londoño",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_iysr8xvhu",
+      "nome": "Madecentro 33",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_pdyvjzyrn",
+      "nome": "Manos A La Obra",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_vjntu38en",
+      "nome": "Manufactura Cohesiva",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wzrrscp0u",
+      "nome": "Maragua",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_g0dclmhqx",
+      "nome": "María Luisa Calle",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5xbmgjkd9",
+      "nome": "Materiales Y Quimicos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_uck2h4eai",
+      "nome": "Médico",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_txcwccsh0",
+      "nome": "Mega Aires",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5to9cynwa",
+      "nome": "Ménsula",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5kwmpktla",
+      "nome": "Meridian 75",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_npsrjj42g",
+      "nome": "metroKUBIKO",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qamhahb88",
+      "nome": "Michael from CHUKUM Lagoon",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_j885s6aey",
+      "nome": "Milano Cocinas Y Proyectos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8oz5yzmxh",
+      "nome": "Miro Motos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zhlxm7xnp",
+      "nome": "Modo Ingeniería",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ue8dcb79s",
+      "nome": "MODUGRAP",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_w26i4chdf",
+      "nome": "MSO",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_763y8dbz0",
+      "nome": "Muma Mobiliario",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_lfnk73rsi",
+      "nome": "Museo Madre Laura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_f6xknogrv",
+      "nome": "Narváez Gómez Silva Y Abogados",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_tusiwhpeo",
+      "nome": "Nediar",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_jzk0k4pad",
+      "nome": "New Body",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_e8nlx1icg",
+      "nome": "Nordic Look",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_entg2dg6l",
+      "nome": "Notaría",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_mzru3id92",
+      "nome": "Nutresa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_hm6y6wzrb",
+      "nome": "On.going EAFIT",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ycck0w1dk",
+      "nome": "OpenHouse 4D",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_yvfww5mxz",
+      "nome": "Origen 21",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_v798yz0tx",
+      "nome": "Parcelación Los Micos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_1sks5up2w",
+      "nome": "Parcelacion Micos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_baa4j7c2m",
+      "nome": "Paseo del Sendero",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_d2tda9msw",
+      "nome": "Permeo Arquitectura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_x7lxh3a9h",
+      "nome": "Permeo Arquitectura & Construcción",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_quj5wxte9",
+      "nome": "Piedras y Fachadas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_opov93jja",
+      "nome": "PINK",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_e6j38pr8m",
+      "nome": "PipeDrive",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_dpn54ds5e",
+      "nome": "Piscinas N Y J",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2cxoeya1o",
+      "nome": "Planeación Rionegro",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ycli4vw3x",
+      "nome": "Plastifuncional",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_v6aevgapa",
+      "nome": "Poluzka",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wd6yjz7ak",
+      "nome": "Prefabricando Casas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_r46bx3x8i",
+      "nome": "Premier Pools",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2xhnj2w8k",
+      "nome": "PRILA SAS",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ohgg9c9ie",
+      "nome": "Prima Juan Pablo",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9vsz9ybph",
+      "nome": "Primera Línea sst",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_3ucti62a8",
+      "nome": "Programa MEGA CCMA",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_u0l0i6et5",
+      "nome": "PROSEIN",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_dfry9q8lq",
+      "nome": "Protección Ecológica",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9h6sznatd",
+      "nome": "PROVENTO Inmobiliaria",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_4w7ce135t",
+      "nome": "Provenza Parcelación",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_1lov86fpe",
+      "nome": "Provenza Reserva",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_s9gpp8oki",
+      "nome": "Qualita",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_yforl1wqo",
+      "nome": "Quintas De Veracruz",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_uhh64283l",
+      "nome": "Recomendación Ligia",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_3nnrdvb0a",
+      "nome": "Recomendada Luisa Cardona",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_lqkrexuks",
+      "nome": "Recomendada Mafu",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_rw3peaei2",
+      "nome": "Recomendada Walter",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_sawhayz5s",
+      "nome": "Recomendado Cesar Luis H.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_iru3uwckn",
+      "nome": "Recomendado Javier Bogotá",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_n2s12ms51",
+      "nome": "Recomendado JC",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_zzln3xb8i",
+      "nome": "Recomendado LUIS Cubatas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_fgytl4dst",
+      "nome": "Recomendado Milo Rendon",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_u5uo4dj1b",
+      "nome": "Recomendado Parra - Modelado BIM",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0588nmfit",
+      "nome": "Recomendado Viviana",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_k8xqkhheo",
+      "nome": "Recomendado Yesid",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8878yuyrb",
+      "nome": "Reconocimiento Botánico",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_5zcvlh9o6",
+      "nome": "Remitido Por La Foret",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_box8iquzy",
+      "nome": "Reserva Agualinda",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_o11auceyn",
+      "nome": "Ruta N",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ne3hfegj0",
+      "nome": "Sarita Cano",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0jtc2agzn",
+      "nome": "Seguros",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_7792l003a",
+      "nome": "Serving NewBall",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_qlqe0be9a",
+      "nome": "Serving NewBall Servicios de Ingeniería",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_prknm5oik",
+      "nome": "Sico 360",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_brq6lwrog",
+      "nome": "Sierra Alta",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_7wa75bvf3",
+      "nome": "SIIGO",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_km9aafepi",
+      "nome": "Sili",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_6k37jsor1",
+      "nome": "Socio Jhonny Marinilla",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_thwr3auax",
+      "nome": "Sugerido Sneider",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_9y23dhc69",
+      "nome": "Techno Smart",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_um42helyk",
+      "nome": "Tecnicell",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_j36fm5co1",
+      "nome": "Tecnnova",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_iq4sns4ex",
+      "nome": "TemplaCOL",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_4ai2n7p0l",
+      "nome": "Templo Madre Laura",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_cym2k0gja",
+      "nome": "Ternium",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2itxmng4r",
+      "nome": "Tic Solutions",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_fo220vcjf",
+      "nome": "Tienda Verde",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_y69akpcb2",
+      "nome": "Tierras Y Suelos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0dse0dmq3",
+      "nome": "Tilano Arango",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_l2af251rj",
+      "nome": "Toderos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_64u6pt15c",
+      "nome": "Todo Tapicero",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_wvapudxed",
+      "nome": "Tres Trigos",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_pqx4h4ih2",
+      "nome": "Tu Casa Alianza Constructora",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_a2xrvv6u5",
+      "nome": "U. P. B.",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_drwbfrwwq",
+      "nome": "Umbral Propiedad Raiz",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_0441xvk8f",
+      "nome": "Vecina Capillas",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_e931ace9m",
+      "nome": "Vélez",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_ulcztyhr1",
+      "nome": "Vibra Animal",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_m45nq6a0y",
+      "nome": "Villa Celeste",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_2vxp0rvfj",
+      "nome": "Virmotion",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_8uk4gdepw",
+      "nome": "Vitelsa",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_sg84yquc1",
+      "nome": "VITRUM",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_cevw1mbhf",
+      "nome": "Vive Modular",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_7iayfggjw",
+      "nome": "Web 3D",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    },
+    {
+      "id": "auto_f16q4rbcq",
+      "nome": "ZM Consultores",
+      "sector": "General / Comercial",
+      "nit": "",
+      "ciudad": "",
+      "web": "",
+      "notes": "Auto-registrada desde contactos R.E.D."
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj_1786743857445",
+      "title": "ff",
+      "client": "20 julio | Erika",
+      "contactRole": "",
+      "relationshipType": "cliente_silver",
+      "amount": 0,
+      "status": "mql",
+      "lineaOperativa": "",
+      "categoria": "",
+      "nextStep": "vfbv",
+      "briefUrl": "",
+      "proposalUrl": "",
+      "dueDate": "",
+      "owner": "",
+      "stageEnteredAt": "2026-08-14T21:44:17.445Z",
+      "createdAt": "2026-08-14T21:44:17.445Z",
+      "ecgX": 9.745127436281859,
+      "ecgY": 50.475260416666664,
+      "weightedAmount": 0
+    }
+  ],
+  "slack": {
+    "webhook_url": "",
+    "channel_name": "#notificaciones-red"
+  },
+  "edits": {},
+  "notes": {},
+  "tags": {},
+  "pulses": {},
+  "phases": {},
+  "channels": {},
+  "personas": {}
+}

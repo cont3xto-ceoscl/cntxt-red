@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CNTXT | R.E.D. System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Heart Background — fixed full-viewport layer -->
+  <div class="heart-bg-layer"></div>
+
+  <!-- Dynamic Parallax Background for Glóbulos Rojos (Proyectos) -->
+  <div class="globulos-bg-layer" id="globulos-bg-layer">
+    <div class="globulos-bg-cells" id="globulos-bg-cells"></div>
+    <div class="globulos-bg-vignette"></div>
+  </div>
+
+  <!-- Cinematic Intro / Splash Screen Overlay -->
+  <div class="splash-overlay" id="splash-overlay">
+    <!-- Custom Energy Cursor — only active during splash -->
+    <div class="splash-cursor-halo" id="splash-cursor-halo"></div>
+    <div class="splash-cursor-dot" id="splash-cursor-dot"></div>
+    <!-- Fullscreen Toggle — top-right corner of splash -->
+    <button class="splash-fullscreen-btn" id="splash-fullscreen-btn" title="Pantalla Completa">
+      <svg class="icon-expand" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+      </svg>
+      <svg class="icon-collapse" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+      </svg>
+    </button>
+    <div class="splash-backdrop-glow"></div>
+    <div class="splash-content">
+      <!-- 4-Color Pulse Scale Cardiac Rhythm Animation Layer -->
+      <div class="splash-pulse-container" id="splash-pulse-anim">
+        <div class="splash-pulse-glow-ring"></div>
+        <svg class="splash-ecg-svg" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <!-- 4-Color Dynamic Gradient -->
+            <linearGradient id="pulse4ColorGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#545b6b" /> <!-- Pulso 1: Sin Pulso -->
+              <stop offset="30%" stop-color="#00e5ff" /> <!-- Pulso 2: Pulso Débil -->
+              <stop offset="65%" stop-color="#ff2a4b" /> <!-- Pulso 3: Pulso Intenso -->
+              <stop offset="100%" stop-color="#00e676" /> <!-- Pulso 4: Tejido Integrado -->
+            </linearGradient>
+
+            <filter id="pulseGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Grid Background -->
+          <pattern id="splashEcgGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" />
+          </pattern>
+          <rect width="600" height="160" fill="url(#splashEcgGrid)" rx="16" />
+
+          <!-- Background Faint Path -->
+          <path class="splash-ecg-bg-line"
+            d="M 10 80 L 100 80 L 110 75 L 120 90 L 130 30 L 145 140 L 160 10 L 175 105 L 190 80 L 320 80 L 330 75 L 340 90 L 350 20 L 365 145 L 380 5 L 395 110 L 410 80 L 590 80"
+            fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
+
+          <!-- Foreground Animated Gradient ECG Path -->
+          <path class="splash-ecg-pulse-line"
+            d="M 10 80 L 100 80 L 110 75 L 120 90 L 130 30 L 145 140 L 160 10 L 175 105 L 190 80 L 320 80 L 330 75 L 340 90 L 350 20 L 365 145 L 380 5 L 395 110 L 410 80 L 590 80"
+            fill="none" stroke="url(#pulse4ColorGradient)" stroke-width="4.5" stroke-linecap="round"
+            stroke-linejoin="round" filter="url(#pulseGlowFilter)" />
+        </svg>
+      </div>
+
+      <!-- Rotating Quote Block -->
+      <div class="splash-quote-block" id="splash-quote-block">
+        <blockquote class="splash-quote-text" id="splash-quote-text"></blockquote>
+        <cite class="splash-quote-author" id="splash-quote-author"></cite>
+      </div>
+
+      <!-- Uncropped Native White Logo + Registered Trademark Lockup -->
+      <div class="splash-logo-lockup">
+        <img src="logo_cntxt_white.png" alt="CNTXT" class="splash-logo-img">
+        <span class="splash-registered">®</span>
+      </div>
+
+      <div class="splash-badge">R.E.D. SYSTEM · CNTXT® 2026</div>
+
+      <!-- Portal Access Button — Dark Glass + Red-Wine Glow Border -->
+      <button class="splash-skip-btn" id="splash-skip-btn">
+        <span class="splash-btn-label">Ingresar al Portal</span>
+        <span class="splash-btn-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Energy Cursor — red pulsating dot + halo, active on all app pages -->
+  <div class="app-cursor-halo" id="app-cursor-halo"></div>
+  <div class="app-cursor-dot" id="app-cursor-dot"></div>
+
+  <div class="app-container">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="brand-pill">
+        <span class="dot"></span>
+        <img src="logo_cntxt_white.png" alt="CNTXT" class="brand-pill-logo">
+        <span>· R.E.D. System 2026</span>
+      </div>
+      <div class="header-right-group">
+        <button class="btn-header-action btn-header-sync" id="btn-sync-status"
+          title="Estado de persistencia en disco (data_storage.json)">
+          <span class="sync-status-dot synced" id="header-sync-dot"></span>
+          <span id="header-sync-text">Disco Sincronizado</span>
+        </button>
+        <button class="btn-header-action btn-header-slack" id="btn-slack-settings"
+          title="Configurar conexión y canal con Slack">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z" />
+          </svg>
+          <span>Slack R.E.D.</span>
+          <span class="slack-status-indicator" id="header-slack-indicator" title="Estado de conexión con Slack"></span>
+        </button>
+        <button class="btn-header-action" id="btn-export-csv"
+          title="Descargar la base de datos completa con notas y etiquetas en CSV">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+          </svg>
+          <span>Exportar CSV</span>
+        </button>
+        <div class="date-badge" id="current-date">Consolidado al 21 Jul 2026</div>
+        <button class="fullscreen-btn" id="fullscreen-btn" title="Pantalla Completa">
+          <svg class="icon-expand" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+          </svg>
+          <svg class="icon-collapse" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+            style="display:none">
+            <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Branding Section (Estilo .png inspiration) -->
+    <section class="hero-brand">
+
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- ARTERIAL DOCK — CANALES DE PROSPECCIÓN (Encima del Logo CNTXT)       -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <div class="prospecting-side-dock" id="prospecting-side-dock">
+        <!-- Pulsing Blood Flow Button (Collapsed Trigger) -->
+        <div class="prospecting-pulse-trigger" id="prospecting-pulse-trigger">
+          <div class="blood-pulse-ring"></div>
+          <div class="blood-pulse-ring-outer"></div>
+          <span class="blood-drop-icon">🩸</span>
+          <span class="blood-trigger-text">Canales de Prospección</span>
+          <span class="blood-trigger-badge" id="active-channel-badge" style="display:none;">Filtrado</span>
+        </div>
+
+        <!-- Expanded Channels Menu -->
+        <div class="prospecting-menu" id="prospecting-menu">
+          <div class="prospecting-menu-header">
+            <div class="prospecting-header-title">
+              <span class="blood-drop-icon" style="font-size: 16px;">🩸</span>
+              <span>Canales de Entrada al Corazón</span>
+            </div>
+            <div class="prospecting-header-sub">Filtrar contactos por origen</div>
+          </div>
+
+          <div class="prospecting-channels-list">
+            <button class="channel-pill-btn channel-all active" data-channel="all">
+              <span>Ver Todos (Sin filtro de canal)</span>
+            </button>
+            <button class="channel-pill-btn channel-fb" data-channel="fb">
+              <span>Media | Facebook</span>
+            </button>
+            <button class="channel-pill-btn channel-ig" data-channel="ig">
+              <span>Media | Instagram</span>
+            </button>
+            <button class="channel-pill-btn channel-gg" data-channel="gg">
+              <span>Media | Google</span>
+            </button>
+            <button class="channel-pill-btn channel-gmaps" data-channel="gmaps">
+              <span>Media | Google Maps</span>
+            </button>
+            <button class="channel-pill-btn channel-referidos" data-channel="referidos">
+              <span>Referidos</span>
+            </button>
+            <button class="channel-pill-btn channel-prospeccion" data-channel="prospeccion">
+              <span>Prospección Activa</span>
+            </button>
+            <button class="channel-pill-btn channel-ferias" data-channel="ferias">
+              <span>Ferias o Activaciones</span>
+            </button>
+            <button class="channel-pill-btn channel-oficinas" data-channel="oficinas">
+              <span>Oficinas CNTXT</span>
+            </button>
+            <button class="channel-pill-btn channel-capital" data-channel="capital">
+              <span>Capital Relacional</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-logo-wrapper">
+        <div class="hero-logo-lockup">
+          <img src="logo_cntxt_white.png" alt="CNTXT" class="hero-logo-img">
+          <span class="hero-registered">®</span>
+        </div>
+      </div>
+      <p class="hero-subtitle">— El corazón del relacionamiento y la construcción de lazos — R.E.D. Portal —</p>
+    </section>
+
+    <!-- Key Metrics Row (Estilo .png inspiration) -->
+    <section class="metrics-row" id="main-metrics-row">
+      <div class="metric-card">
+        <div class="metric-number gold" id="metric-total">928</div>
+        <div class="metric-label">Relaciones activas</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number red" id="metric-active">0</div>
+        <div class="metric-label">Leads Críticos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number green" id="metric-score">0</div>
+        <div class="metric-label">Tejido Integrado</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number coral" id="metric-touchpoints">0</div>
+        <div class="metric-label">Pulsaciones del mes</div>
+      </div>
+    </section>
+
+    <!-- Nav Tabs & Search Bar (Client DashBoard.jpeg inspiration) -->
+    <section class="nav-tabs-container">
+      <div class="tabs-group">
+        <button class="tab-btn active" data-tab="all">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1z" />
+          </svg>
+          Directorio R.E.D.
+        </button>
+        <button class="tab-btn" data-tab="spotlight">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+          Cliente Spotlight
+        </button>
+        <button class="tab-btn tab-btn-red" data-tab="mapeo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z" />
+          </svg>
+          Mapeo R.E.D.
+        </button>
+        <button class="tab-btn tab-btn-pulse" data-tab="pulsos">
+          <svg class="pulse-tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          Pulsos Reales
+          <span class="pulse-tab-badge">LIVE</span>
+        </button>
+        <button class="tab-btn tab-btn-globulo" data-tab="globulos">
+          <svg class="globulo-tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7a5 5 0 1 0 5 5" />
+          </svg>
+          Glóbulos Rojos
+          <span class="globulo-tab-badge">PROYECTOS</span>
+        </button>
+      </div>
+
+      <div class="search-box-header">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
+        <input type="text" id="search-input" placeholder="Buscar por nombre, empresa, teléfono...">
+      </div>
+    </section>
+
+    <!-- Main Content Dashboard Grid -->
+    <main class="dashboard-grid">
+
+      <!-- Left Column: Spotlight Hero Client Card -->
+      <aside class="spotlight-card" id="spotlight-container">
+        <div>
+          <div class="spotlight-tag">
+            <span class="dot"
+              style="width: 6px; height: 6px; border-radius: 50%; background: #ff2a4b; box-shadow: 0 0 8px #ff2a4b;"></span>
+            Cliente Destacado del Día
+          </div>
+
+          <div class="spotlight-avatar-box">
+            <div class="spotlight-avatar" id="spotlight-avatar">AC</div>
+            <h2 class="spotlight-name" id="spotlight-name">Admin. Marta Cecilia Torres</h2>
+            <div class="spotlight-company" id="spotlight-company">C. R. Pietrasanta — Rionegro</div>
+          </div>
+
+          <div class="spotlight-stats">
+            <div class="spotlight-stat-item">
+              <div class="spotlight-stat-val" id="spotlight-phone">573217516361</div>
+              <div class="spotlight-stat-lbl">Teléfono</div>
+            </div>
+            <div class="spotlight-stat-item">
+              <div class="spotlight-stat-val" id="spotlight-temp">Lazo Alto</div>
+              <div class="spotlight-stat-lbl">Estado</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spotlight-actions">
+          <a href="#" id="spotlight-wa-btn" target="_blank" class="btn-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.007 3.676 3.75-1.009z" />
+            </svg>
+            Contactar WhatsApp
+          </a>
+          <button class="btn-detail" id="spotlight-detail-btn">Ver Ficha</button>
+        </div>
+      </aside>
+
+      <!-- Right Column: Directory List & Filter Pills -->
+      <section class="directory-section">
+
+        <div class="directory-header">
+          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <h2 class="directory-title" id="directory-main-title">
+              Directorio R.E.D.
+              <span class="count-badge" id="client-count">928</span>
+            </h2>
+
+            <!-- Sub-tabs Switcher: Personas vs Empresas -->
+            <div class="dir-subtabs-group" id="dir-subtabs-group">
+              <button class="dir-subtab-btn active" data-dir-mode="personas" id="btn-subtab-personas">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                <span>Personas (Contactos)</span>
+              </button>
+              <button class="dir-subtab-btn" data-dir-mode="empresas" id="btn-subtab-empresas">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+                </svg>
+                <span>Empresas (Organizaciones)</span>
+                <span class="count-badge empresa-count-badge" id="company-count">0</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="directory-header-actions">
+            <!-- Personas Header Actions -->
+            <div id="personas-header-actions" style="display: flex; gap: 10px; align-items: center;">
+              <!-- View Mode Toggle -->
+              <div class="view-mode-toggle" id="view-mode-toggle">
+                <button class="view-mode-btn active" id="btn-view-grid" title="Vista Tarjetas">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z" />
+                  </svg>
+                </button>
+                <button class="view-mode-btn" id="btn-view-list" title="Vista Lista">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+                  </svg>
+                </button>
+              </div>
+              <button class="btn-selection-mode" id="btn-toggle-selection"
+                title="Activar selección múltiple para etiquetar o limpiar en bloque">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z" />
+                </svg>
+                <span id="selection-mode-label">Selección Múltiple</span>
+              </button>
+              <button class="btn-primary-action" id="btn-open-add-modal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                <span>Nueva Relación</span>
+              </button>
+            </div>
+
+            <!-- Empresas Header Actions (hidden by default) -->
+            <div id="empresas-header-actions" style="display: none; gap: 10px; align-items: center;">
+              <!-- View Mode Toggle Empresas -->
+              <div class="view-mode-toggle" id="empresa-view-mode-toggle">
+                <button class="view-mode-btn active" id="btn-empresa-view-grid" title="Vista Tarjetas">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z" />
+                  </svg>
+                </button>
+                <button class="view-mode-btn" id="btn-empresa-view-list" title="Vista Lista">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+                  </svg>
+                </button>
+              </div>
+              <button class="btn-primary-action btn-add-empresa" id="btn-open-add-empresa-modal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                <span>Nueva Relación Empresarial</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <!-- VISTA DE PERSONAS (CONTACTOS)                                      -->
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <div id="dir-personas-view">
+
+          <div class="filter-pills">
+            <button class="filter-btn active" data-filter="all">Todos (928)</button>
+            <button class="filter-btn" data-filter="phone">Con WhatsApp</button>
+            <button class="filter-btn" data-filter="email">Con Email</button>
+            <button class="filter-btn" data-filter="company">Con Empresa</button>
+          </div>
+
+          <!-- B2C / B2B Persona Type Filter -->
+          <div class="persona-filter-bar" id="persona-filter-bar">
+            <span class="persona-filter-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.7">
+                <path
+                  d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+              </svg>
+              Tipo de Persona
+            </span>
+            <div class="persona-filter-pills" id="persona-filter-group">
+              <button class="persona-pill active" data-persona="all">Todos</button>
+              <button class="persona-pill persona-b2c" data-persona="b2c">B2C | Persona Natural</button>
+              <button class="persona-pill persona-b2b" data-persona="b2b">B2B | Persona Jurídica</button>
+            </div>
+          </div>
+
+          <!-- 13 Relationship Types Filter Bar -->
+          <div class="tag-filters-container">
+            <div class="tag-filters-label">
+              <span>🏷️ Filtrar por Tipo de Relación</span>
+              <span id="active-tag-count"
+                style="color: var(--accent-gold); text-transform: none; font-size: 11px;">Todos los tipos</span>
+            </div>
+            <div class="tag-pills-scroll" id="tag-filters-group">
+              <button class="rel-tag tag-filter-btn active" data-tag-filter="all"
+                style="background: rgba(255,255,255,0.12); color: #fff;">Todos</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="embajador" data-tag="embajador">Embajador de
+                Marca</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="growth" data-tag="growth">Growth Partner</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="cliente_black" data-tag="cliente_black">Cliente
+                Black</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="cliente_gold" data-tag="cliente_gold">Cliente
+                Gold</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="cliente_silver" data-tag="cliente_silver">Cliente
+                Silver</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="lead" data-tag="lead">Lead</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="media" data-tag="media">Media &
+                Influencers</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="aliados" data-tag="aliados">Aliados
+                Estratégicos</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="servicios_claves"
+                data-tag="servicios_claves">Servicios Claves</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="servicios_aux" data-tag="servicios_aux">Servicios
+                Auxiliares</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="equipo" data-tag="equipo">Equipo CNTXT</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="candidatos" data-tag="candidatos">Candidatos y
+                Talento</button>
+              <button class="rel-tag tag-filter-btn" data-tag-filter="mentores" data-tag="mentores">Mentores y
+                Asesores</button>
+            </div>
+          </div>
+
+          <!-- Bulk Action Bar (Selection Mode) -->
+          <div class="bulk-action-bar" id="bulk-action-bar" style="display:none;">
+            <div class="bulk-selection-info">
+              <div class="bulk-checkbox-all" id="btn-select-all" title="Seleccionar / Deseleccionar todos">
+                <div class="bulk-checkbox-icon" id="select-all-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                  </svg>
+                </div>
+                <span id="select-all-label">Seleccionar todo</span>
+              </div>
+              <div class="bulk-count-badge" id="bulk-count-badge">0 seleccionados</div>
+            </div>
+
+            <div class="bulk-actions">
+              <!-- Tag dropdown -->
+              <div class="bulk-tag-dropdown-wrap">
+                <button class="bulk-tag-trigger" id="bulk-tag-trigger">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+                  </svg>
+                  <span id="bulk-tag-trigger-label">Asignar Etiqueta</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z" />
+                  </svg>
+                </button>
+                <div class="bulk-tag-dropdown" id="bulk-tag-dropdown" style="display:none;">
+                  <div class="bulk-tag-dropdown-inner">
+                    <button class="bulk-tag-option" data-bulk-tag="embajador" data-tag="embajador">Embajador de
+                      Marca</button>
+                    <button class="bulk-tag-option" data-bulk-tag="growth" data-tag="growth">Growth Partner</button>
+                    <button class="bulk-tag-option" data-bulk-tag="cliente_black" data-tag="cliente_black">Cliente
+                      Black</button>
+                    <button class="bulk-tag-option" data-bulk-tag="cliente_gold" data-tag="cliente_gold">Cliente
+                      Gold</button>
+                    <button class="bulk-tag-option" data-bulk-tag="cliente_silver" data-tag="cliente_silver">Cliente
+                      Silver</button>
+                    <button class="bulk-tag-option" data-bulk-tag="lead" data-tag="lead">Lead</button>
+                    <button class="bulk-tag-option" data-bulk-tag="media" data-tag="media">Media &amp;
+                      Influencers</button>
+                    <button class="bulk-tag-option" data-bulk-tag="aliados" data-tag="aliados">Aliados
+                      Estratégicos</button>
+                    <button class="bulk-tag-option" data-bulk-tag="servicios_claves"
+                      data-tag="servicios_claves">Servicios Claves</button>
+                    <button class="bulk-tag-option" data-bulk-tag="servicios_aux" data-tag="servicios_aux">Servicios
+                      Auxiliares</button>
+                    <button class="bulk-tag-option" data-bulk-tag="equipo" data-tag="equipo">Equipo CNTXT</button>
+                    <button class="bulk-tag-option" data-bulk-tag="candidatos" data-tag="candidatos">Candidatos y
+                      Talento</button>
+                    <button class="bulk-tag-option" data-bulk-tag="mentores" data-tag="mentores">Mentores y
+                      Asesores</button>
+                  </div>
+                </div>
+              </div>
+
+              <button class="bulk-btn bulk-btn-danger" id="btn-bulk-clear-tags"
+                title="Borrar etiquetas de los contactos seleccionados">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+                Borrar Etiquetas
+              </button>
+
+              <button class="bulk-btn bulk-btn-ghost" id="btn-cancel-selection">
+                Cancelar
+              </button>
+            </div>
+          </div>
+
+          <!-- Client Cards Grid -->
+          <div class="client-cards-grid" id="client-grid">
+            <!-- Populated by app.js -->
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-bar" id="pagination-bar" style="display:none;">
+            <button class="pagination-btn" id="btn-page-prev" title="Página anterior">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
+              Anterior
+            </button>
+            <div class="pagination-info" id="pagination-info">Página 1 de 1</div>
+            <button class="pagination-btn" id="btn-page-next" title="Página siguiente">
+              Siguiente
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+              </svg>
+            </button>
+          </div>
+
+        </div> <!-- Fin #dir-personas-view -->
+
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <!-- VISTA DE EMPRESAS (ORGANIZACIONES)                                 -->
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <div id="dir-empresas-view" style="display: none;">
+          <!-- Barra de búsqueda y filtro por sector -->
+          <div class="empresa-filter-bar">
+            <div class="search-box-empresa">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+              </svg>
+              <input type="text" id="search-empresa-input" placeholder="Buscar empresas por nombre, sector, ciudad...">
+            </div>
+            <div class="empresa-sector-pills" id="empresa-sector-pills">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
+
+          <!-- Grilla de Tarjetas de Empresas -->
+          <div class="empresa-cards-grid" id="empresa-cards-grid">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Floating Bottom Dock (Estilo .png inspiration) -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- MAPEO R.E.D. PANEL — La Física del Corazón Comercial CNTXT®       -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <section class="red-map-panel" id="red-map-panel" style="display:none;">
+
+      <!-- HERO: Título del Mapeo -->
+      <div class="red-map-hero">
+        <div class="red-map-hero-title">
+          <span class="red-heart-icon">🫀</span>
+          <div>
+            <h2>Mapeo Biológico R.E.D.</h2>
+            <p>La física del corazón humano aplicada a la estrategia comercial de CNTXT®</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLUJO BIOLÓGICO ANIMADO -->
+      <div class="red-flow-container">
+
+        <!-- Entrada: Leads -->
+        <div class="red-flow-source">
+          <div class="red-flow-badge blood-in">🩸 Sangre Desoxigenada / Leads</div>
+          <div class="red-flow-arrow-down">↓</div>
+        </div>
+
+        <!-- 3 Fases en columnas -->
+        <div class="red-phases-grid">
+
+          <!-- FASE R — RELACIÓN -->
+          <div class="red-phase-card phase-r" id="phase-r-card">
+            <div class="red-phase-icon">🫁</div>
+            <div class="red-phase-header">
+              <div class="red-phase-letter">R</div>
+              <div>
+                <div class="red-phase-name">RELACIÓN</div>
+                <div class="red-phase-bio">Aurícula · Diástole</div>
+              </div>
+            </div>
+            <div class="red-phase-count" id="phase-r-count">—</div>
+            <div class="red-phase-count-label">contactos en esta fase</div>
+            <div class="red-phase-desc">
+              <strong>Escucha Activa & Desarme Sandler.</strong> El corazón se relaja para recibir. Atraemos y
+              cualificamos sin presionar. La diástole abre la puerta y recibe la realidad del cliente sin juzgar.
+            </div>
+            <div class="red-phase-tags">
+              <span class="red-phase-tag">Sandler: Escucha Activa</span>
+              <span class="red-phase-tag">Desarme Comercial</span>
+              <span class="red-phase-tag">Dolor / Frustración</span>
+            </div>
+            <div class="red-phase-role">👤 Director Creativo / Comercial</div>
+          </div>
+
+          <!-- FLECHA DE FLUJO -->
+          <div class="red-flow-connector">
+            <div class="red-connector-line"></div>
+            <div class="red-connector-pulse"></div>
+            <div class="red-connector-label">Oxigenación<br>Pulmonar</div>
+          </div>
+
+          <!-- FASE D — DISEÑO -->
+          <div class="red-phase-card phase-d" id="phase-d-card">
+            <div class="red-phase-icon">🧪</div>
+            <div class="red-phase-header">
+              <div class="red-phase-letter">D</div>
+              <div>
+                <div class="red-phase-name">DISEÑO</div>
+                <div class="red-phase-bio">Pulmones · Oxigenación</div>
+              </div>
+            </div>
+            <div class="red-phase-count" id="phase-d-count">—</div>
+            <div class="red-phase-count-label">contactos en esta fase</div>
+            <div class="red-phase-desc">
+              <strong>Neuromarketing Klaric.</strong> La sangre se enriquece. Transformamos necesidades en vida
+              extraordinaria. Co-creamos el proyecto activando el gatillo de Pertenencia y Propiedad.
+            </div>
+            <div class="red-phase-tags">
+              <span class="red-phase-tag">Klaric: Inconsciente</span>
+              <span class="red-phase-tag">Pertenencia</span>
+              <span class="red-phase-tag">Propuesta Co-creada</span>
+            </div>
+            <div class="red-phase-role">👤 Comercial / Equipo de Diseño</div>
+          </div>
+
+          <!-- FLECHA DE FLUJO -->
+          <div class="red-flow-connector">
+            <div class="red-connector-line"></div>
+            <div class="red-connector-pulse"></div>
+            <div class="red-connector-label">Sístole<br>Ventricular</div>
+          </div>
+
+          <!-- FASE E — EXPANSIÓN -->
+          <div class="red-phase-card phase-e" id="phase-e-card">
+            <div class="red-phase-icon">⚡</div>
+            <div class="red-phase-header">
+              <div class="red-phase-letter">E</div>
+              <div>
+                <div class="red-phase-name">EXPANSIÓN</div>
+                <div class="red-phase-bio">Ventrículo Izq. · Sístole</div>
+              </div>
+            </div>
+            <div class="red-phase-count" id="phase-e-count">—</div>
+            <div class="red-phase-count-label">contactos en esta fase</div>
+            <div class="red-phase-desc">
+              <strong>Cialdini: Reciprocidad & Unidad.</strong> El impulso más potente del corazón. El cliente fascinado
+              se convierte en Embajador, Cross-selling, Upselling y motor de referidos.
+            </div>
+            <div class="red-phase-tags">
+              <span class="red-phase-tag">Cialdini: Reciprocidad</span>
+              <span class="red-phase-tag">Embajadores</span>
+              <span class="red-phase-tag">LTV / Referidos</span>
+            </div>
+            <div class="red-phase-role">👤 CEO / Comercial / Post-Venta</div>
+          </div>
+
+        </div>
+
+        <!-- Salida: LTV -->
+        <div class="red-flow-source" style="margin-top: 0;">
+          <div class="red-flow-arrow-down" style="color: #C16A5F;">↓</div>
+          <div class="red-flow-badge blood-out">⚡ Oxígeno a todo el Cuerpo / Referidos & LTV</div>
+        </div>
+
+      </div>
+
+      <!-- MATRIZ DE ALINEACIÓN COMERCIAL -->
+      <div class="red-matrix-section">
+        <h3 class="red-matrix-title">📊 Matriz de Alineación Comercial del Equipo</h3>
+        <div class="red-matrix-subtitle">El lenguaje unificado para las reuniones semanales de crecimiento</div>
+        <div class="red-matrix-table-wrap">
+          <table class="red-matrix-table">
+            <thead>
+              <tr>
+                <th>Fisiología del Corazón</th>
+                <th>Fase R.E.D.</th>
+                <th>Rol en CNTXT</th>
+                <th>Objetivo Comercial High Ticket</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-r">
+                <td><span class="matrix-bio">🫁 Diástole / Retorno Venoso</span></td>
+                <td><span class="matrix-phase phase-badge-r">R — Relación</span></td>
+                <td>Director Creativo / Comercial</td>
+                <td><strong>Atraer y Cualificar:</strong> Generar contenido que atraiga la sangre correcta (Leads
+                  Cualificados).</td>
+              </tr>
+              <tr class="row-d">
+                <td><span class="matrix-bio">🧪 Oxigenación Pulmonar</span></td>
+                <td><span class="matrix-phase phase-badge-d">D — Diseño</span></td>
+                <td>Comercial / Equipo de Diseño</td>
+                <td><strong>Profundizar el Valor:</strong> Convertir la necesidad del cliente en un proyecto
+                  extraordinario con empatía y diagnóstico Sandler.</td>
+              </tr>
+              <tr class="row-e">
+                <td><span class="matrix-bio">⚡ Sístole Ventricular</span></td>
+                <td><span class="matrix-phase phase-badge-e">E — Expansión</span></td>
+                <td>CEO / Comercial / Post-Venta</td>
+                <td><strong>Multiplicar el Impacto:</strong> Convertir la satisfacción en retención, mayor LTV y red de
+                  embajadores activos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REFLEXIÓN COMERCIAL -->
+      <div class="red-reflection">
+        <div class="red-reflection-pulse"></div>
+        <div class="red-reflection-text">
+          <p>"Cuando el equipo entiende que si la sangre deja de circular el organismo muere, comprenden por qué el
+            seguimiento, la cualificación de leads y la postventa no son <em>tareas administrativas</em>, sino el
+            <strong>pulso vital de CNTXT®</strong>."</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- PULSOS REALES R.E.D. PANEL — Ecosistema Vital & Resonancia Biotopo   -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <section class="pulsos-reales-panel" id="pulsos-reales-panel" style="display:none;">
+
+      <!-- HERO BIOTOPO HEADER -->
+      <div class="pulsos-hero">
+        <div class="pulsos-hero-title">
+          <div class="pulsos-hero-icon-wrap">
+            <svg class="pulsos-heart-pulse-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF2A4B"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg>
+            <div class="pulsos-beacon-ping"></div>
+          </div>
+          <div>
+            <h2>Pulsos Reales — Resonancia del Biotopo CNTXT®</h2>
+            <p>Monitoreo de la homeostasis del ecosistema comercial. Modulación agéntica mediante la Pulse Scale.</p>
+          </div>
+        </div>
+
+        <!-- Vital Biotopo Metrics Bar -->
+        <div class="biotopo-stats-grid">
+          <div class="biotopo-stat-card">
+            <div class="biotopo-stat-val cyan" id="stat-coherence-avg">84.2%</div>
+            <div class="biotopo-stat-lbl">Coherencia Global Biotopo</div>
+          </div>
+          <div class="biotopo-stat-card">
+            <div class="biotopo-stat-val gold" id="stat-pulse-bpm">78 BPM</div>
+            <div class="biotopo-stat-lbl">Frecuencia Cardíaca Promedio</div>
+          </div>
+          <div class="biotopo-stat-card">
+            <div class="biotopo-stat-val red" id="stat-critical-count">0</div>
+            <div class="biotopo-stat-lbl">Leads Críticos (Pulso 3)</div>
+          </div>
+          <div class="biotopo-stat-card">
+            <div class="biotopo-stat-val emerald" id="stat-tissue-count">0</div>
+            <div class="biotopo-stat-lbl">Tejido Integrado (Pulso 4)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPONENTES AGÉNTICOS DE ANTIGRAVITY -->
+      <div class="agent-components-bar">
+        <div class="agent-comp-item">
+          <div class="agent-comp-badge status-live">● INGESTA VIVA</div>
+          <div class="agent-comp-info">
+            <span class="agent-comp-name">📡 Data Harness</span>
+            <span class="agent-comp-desc">Emails, Web, LinkedIn, Calls & WhatsApp</span>
+          </div>
+        </div>
+
+        <div class="agent-comp-item">
+          <div class="agent-comp-badge status-active">● 4 AGENTES ACTIVOS</div>
+          <div class="agent-comp-info">
+            <span class="agent-comp-name">🔬 Resonance Agents</span>
+            <span class="agent-comp-desc">Evaluación continua de KPIs vitales</span>
+          </div>
+        </div>
+
+        <div class="agent-comp-item">
+          <div class="agent-comp-badge status-gold">● ORQUESTACIÓN READY</div>
+          <div class="agent-comp-info">
+            <span class="agent-comp-name">🧠 Orchestration Agent</span>
+            <span class="agent-comp-desc">Detonador intersistémico (C.O.R., C.A.S.H., N.E.O.)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PULSE SCALE FILTER BAR -->
+      <div class="pulse-scale-filter-container">
+        <div class="pulse-filter-label">
+          <span>🫀 Escala de Pulsos (The Pulse Scale)</span>
+          <span class="pulse-filter-sub font-mono" id="pulse-active-count">Mostrando todos los entes</span>
+        </div>
+        <div class="pulse-scale-pills">
+          <button class="pulse-pill-btn active" data-pulse-filter="all">
+            <span class="pulse-dot dot-all"></span>
+            <span>Todos los Pulsos</span>
+          </button>
+          <button class="pulse-pill-btn pulse-p1" data-pulse-filter="1">
+            <span class="pulse-dot dot-p1"></span>
+            <span>Pulso 1: SIN PULSO</span>
+            <span class="pulse-badge-count" id="count-p1">0</span>
+          </button>
+          <button class="pulse-pill-btn pulse-p2" data-pulse-filter="2">
+            <span class="pulse-dot dot-p2"></span>
+            <span>Pulso 2: PULSO DÉBIL</span>
+            <span class="pulse-badge-count" id="count-p2">0</span>
+          </button>
+          <button class="pulse-pill-btn pulse-p3" data-pulse-filter="3">
+            <span class="pulse-dot dot-p3"></span>
+            <span>Pulso 3: PULSO INTENSO</span>
+            <span class="pulse-badge-count" id="count-p3">0</span>
+          </button>
+          <button class="pulse-pill-btn pulse-p4" data-pulse-filter="4">
+            <span class="pulse-dot dot-p4"></span>
+            <span>Pulso 4: TEJIDO</span>
+            <span class="pulse-badge-count" id="count-p4">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ENTES ENERGÉTICOS GRID -->
+      <div class="pulse-grid" id="pulse-grid">
+        <!-- Dynamically filled by app.js -->
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- GLÓBULOS ROJOS — TORRENTE DE PROYECTOS PANEL (Hidden by Default)    -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <section class="globulos-panel" id="globulos-panel" style="display: none;">
+
+      <!-- HERO BLOOD FLOW HEADER -->
+      <div class="globulos-hero-header">
+        <div class="globulos-hero-glow"></div>
+        <div class="globulos-hero-content">
+          <div class="globulos-badge-top">
+            <span class="pulse-red-dot"></span>
+            <span>Flujo de Proyectos</span>
+          </div>
+          <h2 class="globulos-hero-title">Embudo de Proyectos Inmobiliarios</h2>
+          <p class="globulos-hero-desc">
+            Cada proyecto es una célula viva, nuestro trabajo en red es hacer que estas células crezcan y se
+            multipliquen.
+          </p>
+          <button class="btn-add-project btn-crear-proyecto-hero" id="btn-crear-proyecto-hero">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            CREAR NUEVO PROYECTO
+          </button>
+        </div>
+      </div>
+      <!-- VITAL PIPELINE METRICS BAR -->
+      <div class="globulos-metrics-grid">
+        <div class="globulo-metric-card">
+          <div class="globulo-metric-header">
+            <span class="globulo-metric-tag">Flujo Arterial Activo</span>
+            <span class="globulo-metric-live-indicator"><span class="metric-live-dot"></span>En vivo</span>
+          </div>
+          <div class="globulo-metric-data">
+            <div class="globulo-metric-lbl">Valor Total en Torrente</div>
+            <div class="globulo-metric-val" id="metric-pipeline-total">$0</div>
+            <div class="globulo-metric-sub" id="metric-pipeline-sub">Ponderado: $0 | Nominal: $0</div>
+          </div>
+          <div class="globulo-metric-glow-edge"></div>
+        </div>
+        <div class="globulo-metric-card">
+          <div class="globulo-metric-header">
+            <span class="globulo-metric-tag">Volumen en Pipeline</span>
+            <span class="globulo-metric-live-indicator"><span class="metric-live-dot"></span>Activo</span>
+          </div>
+          <div class="globulo-metric-data">
+            <div class="globulo-metric-lbl">Proyectos en Torrente</div>
+            <div class="globulo-metric-val" id="metric-pipeline-count">0</div>
+            <div class="globulo-metric-sub">Glóbulos Rojos en Circulación</div>
+          </div>
+          <div class="globulo-metric-glow-edge"></div>
+        </div>
+        <div class="globulo-metric-card">
+          <div class="globulo-metric-header">
+            <span class="globulo-metric-tag">Rendimiento Promedio</span>
+            <span class="globulo-metric-live-indicator"><span class="metric-live-dot"></span>Promedio</span>
+          </div>
+          <div class="globulo-metric-data">
+            <div class="globulo-metric-lbl">Ticket Promedio</div>
+            <div class="globulo-metric-val" id="metric-pipeline-avg">$0</div>
+            <div class="globulo-metric-sub">Valor Medio por Proyecto</div>
+          </div>
+          <div class="globulo-metric-glow-edge"></div>
+        </div>
+      </div>
+
+      <!-- ARTERIAL ECG WAVEFORM CANVAS WITH RED BLOOD CELL NODES -->
+      <div class="globulos-ecg-canvas-container">
+        <div class="ecg-canvas-header">
+          <div class="ecg-canvas-title">
+            <span class="ecg-live-dot"></span>
+            <span>FLUJO DE PROYECTOS ACTIVOS MADE</span>
+          </div>
+          <div class="ecg-canvas-hint">Arrastra libremente cualquier Glóbulo Rojo entre etapas o haz clic para editar
+          </div>
+        </div>
+
+        <div class="globulos-ecg-canvas" id="globulos-ecg-canvas">
+          <!-- Floating background micro blood cells (NatGeo Vessel Stream Animation) -->
+          <div class="arterial-stream-particles">
+            <span class="micro-cell c1"></span>
+            <span class="micro-cell c2"></span>
+            <span class="micro-cell c3"></span>
+            <span class="micro-cell c4"></span>
+            <span class="micro-cell c5"></span>
+            <span class="micro-cell c6"></span>
+            <span class="micro-cell c7"></span>
+            <span class="micro-cell c8"></span>
+          </div>
+
+          <!-- Funnel Stages ECG Zones Header -->
+          <div class="ecg-stage-zones-header">
+            <div class="ecg-zone" data-stage="mql"
+              data-tooltip="Contacto cualificado por marketing. Interés inicial identificado (10%)."><span>🩸 MQL |
+                Plasma (10%)</span><br><span class="ecg-zone-amount" id="ecg-amount-mql">$0</span></div>
+            <div class="ecg-zone" data-stage="conversacion"
+              data-tooltip="Diástole comercial. Escucha activa y diagnóstico preliminar de necesidades (20%)."><span>💓
+                1ra Conversación (20%)</span><br><span class="ecg-zone-amount" id="ecg-amount-conversacion">$0</span>
+            </div>
+            <div class="ecg-zone" data-stage="sql"
+              data-tooltip="Contacto cualificado para ventas. Presupuesto y decisión validados (40%)."><span>🔬 SQL |
+                Válvula (40%)</span><br><span class="ecg-zone-amount" id="ecg-amount-sql">$0</span></div>
+            <div class="ecg-zone" data-stage="propuesta"
+              data-tooltip="Oferta co-creada y entregada. Evaluación de valor en curso (60%)."><span>⚡ Propuesta
+                Presentada (60%)</span><br><span class="ecg-zone-amount" id="ecg-amount-propuesta">$0</span></div>
+            <div class="ecg-zone" data-stage="negociacion"
+              data-tooltip="Ajuste de términos y condiciones. Impulso previo al cierre (80%)."><span>🫀 En Negociación
+                (80%)</span><br><span class="ecg-zone-amount" id="ecg-amount-negociacion">$0</span></div>
+            <div class="ecg-zone" data-stage="ejecucion"
+              data-tooltip="Proyecto cerrado y activo. Integración total en el ecosistema (100%)."><span>🧬 Tejido
+                Consolidado (100%)</span><br><span class="ecg-zone-amount" id="ecg-amount-ejecucion">$0</span></div>
+            <div class="ecg-zone" data-stage="pausa" data-tooltip="Proyecto en estasis o pausa temporal (0%)."><span>⏸️
+                Estasis / Pausa (0%)</span><br><span class="ecg-zone-amount" id="ecg-amount-pausa">$0</span></div>
+          </div>
+
+          <!-- Subtle Vertical Separators Grid between stages -->
+          <div class="ecg-vertical-separators">
+            <div class="ecg-v-sep"></div>
+            <div class="ecg-v-sep"></div>
+            <div class="ecg-v-sep"></div>
+            <div class="ecg-v-sep"></div>
+            <div class="ecg-v-sep"></div>
+            <div class="ecg-v-sep"></div>
+          </div>
+
+          <svg class="globulos-ecg-svg" viewBox="0 0 1200 240" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="arterialStreamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff2a4b" stop-opacity="0.3" />
+                <stop offset="50%" stop-color="#ff2a4b" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#00e676" stop-opacity="0.7" />
+              </linearGradient>
+              <filter id="arterialGlowFilter" x="-10%" y="-10%" width="120%" height="120%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Background Grid Lines -->
+            <pattern id="ecgArterialGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 42, 75, 0.05)" stroke-width="1" />
+            </pattern>
+            <rect width="1200" height="240" fill="url(#ecgArterialGrid)" rx="12" />
+          </svg>
+
+          <!-- Interactive Red Blood Cell Nodes overlay placed dynamically via JS -->
+          <div class="globulo-nodes-layer" id="globulo-nodes-layer"></div>
+        </div>
+      </div>
+
+      <!-- PROJECTS CONTROLS BAR -->
+      <div class="projects-bar-container">
+        <div class="projects-bar-left">
+          <div class="project-status-pills">
+            <button class="project-pill-btn active" data-project-filter="all"
+              data-tooltip="Ver todos los proyectos del embudo">
+              <span>Todos</span>
+              <span class="pill-amount-badge" id="pill-amount-all">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="mql"
+              data-tooltip="Contacto cualificado por marketing. Interés inicial identificado (10%).">
+              <span>MQL | Plasma (10%)</span>
+              <span class="pill-amount-badge" id="pill-amount-mql">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="conversacion"
+              data-tooltip="Diástole comercial. Escucha activa y diagnóstico preliminar de necesidades (20%).">
+              <span>1ra Conversación (20%)</span>
+              <span class="pill-amount-badge" id="pill-amount-conversacion">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="sql"
+              data-tooltip="Contacto cualificado para ventas. Presupuesto y decisión validados (40%).">
+              <span>SQL | Válvula (40%)</span>
+              <span class="pill-amount-badge" id="pill-amount-sql">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="propuesta"
+              data-tooltip="Oferta co-creada y entregada. Evaluación de valor en curso (60%).">
+              <span>Propuesta Presentada (60%)</span>
+              <span class="pill-amount-badge" id="pill-amount-propuesta">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="negociacion"
+              data-tooltip="Ajuste de términos y condiciones. Impulso previo al cierre (80%).">
+              <span>En Negociación (80%)</span>
+              <span class="pill-amount-badge" id="pill-amount-negociacion">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="ejecucion"
+              data-tooltip="Proyecto cerrado y activo. Integración total en el ecosistema (100%).">
+              <span>Tejido Consolidado (100%)</span>
+              <span class="pill-amount-badge" id="pill-amount-ejecucion">$0</span>
+            </button>
+            <button class="project-pill-btn" data-project-filter="pausa"
+              data-tooltip="Proyecto en estasis o pausa temporal (0%).">
+              <span>Estasis / Pausa (0%)</span>
+              <span class="pill-amount-badge" id="pill-amount-pausa">$0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="projects-bar-right" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div class="project-search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <input type="text" id="project-search-input" placeholder="Buscar proyecto o cliente...">
+          </div>
+          <button class="btn-add-project" id="btn-open-project-modal"
+            style="background: linear-gradient(135deg, #c1121f, #7f111e); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(193, 18, 31, 0.4); transition: all 0.2s ease;">
+            <span>+ Nuevo Proyecto</span>
+          </button>
+          <button id="btn-export-projects-csv" title="Descargar base de datos indexada en formato CSV"
+            style="background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+            <span>📥 Flujo de proyectos</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PROJECTS GRID CARDS -->
+      <div class="projects-grid" id="projects-grid">
+        <!-- Rendered by JS -->
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Client Detail Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close">&times;</button>
+
+      <div class="modal-header-profile">
+        <div class="modal-avatar" id="modal-avatar">AC</div>
+        <div style="flex-grow: 1;">
+          <h2 class="modal-title" id="modal-name">Nombre Cliente</h2>
+          <div class="modal-subtitle" id="modal-company">Empresa</div>
+        </div>
+        <button class="btn-edit-toggle" id="btn-toggle-edit-mode" title="Editar datos principales de este contacto">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+          </svg>
+          <span id="edit-toggle-label">Editar Datos</span>
+        </button>
+      </div>
+
+      <!-- View Mode Details -->
+      <div class="modal-grid-details" id="modal-view-details">
+        <div class="detail-item-box" style="grid-column: 1 / -1;">
+          <div class="detail-label">Oficio / Rol</div>
+          <div class="detail-value" id="modal-oficio" style="color: var(--accent-gold);">-</div>
+        </div>
+        <div class="detail-item-box" style="grid-column: 1 / -1;">
+          <div class="detail-label">Ciudad / País</div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="detail-value" id="modal-ciudad">-</div>
+            <a id="modal-maps-link" href="#" target="_blank" rel="noopener noreferrer" title="Ver en Google Maps" style="display:none; align-items:center; gap:5px; font-size:11px; font-weight:600;
+                     color:#C16A5F; text-decoration:none; padding:4px 10px;
+                     border:1px solid rgba(193,106,95,0.4); border-radius:20px;
+                     background:rgba(193,106,95,0.1); transition:all 0.2s; white-space:nowrap;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+              </svg>
+              Ver en Maps
+            </a>
+          </div>
+        </div>
+        <div class="detail-item-box">
+          <div class="detail-label">Primer Nombre</div>
+          <div class="detail-value" id="modal-fname">-</div>
+        </div>
+        <div class="detail-item-box">
+          <div class="detail-label">Apellidos</div>
+          <div class="detail-value" id="modal-lname">-</div>
+        </div>
+        <div class="detail-item-box">
+          <div class="detail-label">Teléfono (WhatsApp)</div>
+          <div class="detail-value" id="modal-phone">-</div>
+        </div>
+        <div class="detail-item-box">
+          <div class="detail-label">Correo Electrónico</div>
+          <div class="detail-value" id="modal-email">-</div>
+        </div>
+        <div class="detail-item-box" style="grid-column: 1 / -1;">
+          <div class="detail-label">Tipo de Persona</div>
+          <div class="detail-value" id="modal-persona-display">-</div>
+        </div>
+      </div>
+
+      <!-- Edit Mode Details Form (hidden by default) -->
+      <div class="modal-grid-details-edit" id="modal-edit-details" style="display: none;">
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">Oficio / Rol</label>
+          <input type="text" class="edit-input" id="edit-input-oficio"
+            placeholder="Ej: Médico, Empresaria, Arquitecto...">
+        </div>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">Tipo de Persona</label>
+          <div class="persona-toggle-group" id="edit-persona-toggle">
+            <button type="button" class="persona-toggle-btn" data-persona-val="" id="edit-persona-none">Sin
+              asignar</button>
+            <button type="button" class="persona-toggle-btn persona-toggle-b2c" data-persona-val="b2c"
+              id="edit-persona-b2c">B2C | Persona Natural</button>
+            <button type="button" class="persona-toggle-btn persona-toggle-b2b" data-persona-val="b2b"
+              id="edit-persona-b2b">B2B | Persona Jurídica</button>
+          </div>
+        </div>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">📍 Ciudad / País <span
+              style="font-size:10px; color:var(--text-muted); font-weight:400; margin-left:6px;">Escribe para buscar —
+              listo para mapificación</span></label>
+          <div style="position: relative;">
+            <input type="text" class="edit-input" id="edit-input-ciudad" placeholder="Ej: Medellín, Colombia"
+              autocomplete="off" data-lat="" data-lng="" style="padding-right: 110px;">
+            <button type="button" id="edit-maps-preview-btn" style="position:absolute; right:6px; top:50%; transform:translateY(-50%);
+                     background:rgba(193,106,95,0.15); border:1px solid rgba(193,106,95,0.4);
+                     color:#C16A5F; font-size:11px; font-weight:600; padding:5px 10px;
+                     border-radius:14px; cursor:pointer; white-space:nowrap;" title="Ver en Google Maps">
+              📍 Ver Maps
+            </button>
+          </div>
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Nombre Completo</label>
+          <input type="text" class="edit-input" id="edit-input-nome" placeholder="Nombre Completo">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Empresa / Organización <span
+              style="font-size:10px; color:var(--text-muted); font-weight:400; margin-left:4px;">(Selecciona de las
+              empresas registradas)</span></label>
+          <select class="edit-input" id="edit-select-empresa">
+            <!-- Populated dynamically -->
+          </select>
+          <div style="font-size: 10px; color: rgba(220, 150, 160, 0.75); margin-top: 3px;">ℹ️ Para registrar una empresa
+            nueva, ve primero al Directorio de Empresas.</div>
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Primer Nombre</label>
+          <input type="text" class="edit-input" id="edit-input-fname" placeholder="Primer Nombre">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Apellidos</label>
+          <input type="text" class="edit-input" id="edit-input-lname" placeholder="Apellidos">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Teléfono (WhatsApp)</label>
+          <input type="text" class="edit-input" id="edit-input-phone" placeholder="Ej: 573001234567">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Correo Electrónico</label>
+          <input type="email" class="edit-input" id="edit-input-email" placeholder="correo@ejemplo.com">
+        </div>
+        <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+          <button class="btn-cancel-edit" id="btn-cancel-contact-edit">Cancelar</button>
+          <button class="btn-save-edit" id="btn-save-contact-edit">💾 Guardar Cambios</button>
+        </div>
+      </div>
+
+      <!-- Tag Assignment Selector -->
+      <div class="modal-tag-selector">
+        <div class="modal-tag-selector-title">
+          <span>🏷️ Asignar Tipo de Relación (Lazo CNTXT)</span>
+        </div>
+        <div class="modal-tag-options" id="modal-tag-options-container">
+          <span class="rel-tag modal-tag-option" data-assign-tag="embajador" data-tag="embajador">Embajador de
+            Marca</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="growth" data-tag="growth">Growth Partner</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="cliente_black" data-tag="cliente_black">Cliente
+            Black</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="cliente_gold" data-tag="cliente_gold">Cliente
+            Gold</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="cliente_silver" data-tag="cliente_silver">Cliente
+            Silver</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="lead" data-tag="lead">Lead</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="media" data-tag="media">Media & Influencers</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="aliados" data-tag="aliados">Aliados
+            Estratégicos</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="servicios_claves"
+            data-tag="servicios_claves">Servicios Claves</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="servicios_aux" data-tag="servicios_aux">Servicios
+            Auxiliares</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="equipo" data-tag="equipo">Equipo CNTXT</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="candidatos" data-tag="candidatos">Candidatos y
+            Talento</span>
+          <span class="rel-tag modal-tag-option" data-assign-tag="mentores" data-tag="mentores">Mentores y
+            Asesores</span>
+        </div>
+      </div>
+
+      <!-- Prospecting Channel Assignment Selector -->
+      <div class="modal-channel-selector">
+        <div class="modal-tag-selector-title">
+          <span>🩸 Canal de Entrada / Prospección</span>
+        </div>
+        <div class="modal-channel-options" id="modal-channel-options-container">
+          <button class="channel-pill-btn channel-fb modal-channel-option" data-assign-channel="fb">Media |
+            Facebook</button>
+          <button class="channel-pill-btn channel-ig modal-channel-option" data-assign-channel="ig">Media |
+            Instagram</button>
+          <button class="channel-pill-btn channel-gg modal-channel-option" data-assign-channel="gg">Media |
+            Google</button>
+          <button class="channel-pill-btn channel-gmaps modal-channel-option" data-assign-channel="gmaps">Media | Google
+            Maps</button>
+          <button class="channel-pill-btn channel-referidos modal-channel-option"
+            data-assign-channel="referidos">Referidos</button>
+          <button class="channel-pill-btn channel-prospeccion modal-channel-option"
+            data-assign-channel="prospeccion">Prospección Activa</button>
+          <button class="channel-pill-btn channel-ferias modal-channel-option" data-assign-channel="ferias">Ferias o
+            Activaciones</button>
+          <button class="channel-pill-btn channel-oficinas modal-channel-option" data-assign-channel="oficinas">Oficinas
+            CNTXT</button>
+          <button class="channel-pill-btn channel-capital modal-channel-option" data-assign-channel="capital">Capital
+            Relacional</button>
+        </div>
+      </div>
+
+      <!-- Pulse Scale Selector in Modal -->
+      <div class="modal-pulse-selector">
+        <div class="modal-tag-selector-title">
+          <span>🫀 Escala de Pulso Relacional (Pulse Scale)</span>
+        </div>
+        <div class="modal-pulse-options" id="modal-pulse-options">
+          <button class="modal-pulse-btn pulse-opt-1" data-pulse-opt="1" title="Lead en frío absoluto (>30d inerte)">
+            <span class="pulse-opt-dot p1"></span> 1: Sin Pulso
+          </button>
+          <button class="modal-pulse-btn pulse-opt-2" data-pulse-opt="2" title="Interacción irregular / bajo valor">
+            <span class="pulse-opt-dot p2"></span> 2: Pulso Débil
+          </button>
+          <button class="modal-pulse-btn pulse-opt-3" data-pulse-opt="3" title="Sincronía total / listo para cierre">
+            <span class="pulse-opt-dot p3"></span> 3: Pulso Intenso
+          </button>
+          <button class="modal-pulse-btn pulse-opt-4" data-pulse-opt="4" title="Cliente integrado / Tejido vital">
+            <span class="pulse-opt-dot p4"></span> 4: Tejido Integrado
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-notes-section">
+        <div class="notes-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+          </svg>
+          Bitácora de Lazos y Notas de Relacionamiento
+        </div>
+
+        <!-- Fase R.E.D. Selector -->
+        <div class="red-phase-selector">
+          <div class="red-phase-selector-label">🫀 Asignar Fase R.E.D. del Contacto</div>
+          <div class="red-phase-selector-options" id="modal-phase-options">
+            <button class="red-phase-btn phase-btn-r" data-phase="R"
+              title="Relación — Diástole / Escucha Activa Sandler">
+              <span class="phase-btn-letter">R</span>
+              <span class="phase-btn-name">Relación</span>
+              <span class="phase-btn-bio">Diástole · Aurícula</span>
+            </button>
+            <div class="phase-btn-arrow">→</div>
+            <button class="red-phase-btn phase-btn-d" data-phase="D"
+              title="Diseño — Oxigenación / Neuromarketing Klaric">
+              <span class="phase-btn-letter">D</span>
+              <span class="phase-btn-name">Diseño</span>
+              <span class="phase-btn-bio">Pulmones · Oxigenación</span>
+            </button>
+            <div class="phase-btn-arrow">→</div>
+            <button class="red-phase-btn phase-btn-e" data-phase="E"
+              title="Expansión — Sístole / Cialdini Reciprocidad">
+              <span class="phase-btn-letter">E</span>
+              <span class="phase-btn-name">Expansión</span>
+              <span class="phase-btn-bio">Ventrículo Izq. · Sístole</span>
+            </button>
+          </div>
+        </div>
+
+        <textarea class="notes-textarea" id="modal-notes-input"
+          placeholder="Escribe aquí notas sobre preferencias del cliente, cumpleaños, acuerdos o temas clave de conversación..."></textarea>
+        <button class="btn-save-notes" id="modal-save-notes">Guardar Nota</button>
+      </div>
+
+      <div class="modal-action-buttons-row">
+        <a href="#" id="modal-wa-btn" target="_blank" class="btn-whatsapp" style="padding: 14px; flex: 1;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z" />
+          </svg>
+          <span>Iniciar en WhatsApp</span>
+        </a>
+        <button type="button" id="modal-notify-red-btn" class="btn-notify-red"
+          title="Enviar ficha de este contacto al canal de Slack">
+          <span class="btn-notify-icon">🩸</span>
+          <span class="btn-notify-text">Notificar en R.E.D.</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal Agregar Nuevo Contacto -->
+  <div class="modal-overlay" id="add-modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="add-modal-close">&times;</button>
+
+      <div style="margin-bottom: 20px;">
+        <h2 class="modal-title">➕ Crear Nueva Relación</h2>
+        <div class="modal-subtitle">Ingresa la información para añadirla al Directorio CNTXT® R.E.D.</div>
+      </div>
+
+      <div class="modal-grid-details-edit">
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">Oficio / Rol</label>
+          <input type="text" class="edit-input" id="add-input-oficio"
+            placeholder="Ej: Médico, Empresaria, Arquitecto...">
+        </div>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">Tipo de Persona</label>
+          <div class="persona-toggle-group" id="add-persona-toggle">
+            <button type="button" class="persona-toggle-btn active" data-persona-val="" id="add-persona-none">Sin
+              asignar</button>
+            <button type="button" class="persona-toggle-btn persona-toggle-b2c" data-persona-val="b2c"
+              id="add-persona-b2c">B2C | Persona Natural</button>
+            <button type="button" class="persona-toggle-btn persona-toggle-b2b" data-persona-val="b2b"
+              id="add-persona-b2b">B2B | Persona Jurídica</button>
+          </div>
+        </div>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">📍 Ciudad / País <span
+              style="font-size:10px; color:var(--text-muted); font-weight:400; margin-left:6px;">Listo para
+              mapificación</span></label>
+          <div style="position: relative;">
+            <input type="text" class="edit-input" id="add-input-ciudad" placeholder="Ej: Medellín, Colombia"
+              autocomplete="off" data-lat="" data-lng="" style="padding-right: 110px;">
+            <button type="button" id="add-maps-preview-btn" style="position:absolute; right:6px; top:50%; transform:translateY(-50%);
+                     background:rgba(193,106,95,0.15); border:1px solid rgba(193,106,95,0.4);
+                     color:#C16A5F; font-size:11px; font-weight:600; padding:5px 10px;
+                     border-radius:14px; cursor:pointer; white-space:nowrap;" title="Ver en Google Maps">
+              📍 Ver Maps
+            </button>
+          </div>
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Nombre Completo *</label>
+          <input type="text" class="edit-input" id="add-input-nome" placeholder="Ej: María Camila Restrepo">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Empresa / Organización <span
+              style="font-size:10px; color:var(--text-muted); font-weight:400; margin-left:4px;">(Selecciona de las
+              empresas registradas)</span></label>
+          <select class="edit-input" id="add-select-empresa">
+            <!-- Populated dynamically -->
+          </select>
+          <div style="font-size: 10px; color: rgba(220, 150, 160, 0.75); margin-top: 3px;">ℹ️ Para registrar una empresa
+            nueva, ve primero al Directorio de Empresas.</div>
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Primer Nombre</label>
+          <input type="text" class="edit-input" id="add-input-fname" placeholder="Ej: María">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Apellidos</label>
+          <input type="text" class="edit-input" id="add-input-lname" placeholder="Ej: Restrepo">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Teléfono (WhatsApp)</label>
+          <input type="text" class="edit-input" id="add-input-phone" placeholder="Ej: 573001234567">
+        </div>
+        <div class="detail-item-box-edit">
+          <label class="detail-label">Correo Electrónico</label>
+          <input type="email" class="edit-input" id="add-input-email" placeholder="correo@ejemplo.com">
+        </div>
+      </div>
+
+      <div class="modal-tag-selector" style="margin-top: 16px;">
+        <div class="modal-tag-selector-title">
+          <span>🏷️ Seleccionar Tipo de Relación Inicial</span>
+        </div>
+        <div class="modal-tag-options" id="add-tag-options-container">
+          <span class="rel-tag modal-tag-option selected" data-add-tag="cliente_gold" data-tag="cliente_gold">Cliente
+            Gold</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="cliente_black" data-tag="cliente_black">Cliente
+            Black</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="cliente_silver" data-tag="cliente_silver">Cliente
+            Silver</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="embajador" data-tag="embajador">Embajador de Marca</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="growth" data-tag="growth">Growth Partner</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="lead" data-tag="lead">Lead</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="media" data-tag="media">Media & Influencers</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="aliados" data-tag="aliados">Aliados Estratégicos</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="servicios_claves" data-tag="servicios_claves">Servicios
+            Claves</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="servicios_aux" data-tag="servicios_aux">Servicios
+            Auxiliares</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="equipo" data-tag="equipo">Equipo CNTXT</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="candidatos" data-tag="candidatos">Candidatos y
+            Talento</span>
+          <span class="rel-tag modal-tag-option" data-add-tag="mentores" data-tag="mentores">Mentores y Asesores</span>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+        <button class="btn-cancel-edit" id="btn-cancel-add-contact">Cancelar</button>
+        <button class="btn-save-edit" id="btn-save-new-contact" style="padding: 12px 24px;">✨ Guardar Nueva
+          Relación</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Create/Edit Project (Glóbulo Rojo) Modal -->
+  <div class="modal-overlay" id="project-modal-overlay" style="display:none;">
+    <div class="modal-card project-modal-card">
+      <button class="modal-close-btn" id="project-modal-close" type="button">&times;</button>
+
+      <div class="modal-header-edit">
+        <h3 class="modal-edit-title" id="project-modal-title">🩸 Registrar Nuevo Proyecto</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Vincula una Relación aprobada
+          previamente, asigna su valor presupuestado y define el siguiente paso</p>
+      </div>
+
+      <form id="project-form" onsubmit="return false;">
+        <input type="hidden" id="project-edit-id" value="">
+
+        <div class="detail-grid-edit" style="margin-top: 16px;">
+          <div class="detail-item-box-edit" style="grid-column: span 2;">
+            <label class="detail-label">Nombre del Proyecto *</label>
+            <input type="text" class="edit-input" id="project-input-title"
+              placeholder="Ej: Implementación CRM CNTXT Gold" required>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">
+              Relación R.E.D. *
+              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:6px;">
+                — Contacto o Empresa del Directorio
+              </span>
+            </label>
+            <select class="edit-input" id="project-select-relacion" required>
+              <option value="" disabled selected>Cargando relaciones del Directorio R.E.D…</option>
+            </select>
+            <small style="display:block; margin-top:5px; font-size:11px; color:var(--text-muted); line-height:1.4;">
+              🔒 Solo se listan entes preexistentes. Para añadir uno nuevo,
+              ve al <strong>Directorio R.E.D.</strong> primero.
+            </small>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Cargo / Oficio de la Persona</span>
+              <span id="project-role-sync-badge"
+                style="font-size:10px; color:#00e676; font-weight:700; background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.3); padding:2px 7px; border-radius:10px; display:none;">
+                ⚡ Sincronizado con Directorio
+              </span>
+            </label>
+            <input type="text" class="edit-input" id="project-input-contact-role"
+              placeholder="Autocompletado desde el Directorio R.E.D.">
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Sincronizado automáticamente con la información del contacto en el Directorio R.E.D.
+            </small>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Tipo de Relación R.E.D. (Clasificación)</span>
+              <span id="project-type-sync-badge"
+                style="font-size:10px; color:#00e676; font-weight:700; background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.3); padding:2px 7px; border-radius:10px; display:none;">
+                ⚡ Sincronizado con Directorio
+              </span>
+            </label>
+            <select class="edit-input" id="project-input-relationship-type">
+              <option value="" disabled selected>— Seleccionar Clasificación R.E.D. —</option>
+              <option value="cliente_black">Cliente Black</option>
+              <option value="cliente_gold">Cliente Gold</option>
+              <option value="cliente_silver">Cliente Silver</option>
+              <option value="embajador">Embajador de Marca</option>
+              <option value="growth">Growth Partner</option>
+              <option value="lead">Lead</option>
+              <option value="media">Media & Influencers</option>
+              <option value="aliados">Aliados Estratégicos</option>
+              <option value="servicios_claves">Servicios Claves</option>
+              <option value="servicios_aux">Servicios Auxiliares</option>
+              <option value="equipo">Equipo CNTXT</option>
+              <option value="candidatos">Candidatos y Talento</option>
+              <option value="mentores">Mentores y Asesores</option>
+            </select>
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Se vincula directamente a la clasificación activa del contacto en el Directorio.
+            </small>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">Monto Proyectado ($ COP) *</label>
+            <input type="number" class="edit-input" id="project-input-amount" placeholder="Ej: 150000000" min="0"
+              required>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">Estado de Flujo Arterial</label>
+            <select class="edit-input" id="project-input-status">
+              <option value="mql">🩸 MQL | Plasma (10%)</option>
+              <option value="conversacion">💓 1ra Conversación (20%)</option>
+              <option value="sql">🔬 SQL | Válvula (40%)</option>
+              <option value="propuesta">⚡ Propuesta Presentada (60%)</option>
+              <option value="negociacion">🫀 En Negociación (80%)</option>
+              <option value="ejecucion" selected>🧬 Sangre Oxigenada (100%)</option>
+              <option value="finalizado">🏆 Tejido Finalizado</option>
+              <option value="pausa">⏸️ Estasis / Pausa (0%)</option>
+            </select>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">
+              <span>Línea Operativa (C.O.R.)</span>
+              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:4px;">—
+                Operativo</span>
+            </label>
+            <select class="edit-input" id="project-input-linea-operativa">
+              <option value="" disabled selected>— Seleccionar Línea Operativa (C.O.R.) —</option>
+              <option value="cor_lo_01">C.O.R. | LO. 0.1. Estructuración y Gerencia</option>
+              <option value="cor_lo_02">C.O.R. | L.O. 02. Diseño Arquitectónico</option>
+              <option value="cor_lo_03">C.O.R. | L.O. 03. Visualización Arquitectónica</option>
+              <option value="cor_lo_04">C.O.R. | L.O. 04. Tecnología y Ux</option>
+              <option value="cor_lo_05">C.O.R. | L.O. 05. Gestión Urbana</option>
+              <option value="cor_lo_06">C.O.R. | L.O. 06. Construcción de Proyectos</option>
+              <option value="cor_lo_07">C.O.R. | L.O. 07. Educación y Formación</option>
+            </select>
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Unidad operativa responsable de la ejecución técnica.
+            </small>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">
+              <span>Categoría de Proyecto (C.O.R.)</span>
+              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:4px;">—
+                Tipología</span>
+            </label>
+            <select class="edit-input" id="project-input-categoria">
+              <option value="" disabled selected>— Seleccionar Categoría de Proyecto —</option>
+              <option value="cor_cat_01">C.O.R. | 01. Parcelaciones y Condominios</option>
+              <option value="cor_cat_02">C.O.R. | 02. Edificación en Altura</option>
+              <option value="cor_cat_03">C.O.R. | 03. Vivienda Campestre</option>
+              <option value="cor_cat_04">C.O.R. | 04. Comercial</option>
+              <option value="cor_cat_08">C.O.R. | 08. Hotelería y Hospitality</option>
+            </select>
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Tipología y alcance arquitectónico del proyecto.
+            </small>
+          </div>
+          <div class="detail-item-box-edit" style="grid-column: span 2;">
+            <label class="detail-label">Próxima Acción / Siguiente Paso *</label>
+            <input type="text" class="edit-input" id="project-input-next-step"
+              placeholder="Ej: Presentación de propuesta ejecutiva el 15 de Agosto" required>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">📄 Link del Brief (Encargo del Cliente)</label>
+            <input type="url" class="edit-input" id="project-input-brief-url"
+              placeholder="https://drive.google.com/... o enlace de Notion/Docs">
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Enlace directo al documento del Brief o encargo inicial.
+            </small>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">💼 Link de la Propuesta (Proposal Enviada)</label>
+            <input type="url" class="edit-input" id="project-input-proposal-url"
+              placeholder="https://pitch.com/... o enlace de la propuesta/PDF">
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Enlace directo para consultar y revisar la propuesta comercial enviada.
+            </small>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">📅 Fecha Límite (Due Date)</label>
+            <input type="date" class="edit-input" id="project-input-due-date">
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">👤 Responsable / Owner</label>
+            <input type="text" class="edit-input" id="project-input-owner"
+              placeholder="Ej: Juan Pérez, Director Comercial">
+          </div>
+        </div>
+
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; flex-wrap: wrap; gap: 12px;">
+          <button type="button" class="btn-notify-red" id="project-notify-red-btn" style="padding: 12px 20px;"
+            title="Notificar este proyecto al equipo en Slack">
+            <span class="btn-notify-icon">🩸</span>
+            <span class="btn-notify-text">Notificar en R.E.D.</span>
+          </button>
+          <div style="display: flex; gap: 12px;">
+            <button type="button" class="btn-cancel-edit" id="btn-cancel-project">Cancelar</button>
+            <button type="button" class="btn-save-edit" id="btn-save-project" style="padding: 12px 26px;">🩸 Guardar
+              Glóbulo Rojo</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Create/Edit Empresa Modal -->
+  <div class="modal-overlay" id="empresa-modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="empresa-modal-close">&times;</button>
+      <div style="margin-bottom: 20px;">
+        <h2 class="modal-title" id="empresa-modal-title">🏢 Nueva Relación Empresarial</h2>
+        <div class="modal-subtitle">Crea una organización oficial en el directorio para vincular contactos sin errores
+          de redacción</div>
+      </div>
+      <form id="empresa-form" onsubmit="return false;">
+        <input type="hidden" id="empresa-edit-id" value="">
+        <div class="modal-grid-details-edit">
+          <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+            <label class="detail-label">Nombre de la Empresa / Organización *</label>
+            <input type="text" class="edit-input" id="empresa-input-nome"
+              placeholder="Ej: Grupo SURA, Pietrasanta, Bancolombia..." required>
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">Sector / Industria</label>
+            <input type="text" class="edit-input" id="empresa-input-sector"
+              placeholder="Ej: Financiero, Construcción, Salud, Tecnología...">
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">NIT / ID Fiscal</label>
+            <input type="text" class="edit-input" id="empresa-input-nit" placeholder="Ej: 900.123.456-7">
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">📍 Ciudad / País</label>
+            <input type="text" class="edit-input" id="empresa-input-ciudad" placeholder="Ej: Medellín, Colombia">
+          </div>
+          <div class="detail-item-box-edit">
+            <label class="detail-label">Sitio Web / Portal Corporativo</label>
+            <input type="text" class="edit-input" id="empresa-input-web" placeholder="Ej: www.sura.com">
+          </div>
+          <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+            <label class="detail-label">Notas & Descripción de la Empresa</label>
+            <textarea class="edit-input" id="empresa-input-notes" rows="2"
+              placeholder="Detalles estratégicos de la alianza o relación institucional..."></textarea>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn-cancel-edit" id="btn-cancel-empresa">Cancelar</button>
+          <button type="button" class="btn-save-edit" id="btn-save-empresa" style="padding: 12px 24px;">🏢 Guardar
+            Empresa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Slack Configuration Modal -->
+  <div class="modal-overlay" id="slack-config-modal-overlay" style="display:none;">
+    <div class="modal-card slack-config-card">
+      <button class="modal-close-btn" id="slack-config-modal-close" type="button">&times;</button>
+      <div style="margin-bottom: 20px;">
+        <div class="slack-modal-header-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z" />
+          </svg>
+          <span>Conexión Slack R.E.D.</span>
+        </div>
+        <h2 class="modal-title" style="margin-top: 10px;">Configuración del Canal Slack</h2>
+        <div class="modal-subtitle">Conecta el portal R.E.D. con tu espacio de trabajo de Slack para emitir alertas en
+          tiempo real al equipo.</div>
+      </div>
+
+      <div class="slack-config-body">
+        <div class="detail-item-box-edit" style="margin-bottom: 16px;">
+          <label class="detail-label">URL del Webhook de Slack (Incoming Webhook) *</label>
+          <input type="url" class="edit-input" id="slack-input-webhook-url"
+            placeholder="https://hooks.slack.com/services/T.../B.../..." autocomplete="off">
+          <small style="display:block; margin-top:6px; font-size:11px; color:var(--text-muted); line-height:1.4;">
+            Pega aquí la URL generada en <strong>api.slack.com/apps</strong> &gt; Incoming Webhooks.
+          </small>
+        </div>
+
+        <div class="detail-item-box-edit" style="margin-bottom: 16px;">
+          <label class="detail-label">Nombre del Canal de Destino (Opcional)</label>
+          <input type="text" class="edit-input" id="slack-input-channel-name"
+            placeholder="Ej: #equipo-rer o #notificaciones-red">
+          <small style="display:block; margin-top:6px; font-size:11px; color:var(--text-muted);">
+            Etiqueta informativa de referencia del canal.
+          </small>
+        </div>
+
+        <div class="slack-status-banner" id="slack-status-banner">
+          <div class="slack-status-banner-icon" id="slack-banner-icon">⚡</div>
+          <div class="slack-status-banner-text" id="slack-banner-text">
+            Ingresa tu URL de Webhook y presiona <strong>Probar Conexión</strong> para validar el envío directo a Slack.
+          </div>
+        </div>
+
+        <!-- Respaldo y Persistencia en Disco -->
+        <div class="backup-tools-section">
+          <div class="backup-tools-title">
+            <span>💾 Respaldo y Persistencia de R.E.D.</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+            Los datos se sincronizan automáticamente en <code>data_storage.json</code> en la Unidad Compartida. También
+            puedes exportar o restaurar copias de seguridad manualmente.
+          </div>
+          <div class="backup-tools-actions">
+            <button type="button" class="btn-backup-tool" id="btn-export-backup-json"
+              title="Descargar copia de seguridad en JSON">
+              <span>📥 Descargar Copia JSON</span>
+            </button>
+            <button type="button" class="btn-backup-tool" id="btn-trigger-import-json"
+              title="Restaurar datos desde un archivo JSON">
+              <span>📤 Restaurar Copia JSON</span>
+            </button>
+            <button type="button" class="btn-backup-tool" id="btn-force-sync-disk"
+              title="Guardar todo en disco ahora mismo">
+              <span>⚡ Forzar Guardado en Disco</span>
+            </button>
+            <input type="file" id="input-import-backup-file" accept=".json" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <div class="slack-config-footer"
+        style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; flex-wrap: wrap; gap: 12px;">
+        <button type="button" class="btn-slack-test" id="btn-test-slack-config">
+          <span>🔔 Probar Conexión</span>
+        </button>
+        <div style="display: flex; gap: 12px;">
+          <button type="button" class="btn-cancel-edit" id="btn-cancel-slack-config">Cancelar</button>
+          <button type="button" class="btn-save-edit" id="btn-save-slack-config" style="padding: 12px 24px;">💾 Guardar
+            Configuración</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Agent Notification Toast Container -->
+  <div class="agent-toast-container" id="agent-toast-container"></div>
+
+  <!-- Include Central Configuration & Embedded Contacts Data for Instant Offline Execution -->
+  <script src="config.js"></script>
+  <script src="contacts_data.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
