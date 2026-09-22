@@ -72,6 +72,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:3000',
     'http://localhost:3000',
+    'https://centralcntxt.tech',
+    'https://www.centralcntxt.tech',
+    'http://centralcntxt.tech',
+    'http://www.centralcntxt.tech',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -79,6 +83,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5500',
     'http://127.0.0.1:8000',
     'http://localhost:8000',
+    'https://centralcntxt.tech',
+    'https://www.centralcntxt.tech',
+    'http://centralcntxt.tech',
+    'http://www.centralcntxt.tech',
 ]
 
 REST_FRAMEWORK = {
