@@ -12,8 +12,10 @@ window.CNTXT_CONFIG = {
   SYNC: {
     ENABLED: true,
     
-    // URL base explícita del backend Django (evita llamar al puerto 5500 de Live Server)
-    API_BASE_URL: 'http://127.0.0.1:8000/api',
+    // URL base dinámica del backend Django
+    API_BASE_URL: (typeof window !== 'undefined' && (window.location.origin.includes('127.0.0.1') || window.location.origin.includes('localhost')))
+      ? 'http://127.0.0.1:8000/api'
+      : '/api',
     
     // URL alternativa de respaldo
     FALLBACK_API_URL: 'http://localhost:8000/api',

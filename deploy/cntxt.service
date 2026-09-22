@@ -1,0 +1,24 @@
+[Unit]
+Description=Gunicorn daemon for CNTXT R.E.D. System
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/cntxt
+ExecStart=/var/www/cntxt/venv/bin/gunicorn \
+    --workers 3 \
+    --bind 127.0.0.1:8000 \
+    --timeout 120 \
+    --access-logfile /var/log/gunicorn-cntxt-access.log \
+    --error-logfile /var/log/gunicorn-cntxt-error.log \
+    cntxt_system.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=15
+PrivateTmp=true
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -1,5 +1,6 @@
 # Python & Virtual Environments
 venv/
+.venvs/
 env/
 ENV/
 env.bak/
@@ -16,9 +17,12 @@ __pycache__/
 *$py.class
 *.pyc
 
-# Database
-*.sqlite3
-db.sqlite3
+# Cache & Temporary Directories
+images_cache/
+.cache/
+
+# Database (db.sqlite3 is tracked to preserve seeded contacts/companies)
+# *.sqlite3
 
 # Django & Media / Static build outputs
 staticfiles/

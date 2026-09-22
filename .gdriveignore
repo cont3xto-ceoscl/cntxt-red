@@ -1,0 +1,9 @@
+﻿# Google Drive - Ignorar estos archivos/carpetas
+# Los entornos virtuales contienen rutas absolutas especificas
+# de cada equipo y NO deben sincronizarse entre computadores.
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+get-pip.py

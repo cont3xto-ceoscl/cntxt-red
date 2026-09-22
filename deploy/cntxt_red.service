@@ -1,0 +1,21 @@
+[Unit]
+Description=Gunicorn daemon for CNTXT R.E.D. System
+After=network.target postgresql.service
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/cntxt_red
+EnvironmentFile=/var/www/cntxt_red/.env
+ExecStart=/var/www/cntxt_red/venv/bin/gunicorn \
+    --config /var/www/cntxt_red/gunicorn.conf.py \
+    cntxt_system.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=15
+PrivateTmp=true
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

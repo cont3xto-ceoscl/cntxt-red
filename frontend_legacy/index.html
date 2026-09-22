@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CNTXT | R.E.D. System</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2.4">
 </head>
 
 <body>
@@ -17,6 +17,11 @@
   <div class="globulos-bg-layer" id="globulos-bg-layer">
     <div class="globulos-bg-cells" id="globulos-bg-cells"></div>
     <div class="globulos-bg-vignette"></div>
+  </div>
+
+  <!-- Giant Background Hero Typography / Logo Layer (Depth Glassmorphism) -->
+  <div class="cntxt-hero-bg-layer" id="cntxt-hero-bg-layer" aria-hidden="true">
+    <img src="01. CNTXT_BLANCO.png" alt="CNTXT Background" class="cntxt-hero-bg-img">
   </div>
 
   <!-- Cinematic Intro / Splash Screen Overlay -->
@@ -35,42 +40,34 @@
     </button>
     <div class="splash-backdrop-glow"></div>
     <div class="splash-content">
-      <!-- 4-Color Pulse Scale Cardiac Rhythm Animation Layer -->
+      <!-- 4-Color Pulse Scale Cardiac Rhythm Animation Layer (Sin fondo / Sin retícula) -->
       <div class="splash-pulse-container" id="splash-pulse-anim">
-        <div class="splash-pulse-glow-ring"></div>
         <svg class="splash-ecg-svg" viewBox="0 0 600 160" preserveAspectRatio="xMidYMid meet">
           <defs>
-            <!-- 4-Color Dynamic Gradient -->
+            <!-- 4-Color Dynamic Gradient (Luminoso y Progresivo) -->
             <linearGradient id="pulse4ColorGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#545b6b" /> <!-- Pulso 1: Sin Pulso -->
-              <stop offset="30%" stop-color="#00e5ff" /> <!-- Pulso 2: Pulso Débil -->
-              <stop offset="65%" stop-color="#ff2a4b" /> <!-- Pulso 3: Pulso Intenso -->
-              <stop offset="100%" stop-color="#00e676" /> <!-- Pulso 4: Tejido Integrado -->
+              <stop offset="0%" stop-color="#FFE4E1" /> <!-- Pulso 1: Blanco Rosado Luminoso -->
+              <stop offset="28%" stop-color="#C7807B" /> <!-- Pulso 2: Rosa Viejo R.E.D. -->
+              <stop offset="65%" stop-color="#DC142C" /> <!-- Pulso 3: Rojo Intenso Carmesí -->
+              <stop offset="100%" stop-color="#A03838" /> <!-- Pulso 4: Terracota Granate Luminous -->
             </linearGradient>
 
-            <filter id="pulseGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
+            <!-- Multi-layer Neon Glow Filter -->
+            <filter id="pulseGlowFilter" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur1" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur2" />
               <feMerge>
-                <feMergeNode in="blur" />
+                <feMergeNode in="blur2" />
+                <feMergeNode in="blur1" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
 
-          <!-- Grid Background -->
-          <pattern id="splashEcgGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1" />
-          </pattern>
-          <rect width="600" height="160" fill="url(#splashEcgGrid)" rx="16" />
-
-          <!-- Background Faint Path -->
-          <path class="splash-ecg-bg-line"
-            d="M 10 80 L 100 80 L 110 75 L 120 90 L 130 30 L 145 140 L 160 10 L 175 105 L 190 80 L 320 80 L 330 75 L 340 90 L 350 20 L 365 145 L 380 5 L 395 110 L 410 80 L 590 80"
-            fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" />
-
-          <!-- Foreground Animated Gradient ECG Path -->
+          <!-- Foreground Animated Gradient ECG Path (Un solo movimiento fluido completo) -->
           <path class="splash-ecg-pulse-line"
-            d="M 10 80 L 100 80 L 110 75 L 120 90 L 130 30 L 145 140 L 160 10 L 175 105 L 190 80 L 320 80 L 330 75 L 340 90 L 350 20 L 365 145 L 380 5 L 395 110 L 410 80 L 590 80"
+            d="M 0 80 L 100 80 L 110 75 L 120 90 L 130 30 L 145 140 L 160 10 L 175 105 L 190 80 L 320 80 L 330 75 L 340 90 L 350 20 L 365 145 L 380 5 L 395 110 L 410 80 L 600 80"
+            pathLength="1400"
             fill="none" stroke="url(#pulse4ColorGradient)" stroke-width="4.5" stroke-linecap="round"
             stroke-linejoin="round" filter="url(#pulseGlowFilter)" />
         </svg>
@@ -80,12 +77,6 @@
       <div class="splash-quote-block" id="splash-quote-block">
         <blockquote class="splash-quote-text" id="splash-quote-text"></blockquote>
         <cite class="splash-quote-author" id="splash-quote-author"></cite>
-      </div>
-
-      <!-- Uncropped Native White Logo + Registered Trademark Lockup -->
-      <div class="splash-logo-lockup">
-        <img src="logo_cntxt_white.png" alt="CNTXT" class="splash-logo-img">
-        <span class="splash-registered">®</span>
       </div>
 
       <div class="splash-badge">R.E.D. SYSTEM · CNTXT® 2026</div>
@@ -107,13 +98,108 @@
   <div class="app-cursor-halo" id="app-cursor-halo"></div>
   <div class="app-cursor-dot" id="app-cursor-dot"></div>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       LOGIN OVERLAY — JWT Auth Screen
+       Aparece sobre toda la app cuando no hay token válido.
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="auth-login-overlay" id="auth-login-overlay" aria-hidden="true">
+    <div class="auth-login-card" role="dialog" aria-modal="true" aria-labelledby="auth-login-title">
+      <!-- Close button to return to intro -->
+      <button type="button" class="auth-modal-close" id="auth-modal-close" title="Volver al intro" aria-label="Cerrar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Brand Header -->
+      <div class="auth-login-brand">
+        <img src="Imágenes/logo_cntxt_white.png" alt="CNTXT Logo" class="auth-login-logo">
+        <div class="auth-login-subtitle">R.E.D. System · 2026</div>
+      </div>
+
+      <!-- Decorative ECG Line -->
+      <div class="auth-ecg-line">
+        <svg viewBox="0 0 200 30" preserveAspectRatio="none">
+          <polyline points="0,15 30,15 38,8 44,22 52,2 60,28 68,8 76,18 90,15 200,15"
+            fill="none" stroke="url(#authEcgGrad)" stroke-width="1.5" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="authEcgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="transparent"/>
+              <stop offset="30%" stop-color="#c0392b"/>
+              <stop offset="70%" stop-color="#e74c3c"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Form -->
+      <form class="auth-login-form" id="auth-login-form" autocomplete="on" novalidate>
+        <div class="auth-field-group">
+          <label for="auth-input-email" class="auth-label">Usuario / Email</label>
+          <div class="auth-input-wrapper">
+            <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input
+              type="text"
+              id="auth-input-email"
+              name="username"
+              class="auth-input"
+              placeholder="tu.usuario o email@cntxt.co"
+              autocomplete="username"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="auth-field-group">
+          <label for="auth-input-password" class="auth-label">Contraseña</label>
+          <div class="auth-input-wrapper">
+            <svg class="auth-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              type="password"
+              id="auth-input-password"
+              name="password"
+              class="auth-input"
+              placeholder="••••••••••••"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Error message -->
+        <div class="auth-error-msg" id="auth-error-msg" role="alert" aria-live="assertive" style="display:none;"></div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="auth-submit-btn" id="auth-submit-btn">
+          <span class="auth-btn-text">Ingresar al Portal</span>
+          <span class="auth-btn-spinner" id="auth-btn-spinner" style="display:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spin-anim">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+            </svg>
+          </span>
+          <svg class="auth-btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </form>
+
+      <div class="auth-login-footer">CNTXT® · Núcleo Estratégico Organizacional</div>
+    </div>
+  </div>
+
   <div class="app-container">
 
     <!-- Top Header -->
     <header class="top-header">
       <div class="brand-pill">
         <span class="dot"></span>
-        <img src="logo_cntxt_white.png" alt="CNTXT" class="brand-pill-logo">
+        <img src="Imágenes/logo_cntxt_white.png" alt="CNTXT" class="brand-pill-logo">
         <span>· R.E.D. System 2026</span>
       </div>
       <div class="header-right-group">
@@ -139,6 +225,27 @@
           <span>Exportar CSV</span>
         </button>
         <div class="date-badge" id="current-date">Consolidado al 21 Jul 2026</div>
+
+        <!-- User Profile Badge (visible cuando hay sesión activa) -->
+        <div class="header-user-badge" id="header-user-badge" style="display:none;">
+          <div class="user-badge-avatar" id="header-user-avatar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <div class="user-badge-info">
+            <span class="user-badge-name" id="header-user-name">Usuario</span>
+            <span class="user-badge-rol" id="header-user-rol">Rol</span>
+          </div>
+          <button class="btn-logout" id="btn-logout" title="Cerrar sesión">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
         <button class="fullscreen-btn" id="fullscreen-btn" title="Pantalla Completa">
           <svg class="icon-expand" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
@@ -158,13 +265,19 @@
       <!-- ARTERIAL DOCK — CANALES DE PROSPECCIÓN (Encima del Logo CNTXT)       -->
       <!-- ═══════════════════════════════════════════════════════════════════ -->
       <div class="prospecting-side-dock" id="prospecting-side-dock">
+        <!-- Backdrop for Prospección Filter -->
+        <div class="channel-filter-backdrop" id="channel-filter-backdrop"></div>
+
         <!-- Pulsing Blood Flow Button (Collapsed Trigger) -->
-        <div class="prospecting-pulse-trigger" id="prospecting-pulse-trigger">
+        <div class="prospecting-pulse-trigger" id="prospecting-pulse-trigger" role="button" aria-haspopup="true" aria-expanded="false" title="Filtrar contactos por canal de entrada">
           <div class="blood-pulse-ring"></div>
           <div class="blood-pulse-ring-outer"></div>
           <span class="blood-drop-icon">🩸</span>
-          <span class="blood-trigger-text">Canales de Prospección</span>
-          <span class="blood-trigger-badge" id="active-channel-badge" style="display:none;">Filtrado</span>
+          <span class="blood-trigger-text" id="channel-trigger-label">Canales de Prospección</span>
+          <span class="blood-trigger-badge" id="active-channel-badge" style="display:none;">Todos</span>
+          <svg class="channel-trigger-chevron" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
         </div>
 
         <!-- Expanded Channels Menu -->
@@ -174,70 +287,91 @@
               <span class="blood-drop-icon" style="font-size: 16px;">🩸</span>
               <span>Canales de Entrada al Corazón</span>
             </div>
-            <div class="prospecting-header-sub">Filtrar contactos por origen</div>
+            <div class="prospecting-header-sub">Filtrar relaciones por canal de prospección</div>
           </div>
 
-          <div class="prospecting-channels-list">
-            <button class="channel-pill-btn channel-all active" data-channel="all">
-              <span>Ver Todos (Sin filtro de canal)</span>
+          <div class="prospecting-channels-list" id="prospecting-channels-list">
+            <button type="button" class="channel-item-row active" data-channel="all">
+              <span class="channel-dot dot-all"></span>
+              <span class="channel-name">Todos los Canales</span>
+              <span class="channel-count" id="count-chan-all">-</span>
             </button>
-            <button class="channel-pill-btn channel-fb" data-channel="fb">
-              <span>Media | Facebook</span>
+            <button type="button" class="channel-item-row" data-channel="fb">
+              <span class="channel-dot dot-fb"></span>
+              <span class="channel-name">Media | Facebook</span>
+              <span class="channel-count" id="count-chan-fb">-</span>
             </button>
-            <button class="channel-pill-btn channel-ig" data-channel="ig">
-              <span>Media | Instagram</span>
+            <button type="button" class="channel-item-row" data-channel="ig">
+              <span class="channel-dot dot-ig"></span>
+              <span class="channel-name">Media | Instagram</span>
+              <span class="channel-count" id="count-chan-ig">-</span>
             </button>
-            <button class="channel-pill-btn channel-gg" data-channel="gg">
-              <span>Media | Google</span>
+            <button type="button" class="channel-item-row" data-channel="gg">
+              <span class="channel-dot dot-gg"></span>
+              <span class="channel-name">Media | Google</span>
+              <span class="channel-count" id="count-chan-gg">-</span>
             </button>
-            <button class="channel-pill-btn channel-gmaps" data-channel="gmaps">
-              <span>Media | Google Maps</span>
+            <button type="button" class="channel-item-row" data-channel="gmaps">
+              <span class="channel-dot dot-gmaps"></span>
+              <span class="channel-name">Media | Google Maps</span>
+              <span class="channel-count" id="count-chan-gmaps">-</span>
             </button>
-            <button class="channel-pill-btn channel-referidos" data-channel="referidos">
-              <span>Referidos</span>
+            <button type="button" class="channel-item-row" data-channel="referidos">
+              <span class="channel-dot dot-referidos"></span>
+              <span class="channel-name">Referidos</span>
+              <span class="channel-count" id="count-chan-referidos">-</span>
             </button>
-            <button class="channel-pill-btn channel-prospeccion" data-channel="prospeccion">
-              <span>Prospección Activa</span>
+            <button type="button" class="channel-item-row" data-channel="prospeccion">
+              <span class="channel-dot dot-prospeccion"></span>
+              <span class="channel-name">Prospección Activa</span>
+              <span class="channel-count" id="count-chan-prospeccion">-</span>
             </button>
-            <button class="channel-pill-btn channel-ferias" data-channel="ferias">
-              <span>Ferias o Activaciones</span>
+            <button type="button" class="channel-item-row" data-channel="ferias">
+              <span class="channel-dot dot-ferias"></span>
+              <span class="channel-name">Ferias o Activaciones</span>
+              <span class="channel-count" id="count-chan-ferias">-</span>
             </button>
-            <button class="channel-pill-btn channel-oficinas" data-channel="oficinas">
-              <span>Oficinas CNTXT</span>
+            <button type="button" class="channel-item-row" data-channel="oficinas">
+              <span class="channel-dot dot-oficinas"></span>
+              <span class="channel-name">Oficinas CNTXT</span>
+              <span class="channel-count" id="count-chan-oficinas">-</span>
             </button>
-            <button class="channel-pill-btn channel-capital" data-channel="capital">
-              <span>Capital Relacional</span>
+            <button type="button" class="channel-item-row" data-channel="capital">
+              <span class="channel-dot dot-capital"></span>
+              <span class="channel-name">Capital Relacional</span>
+              <span class="channel-count" id="count-chan-capital">-</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div class="hero-logo-wrapper">
-        <div class="hero-logo-lockup">
-          <img src="logo_cntxt_white.png" alt="CNTXT" class="hero-logo-img">
-          <span class="hero-registered">®</span>
-        </div>
-      </div>
-      <p class="hero-subtitle">— El corazón del relacionamiento y la construcción de lazos — R.E.D. Portal —</p>
     </section>
 
-    <!-- Key Metrics Row (Estilo .png inspiration) -->
+    <!-- Key Metrics Row (6 Metricas Clave: Relaciones Activas, Embajadores de Marca, Growth Partners, Clientes Black, Clientes Gold, Clientes Silver) -->
     <section class="metrics-row" id="main-metrics-row">
-      <div class="metric-card">
-        <div class="metric-number gold" id="metric-total">928</div>
-        <div class="metric-label">Relaciones activas</div>
+      <div class="metric-card" data-kpi-filter="all" title="Filtrar por todas las relaciones">
+        <div class="metric-number gold" id="metric-total">870</div>
+        <div class="metric-label">Relaciones Activas</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-number red" id="metric-active">0</div>
-        <div class="metric-label">Leads Críticos</div>
+      <div class="metric-card" data-kpi-filter="embajador" title="Filtrar por Embajadores de Marca">
+        <div class="metric-number amber" id="metric-embajador">0</div>
+        <div class="metric-label">Embajadores de Marca</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-number green" id="metric-score">0</div>
-        <div class="metric-label">Tejido Integrado</div>
+      <div class="metric-card" data-kpi-filter="growth" title="Filtrar por Growth Partners">
+        <div class="metric-number teal" id="metric-growth">0</div>
+        <div class="metric-label">Growth Partners</div>
       </div>
-      <div class="metric-card">
-        <div class="metric-number coral" id="metric-touchpoints">0</div>
-        <div class="metric-label">Pulsaciones del mes</div>
+      <div class="metric-card" data-kpi-filter="cliente_black" title="Filtrar por Clientes Black">
+        <div class="metric-number coral" id="metric-black">0</div>
+        <div class="metric-label">Clientes Black</div>
+      </div>
+      <div class="metric-card" data-kpi-filter="cliente_gold" title="Filtrar por Clientes Gold">
+        <div class="metric-number gold-kpi" id="metric-gold">0</div>
+        <div class="metric-label">Clientes Gold</div>
+      </div>
+      <div class="metric-card" data-kpi-filter="cliente_silver" title="Filtrar por Clientes Silver">
+        <div class="metric-number silver" id="metric-silver">0</div>
+        <div class="metric-label">Clientes Silver</div>
       </div>
     </section>
 
@@ -249,27 +383,14 @@
             <path
               d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1z" />
           </svg>
-          Directorio R.E.D.
-        </button>
-        <button class="tab-btn" data-tab="spotlight">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-          Cliente Spotlight
-        </button>
-        <button class="tab-btn tab-btn-red" data-tab="mapeo">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z" />
-          </svg>
-          Mapeo R.E.D.
+          Relaciones
         </button>
         <button class="tab-btn tab-btn-pulse" data-tab="pulsos">
           <svg class="pulse-tab-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
           </svg>
-          Pulsos Reales
+          Pulso Relacional
           <span class="pulse-tab-badge">LIVE</span>
         </button>
         <button class="tab-btn tab-btn-globulo" data-tab="globulos">
@@ -295,46 +416,7 @@
     <!-- Main Content Dashboard Grid -->
     <main class="dashboard-grid">
 
-      <!-- Left Column: Spotlight Hero Client Card -->
-      <aside class="spotlight-card" id="spotlight-container">
-        <div>
-          <div class="spotlight-tag">
-            <span class="dot"
-              style="width: 6px; height: 6px; border-radius: 50%; background: #ff2a4b; box-shadow: 0 0 8px #ff2a4b;"></span>
-            Cliente Destacado del Día
-          </div>
-
-          <div class="spotlight-avatar-box">
-            <div class="spotlight-avatar" id="spotlight-avatar">AC</div>
-            <h2 class="spotlight-name" id="spotlight-name">Admin. Marta Cecilia Torres</h2>
-            <div class="spotlight-company" id="spotlight-company">C. R. Pietrasanta — Rionegro</div>
-          </div>
-
-          <div class="spotlight-stats">
-            <div class="spotlight-stat-item">
-              <div class="spotlight-stat-val" id="spotlight-phone">573217516361</div>
-              <div class="spotlight-stat-lbl">Teléfono</div>
-            </div>
-            <div class="spotlight-stat-item">
-              <div class="spotlight-stat-val" id="spotlight-temp">Lazo Alto</div>
-              <div class="spotlight-stat-lbl">Estado</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="spotlight-actions">
-          <a href="#" id="spotlight-wa-btn" target="_blank" class="btn-whatsapp">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.007 3.676 3.75-1.009z" />
-            </svg>
-            Contactar WhatsApp
-          </a>
-          <button class="btn-detail" id="spotlight-detail-btn">Ver Ficha</button>
-        </div>
-      </aside>
-
-      <!-- Right Column: Directory List & Filter Pills -->
+      <!-- Full-Width Directory List & Filter Pills -->
       <section class="directory-section">
 
         <div class="directory-header">
@@ -380,14 +462,75 @@
                   </svg>
                 </button>
               </div>
-              <button class="btn-selection-mode" id="btn-toggle-selection"
-                title="Activar selección múltiple para etiquetar o limpiar en bloque">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path
-                    d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z" />
-                </svg>
-                <span id="selection-mode-label">Selección Múltiple</span>
-              </button>
+              <!-- Bulk Tag Change Dropdown Button (Relación Masiva) -->
+              <div class="header-bulk-wrap" style="position: relative;">
+                <button type="button" class="btn-bulk-tag-action" id="btn-bulk-tag-header"
+                  title="Cambiar Tipo de Relación en lote a los contactos seleccionados">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+                  </svg>
+                  <span>Cambio Masivo de Relación</span>
+                  <span class="header-bulk-count" id="header-bulk-count" style="display: none;">0</span>
+                </button>
+
+                <!-- Floating Dropdown Menu for Bulk Relationship Assignment -->
+                <div class="header-bulk-dropdown" id="header-bulk-dropdown" style="display: none;">
+                  <div class="header-bulk-dropdown-title">
+                    <span>🏷️ Asignar Tipo de Relación</span>
+                    <span class="header-bulk-sel-hint" id="header-bulk-sel-hint">0 seleccionados</span>
+                  </div>
+                  <div class="header-bulk-options-list">
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="embajador"><span class="rel-tag" data-tag="embajador">Embajador de Marca</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="growth"><span class="rel-tag" data-tag="growth">Growth Partner</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="cliente_black"><span class="rel-tag" data-tag="cliente_black">Cliente Black</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="cliente_gold"><span class="rel-tag" data-tag="cliente_gold">Cliente Gold</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="cliente_silver"><span class="rel-tag" data-tag="cliente_silver">Cliente Silver</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="lead"><span class="rel-tag" data-tag="lead">Lead</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="media"><span class="rel-tag" data-tag="media">Media &amp; Influencers</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="aliados"><span class="rel-tag" data-tag="aliados">Aliados Estratégicos</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="servicios_claves"><span class="rel-tag" data-tag="servicios_claves">Servicios Claves</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="servicios_aux"><span class="rel-tag" data-tag="servicios_aux">Servicios Auxiliares</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="equipo"><span class="rel-tag" data-tag="equipo">Equipo CNTXT</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="candidatos"><span class="rel-tag" data-tag="candidatos">Candidatos y Talento</span></button>
+                    <button type="button" class="bulk-apply-tag-btn" data-bulk-tag="mentores"><span class="rel-tag" data-tag="mentores">Mentores y Asesores</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bulk Channel Change Dropdown Button (Canal Masivo) -->
+              <div class="header-bulk-wrap" style="position: relative;">
+                <button type="button" class="btn-bulk-tag-action btn-bulk-channel-action" id="btn-bulk-channel-header"
+                  title="Cambiar Canal de Prospección en lote a los contactos seleccionados">
+                  <span style="font-size: 13px;">🩸</span>
+                  <span>Cambio Masivo de Canal</span>
+                  <span class="header-bulk-count" id="header-bulk-channel-count" style="display: none;">0</span>
+                </button>
+
+                <!-- Floating Dropdown Menu for Bulk Channel Assignment -->
+                <div class="header-bulk-dropdown" id="header-bulk-channel-dropdown" style="display: none;">
+                  <div class="header-bulk-dropdown-title">
+                    <span>🩸 Asignar Canal de Prospección</span>
+                    <span class="header-bulk-sel-hint" id="header-bulk-channel-sel-hint">0 seleccionados</span>
+                  </div>
+                  <div class="header-bulk-options-list">
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="fb"><span class="channel-dot dot-fb"></span><span>Media | Facebook</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="ig"><span class="channel-dot dot-ig"></span><span>Media | Instagram</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="gg"><span class="channel-dot dot-gg"></span><span>Media | Google</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="gmaps"><span class="channel-dot dot-gmaps"></span><span>Media | Google Maps</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="referidos"><span class="channel-dot dot-referidos"></span><span>Referidos</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="prospeccion"><span class="channel-dot dot-prospeccion"></span><span>Prospección Activa</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="ferias"><span class="channel-dot dot-ferias"></span><span>Ferias o Activaciones</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="oficinas"><span class="channel-dot dot-oficinas"></span><span>Oficinas CNTXT</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="capital"><span class="channel-dot dot-capital"></span><span>Capital Relacional</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="whatsapp"><span class="channel-dot dot-referidos"></span><span>WhatsApp Directo</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="linkedin"><span class="channel-dot dot-fb"></span><span>LinkedIn</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="web"><span class="channel-dot dot-gg"></span><span>Sitio Web</span></button>
+                    <button type="button" class="bulk-apply-channel-btn" data-bulk-channel="directo"><span class="channel-dot dot-all"></span><span>Contacto Directo / Networking</span></button>
+                  </div>
+                </div>
+              </div>
+
               <button class="btn-primary-action" id="btn-open-add-modal">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
@@ -449,39 +592,106 @@
             </div>
           </div>
 
-          <!-- 13 Relationship Types Filter Bar -->
+          <!-- Relationship Filter Dim Backdrop -->
+          <div class="rel-filter-backdrop" id="rel-filter-backdrop"></div>
+
+          <!-- Relationship Types Multi-Select Filter (Glassmorphic Dropdown) -->
           <div class="tag-filters-container">
-            <div class="tag-filters-label">
-              <span>🏷️ Filtrar por Tipo de Relación</span>
-              <span id="active-tag-count"
-                style="color: var(--accent-gold); text-transform: none; font-size: 11px;">Todos los tipos</span>
-            </div>
-            <div class="tag-pills-scroll" id="tag-filters-group">
-              <button class="rel-tag tag-filter-btn active" data-tag-filter="all"
-                style="background: rgba(255,255,255,0.12); color: #fff;">Todos</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="embajador" data-tag="embajador">Embajador de
-                Marca</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="growth" data-tag="growth">Growth Partner</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="cliente_black" data-tag="cliente_black">Cliente
-                Black</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="cliente_gold" data-tag="cliente_gold">Cliente
-                Gold</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="cliente_silver" data-tag="cliente_silver">Cliente
-                Silver</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="lead" data-tag="lead">Lead</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="media" data-tag="media">Media &
-                Influencers</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="aliados" data-tag="aliados">Aliados
-                Estratégicos</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="servicios_claves"
-                data-tag="servicios_claves">Servicios Claves</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="servicios_aux" data-tag="servicios_aux">Servicios
-                Auxiliares</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="equipo" data-tag="equipo">Equipo CNTXT</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="candidatos" data-tag="candidatos">Candidatos y
-                Talento</button>
-              <button class="rel-tag tag-filter-btn" data-tag-filter="mentores" data-tag="mentores">Mentores y
-                Asesores</button>
+            <div class="tag-filters-header-center">
+              <div class="tag-filters-label-center">
+                <span>🏷️ Filtrar por Tipo de Relación</span>
+                <span id="active-tag-count" class="active-tag-count-badge">Todos los tipos visibles</span>
+              </div>
+              
+              <!-- Multi-select Dropdown Wrap -->
+              <div class="rel-filter-dropdown-wrap">
+                <button type="button" class="rel-filter-trigger-btn" id="rel-filter-trigger" aria-haspopup="true" aria-expanded="false" title="Filtrar relaciones con selección múltiple">
+                  <span class="rel-trigger-icon">🏷️</span>
+                  <span class="rel-trigger-text" id="rel-filter-trigger-label">Todos los Tipos de Relación</span>
+                  <span class="rel-trigger-badge" id="rel-filter-badge">Todos</span>
+                  <svg class="rel-trigger-chevron" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z" />
+                  </svg>
+                </button>
+
+                <!-- Floating Dropdown Menu with Multi-select Checkboxes -->
+                <div class="rel-filter-dropdown-menu" id="rel-filter-dropdown">
+                  <div class="rel-dropdown-top-actions">
+                    <span class="rel-dropdown-title">Selección Múltiple</span>
+                    <div class="rel-dropdown-action-btns">
+                      <button type="button" class="rel-action-btn" id="btn-rel-select-all">Seleccionar Todos</button>
+                      <button type="button" class="rel-action-btn" id="btn-rel-clear-all">Limpiar</button>
+                    </div>
+                  </div>
+                  <div class="rel-dropdown-list" id="rel-dropdown-options-list">
+                    <label class="rel-dropdown-option" data-tag="embajador">
+                      <input type="checkbox" class="rel-dropdown-cb" value="embajador">
+                      <span class="rel-tag" data-tag="embajador">Embajador de Marca</span>
+                      <span class="rel-tag-count" id="count-tag-embajador">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="growth">
+                      <input type="checkbox" class="rel-dropdown-cb" value="growth">
+                      <span class="rel-tag" data-tag="growth">Growth Partner</span>
+                      <span class="rel-tag-count" id="count-tag-growth">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="cliente_black">
+                      <input type="checkbox" class="rel-dropdown-cb" value="cliente_black">
+                      <span class="rel-tag" data-tag="cliente_black">Cliente Black</span>
+                      <span class="rel-tag-count" id="count-tag-cliente_black">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="cliente_gold">
+                      <input type="checkbox" class="rel-dropdown-cb" value="cliente_gold">
+                      <span class="rel-tag" data-tag="cliente_gold">Cliente Gold</span>
+                      <span class="rel-tag-count" id="count-tag-cliente_gold">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="cliente_silver">
+                      <input type="checkbox" class="rel-dropdown-cb" value="cliente_silver">
+                      <span class="rel-tag" data-tag="cliente_silver">Cliente Silver</span>
+                      <span class="rel-tag-count" id="count-tag-cliente_silver">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="lead">
+                      <input type="checkbox" class="rel-dropdown-cb" value="lead">
+                      <span class="rel-tag" data-tag="lead">Lead</span>
+                      <span class="rel-tag-count" id="count-tag-lead">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="media">
+                      <input type="checkbox" class="rel-dropdown-cb" value="media">
+                      <span class="rel-tag" data-tag="media">Media & Influencers</span>
+                      <span class="rel-tag-count" id="count-tag-media">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="aliados">
+                      <input type="checkbox" class="rel-dropdown-cb" value="aliados">
+                      <span class="rel-tag" data-tag="aliados">Aliados Estratégicos</span>
+                      <span class="rel-tag-count" id="count-tag-aliados">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="servicios_claves">
+                      <input type="checkbox" class="rel-dropdown-cb" value="servicios_claves">
+                      <span class="rel-tag" data-tag="servicios_claves">Servicios Claves</span>
+                      <span class="rel-tag-count" id="count-tag-servicios_claves">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="servicios_aux">
+                      <input type="checkbox" class="rel-dropdown-cb" value="servicios_aux">
+                      <span class="rel-tag" data-tag="servicios_aux">Servicios Auxiliares</span>
+                      <span class="rel-tag-count" id="count-tag-servicios_aux">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="equipo">
+                      <input type="checkbox" class="rel-dropdown-cb" value="equipo">
+                      <span class="rel-tag" data-tag="equipo">Equipo CNTXT</span>
+                      <span class="rel-tag-count" id="count-tag-equipo">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="candidatos">
+                      <input type="checkbox" class="rel-dropdown-cb" value="candidatos">
+                      <span class="rel-tag" data-tag="candidatos">Candidatos y Talento</span>
+                      <span class="rel-tag-count" id="count-tag-candidatos">-</span>
+                    </label>
+                    <label class="rel-dropdown-option" data-tag="mentores">
+                      <input type="checkbox" class="rel-dropdown-cb" value="mentores">
+                      <span class="rel-tag" data-tag="mentores">Mentores y Asesores</span>
+                      <span class="rel-tag-count" id="count-tag-mentores">-</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -556,6 +766,20 @@
             </div>
           </div>
 
+          <!-- Client Cards List Header (Visible in List View) -->
+          <div class="client-list-header" id="client-list-header" style="display: none;">
+            <div class="header-col header-col-cb">
+              <input type="checkbox" id="header-select-all" title="Seleccionar todos" onclick="window.toggleSelectAllContacts && window.toggleSelectAllContacts();">
+            </div>
+            <div class="header-col header-col-pulse"></div>
+            <div class="header-col header-col-name">NOMBRE Y CARGO</div>
+            <div class="header-col header-col-tag">TIPO DE RELACIÓN</div>
+            <div class="header-col header-col-location">UBICACIÓN</div>
+            <div class="header-col header-col-phone">TELÉFONO</div>
+            <div class="header-col header-col-next-action">PRÓXIMA ACCIÓN</div>
+            <div class="header-col header-col-actions">ACCIONES</div>
+          </div>
+
           <!-- Client Cards Grid -->
           <div class="client-cards-grid" id="client-grid">
             <!-- Populated by app.js -->
@@ -598,6 +822,7 @@
             </div>
           </div>
 
+
           <!-- Grilla de Tarjetas de Empresas -->
           <div class="empresa-cards-grid" id="empresa-cards-grid">
             <!-- Populated dynamically by app.js -->
@@ -608,184 +833,6 @@
 
     </main>
 
-    <!-- Floating Bottom Dock (Estilo .png inspiration) -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <!-- MAPEO R.E.D. PANEL — La Física del Corazón Comercial CNTXT®       -->
-    <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <section class="red-map-panel" id="red-map-panel" style="display:none;">
-
-      <!-- HERO: Título del Mapeo -->
-      <div class="red-map-hero">
-        <div class="red-map-hero-title">
-          <span class="red-heart-icon">🫀</span>
-          <div>
-            <h2>Mapeo Biológico R.E.D.</h2>
-            <p>La física del corazón humano aplicada a la estrategia comercial de CNTXT®</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- FLUJO BIOLÓGICO ANIMADO -->
-      <div class="red-flow-container">
-
-        <!-- Entrada: Leads -->
-        <div class="red-flow-source">
-          <div class="red-flow-badge blood-in">🩸 Sangre Desoxigenada / Leads</div>
-          <div class="red-flow-arrow-down">↓</div>
-        </div>
-
-        <!-- 3 Fases en columnas -->
-        <div class="red-phases-grid">
-
-          <!-- FASE R — RELACIÓN -->
-          <div class="red-phase-card phase-r" id="phase-r-card">
-            <div class="red-phase-icon">🫁</div>
-            <div class="red-phase-header">
-              <div class="red-phase-letter">R</div>
-              <div>
-                <div class="red-phase-name">RELACIÓN</div>
-                <div class="red-phase-bio">Aurícula · Diástole</div>
-              </div>
-            </div>
-            <div class="red-phase-count" id="phase-r-count">—</div>
-            <div class="red-phase-count-label">contactos en esta fase</div>
-            <div class="red-phase-desc">
-              <strong>Escucha Activa & Desarme Sandler.</strong> El corazón se relaja para recibir. Atraemos y
-              cualificamos sin presionar. La diástole abre la puerta y recibe la realidad del cliente sin juzgar.
-            </div>
-            <div class="red-phase-tags">
-              <span class="red-phase-tag">Sandler: Escucha Activa</span>
-              <span class="red-phase-tag">Desarme Comercial</span>
-              <span class="red-phase-tag">Dolor / Frustración</span>
-            </div>
-            <div class="red-phase-role">👤 Director Creativo / Comercial</div>
-          </div>
-
-          <!-- FLECHA DE FLUJO -->
-          <div class="red-flow-connector">
-            <div class="red-connector-line"></div>
-            <div class="red-connector-pulse"></div>
-            <div class="red-connector-label">Oxigenación<br>Pulmonar</div>
-          </div>
-
-          <!-- FASE D — DISEÑO -->
-          <div class="red-phase-card phase-d" id="phase-d-card">
-            <div class="red-phase-icon">🧪</div>
-            <div class="red-phase-header">
-              <div class="red-phase-letter">D</div>
-              <div>
-                <div class="red-phase-name">DISEÑO</div>
-                <div class="red-phase-bio">Pulmones · Oxigenación</div>
-              </div>
-            </div>
-            <div class="red-phase-count" id="phase-d-count">—</div>
-            <div class="red-phase-count-label">contactos en esta fase</div>
-            <div class="red-phase-desc">
-              <strong>Neuromarketing Klaric.</strong> La sangre se enriquece. Transformamos necesidades en vida
-              extraordinaria. Co-creamos el proyecto activando el gatillo de Pertenencia y Propiedad.
-            </div>
-            <div class="red-phase-tags">
-              <span class="red-phase-tag">Klaric: Inconsciente</span>
-              <span class="red-phase-tag">Pertenencia</span>
-              <span class="red-phase-tag">Propuesta Co-creada</span>
-            </div>
-            <div class="red-phase-role">👤 Comercial / Equipo de Diseño</div>
-          </div>
-
-          <!-- FLECHA DE FLUJO -->
-          <div class="red-flow-connector">
-            <div class="red-connector-line"></div>
-            <div class="red-connector-pulse"></div>
-            <div class="red-connector-label">Sístole<br>Ventricular</div>
-          </div>
-
-          <!-- FASE E — EXPANSIÓN -->
-          <div class="red-phase-card phase-e" id="phase-e-card">
-            <div class="red-phase-icon">⚡</div>
-            <div class="red-phase-header">
-              <div class="red-phase-letter">E</div>
-              <div>
-                <div class="red-phase-name">EXPANSIÓN</div>
-                <div class="red-phase-bio">Ventrículo Izq. · Sístole</div>
-              </div>
-            </div>
-            <div class="red-phase-count" id="phase-e-count">—</div>
-            <div class="red-phase-count-label">contactos en esta fase</div>
-            <div class="red-phase-desc">
-              <strong>Cialdini: Reciprocidad & Unidad.</strong> El impulso más potente del corazón. El cliente fascinado
-              se convierte en Embajador, Cross-selling, Upselling y motor de referidos.
-            </div>
-            <div class="red-phase-tags">
-              <span class="red-phase-tag">Cialdini: Reciprocidad</span>
-              <span class="red-phase-tag">Embajadores</span>
-              <span class="red-phase-tag">LTV / Referidos</span>
-            </div>
-            <div class="red-phase-role">👤 CEO / Comercial / Post-Venta</div>
-          </div>
-
-        </div>
-
-        <!-- Salida: LTV -->
-        <div class="red-flow-source" style="margin-top: 0;">
-          <div class="red-flow-arrow-down" style="color: #C16A5F;">↓</div>
-          <div class="red-flow-badge blood-out">⚡ Oxígeno a todo el Cuerpo / Referidos & LTV</div>
-        </div>
-
-      </div>
-
-      <!-- MATRIZ DE ALINEACIÓN COMERCIAL -->
-      <div class="red-matrix-section">
-        <h3 class="red-matrix-title">📊 Matriz de Alineación Comercial del Equipo</h3>
-        <div class="red-matrix-subtitle">El lenguaje unificado para las reuniones semanales de crecimiento</div>
-        <div class="red-matrix-table-wrap">
-          <table class="red-matrix-table">
-            <thead>
-              <tr>
-                <th>Fisiología del Corazón</th>
-                <th>Fase R.E.D.</th>
-                <th>Rol en CNTXT</th>
-                <th>Objetivo Comercial High Ticket</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="row-r">
-                <td><span class="matrix-bio">🫁 Diástole / Retorno Venoso</span></td>
-                <td><span class="matrix-phase phase-badge-r">R — Relación</span></td>
-                <td>Director Creativo / Comercial</td>
-                <td><strong>Atraer y Cualificar:</strong> Generar contenido que atraiga la sangre correcta (Leads
-                  Cualificados).</td>
-              </tr>
-              <tr class="row-d">
-                <td><span class="matrix-bio">🧪 Oxigenación Pulmonar</span></td>
-                <td><span class="matrix-phase phase-badge-d">D — Diseño</span></td>
-                <td>Comercial / Equipo de Diseño</td>
-                <td><strong>Profundizar el Valor:</strong> Convertir la necesidad del cliente en un proyecto
-                  extraordinario con empatía y diagnóstico Sandler.</td>
-              </tr>
-              <tr class="row-e">
-                <td><span class="matrix-bio">⚡ Sístole Ventricular</span></td>
-                <td><span class="matrix-phase phase-badge-e">E — Expansión</span></td>
-                <td>CEO / Comercial / Post-Venta</td>
-                <td><strong>Multiplicar el Impacto:</strong> Convertir la satisfacción en retención, mayor LTV y red de
-                  embajadores activos.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- REFLEXIÓN COMERCIAL -->
-      <div class="red-reflection">
-        <div class="red-reflection-pulse"></div>
-        <div class="red-reflection-text">
-          <p>"Cuando el equipo entiende que si la sangre deja de circular el organismo muere, comprenden por qué el
-            seguimiento, la cualificación de leads y la postventa no son <em>tareas administrativas</em>, sino el
-            <strong>pulso vital de CNTXT®</strong>."</p>
-        </div>
-      </div>
-
-    </section>
-
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- PULSOS REALES R.E.D. PANEL — Ecosistema Vital & Resonancia Biotopo   -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -795,7 +842,7 @@
       <div class="pulsos-hero">
         <div class="pulsos-hero-title">
           <div class="pulsos-hero-icon-wrap">
-            <svg class="pulsos-heart-pulse-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF2A4B"
+            <svg class="pulsos-heart-pulse-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94443E"
               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path
                 d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
@@ -804,55 +851,452 @@
             <div class="pulsos-beacon-ping"></div>
           </div>
           <div>
-            <h2>Pulsos Reales — Resonancia del Biotopo CNTXT®</h2>
-            <p>Monitoreo de la homeostasis del ecosistema comercial. Modulación agéntica mediante la Pulse Scale.</p>
+            <h2>Pulso Relacional — Resonancia del Biotopo CNTXT®</h2>
+            <p style="font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.85); max-width: 900px; margin-top: 6px;">
+              El pulso es la manifestación vital de la relación. Si los clientes son la sangre que mantiene vivo al sistema y alimenta al ecosistema, el pulso nos indica con qué fuerza, ritmo y salud está fluyendo esa energía hacia el corazón de la empresa. <strong style="color: #FFCBC7;">No medimos "ventas", medimos niveles de confianza y sincronía humana.</strong>
+            </p>
           </div>
         </div>
 
-        <!-- Vital Biotopo Metrics Bar -->
-        <div class="biotopo-stats-grid">
-          <div class="biotopo-stat-card">
-            <div class="biotopo-stat-val cyan" id="stat-coherence-avg">84.2%</div>
-            <div class="biotopo-stat-lbl">Coherencia Global Biotopo</div>
+        <!-- Vital Biotopo Metrics Bar — 4 Estados de Pulsación R.E.D. (Filtros de Salud Relacional) -->
+        <div class="biotopo-stats-grid" id="biotopo-pulse-filters-grid">
+          <div class="biotopo-stat-card card-pulse-1" data-pulse-filter="1" role="button" tabindex="0" title="Filtrar relaciones por Pulso 1: Sin Pulso (0 a 25 pts)">
+            <div class="biotopo-stat-header">
+              <div class="biotopo-stat-badge-wrap">
+                <span class="biotopo-stat-dot dot-p1"></span>
+                <span class="biotopo-stat-tag">PULSO 1</span>
+              </div>
+              <span class="biotopo-stat-filter-hint">Filtro</span>
+            </div>
+            <div class="biotopo-stat-val val-p1" id="stat-pulse-count-1">0</div>
+            <div class="biotopo-stat-lbl">Sin Pulso</div>
+            <div class="biotopo-stat-sub">0 a 25 pts · Latencia</div>
           </div>
-          <div class="biotopo-stat-card">
-            <div class="biotopo-stat-val gold" id="stat-pulse-bpm">78 BPM</div>
-            <div class="biotopo-stat-lbl">Frecuencia Cardíaca Promedio</div>
+
+          <div class="biotopo-stat-card card-pulse-2" data-pulse-filter="2" role="button" tabindex="0" title="Filtrar relaciones por Pulso 2: Pulso Débil (26 a 50 pts)">
+            <div class="biotopo-stat-header">
+              <div class="biotopo-stat-badge-wrap">
+                <span class="biotopo-stat-dot dot-p2"></span>
+                <span class="biotopo-stat-tag">PULSO 2</span>
+              </div>
+              <span class="biotopo-stat-filter-hint">Filtro</span>
+            </div>
+            <div class="biotopo-stat-val val-p2" id="stat-pulse-count-2">0</div>
+            <div class="biotopo-stat-lbl">Pulso Débil</div>
+            <div class="biotopo-stat-sub">26 a 50 pts · Exploración</div>
           </div>
-          <div class="biotopo-stat-card">
-            <div class="biotopo-stat-val red" id="stat-critical-count">0</div>
-            <div class="biotopo-stat-lbl">Leads Críticos (Pulso 3)</div>
+
+          <div class="biotopo-stat-card card-pulse-3" data-pulse-filter="3" role="button" tabindex="0" title="Filtrar relaciones por Pulso 3: Pulso Intenso (51 a 80 pts)">
+            <div class="biotopo-stat-header">
+              <div class="biotopo-stat-badge-wrap">
+                <span class="biotopo-stat-dot dot-p3"></span>
+                <span class="biotopo-stat-tag">PULSO 3</span>
+              </div>
+              <span class="biotopo-stat-filter-hint">Filtro</span>
+            </div>
+            <div class="biotopo-stat-val val-p3" id="stat-pulse-count-3">0</div>
+            <div class="biotopo-stat-lbl">Pulso Intenso</div>
+            <div class="biotopo-stat-sub">51 a 80 pts · Sincronía</div>
           </div>
-          <div class="biotopo-stat-card">
-            <div class="biotopo-stat-val emerald" id="stat-tissue-count">0</div>
-            <div class="biotopo-stat-lbl">Tejido Integrado (Pulso 4)</div>
+
+          <div class="biotopo-stat-card card-pulse-4" data-pulse-filter="4" role="button" tabindex="0" title="Filtrar relaciones por Pulso 4: Tejido Integrado (81 a 100 pts)">
+            <div class="biotopo-stat-header">
+              <div class="biotopo-stat-badge-wrap">
+                <span class="biotopo-stat-dot dot-p4"></span>
+                <span class="biotopo-stat-tag">PULSO 4</span>
+              </div>
+              <span class="biotopo-stat-filter-hint">Filtro</span>
+            </div>
+            <div class="biotopo-stat-val val-p4" id="stat-pulse-count-4">0</div>
+            <div class="biotopo-stat-lbl">Tejido Integrado</div>
+            <div class="biotopo-stat-sub">81 a 100 pts · Simbiosis</div>
           </div>
         </div>
       </div>
 
-      <!-- COMPONENTES AGÉNTICOS DE ANTIGRAVITY -->
-      <div class="agent-components-bar">
-        <div class="agent-comp-item">
-          <div class="agent-comp-badge status-live">● INGESTA VIVA</div>
-          <div class="agent-comp-info">
-            <span class="agent-comp-name">📡 Data Harness</span>
-            <span class="agent-comp-desc">Emails, Web, LinkedIn, Calls & WhatsApp</span>
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- MATRIZ DE INTENSIDAD RELACIONAL (100 PUNTOS) — MARCO DE SINCRONÍA -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <div class="matriz-intensidad-relacional">
+        <div class="matriz-header-bar">
+          <div class="matriz-header-info">
+            <div class="matriz-badge">
+              <span class="matriz-pulse-dot"></span>
+              <span>METODOLOGÍA R.E.D. · 100 PUNTOS</span>
+            </div>
+            <h3 class="matriz-title">
+              <span class="matriz-title-icon-badge">
+                <svg class="matriz-title-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                  <path d="M7 17l2-4 3 6 2-3 3 1" stroke="#FFCBC7" stroke-width="2"></path>
+                </svg>
+              </span>
+              <span>Matriz de Intensidad Relacional</span>
+            </h3>
+            <p class="matriz-intro-text">
+              Ponderación multidimensional del flujo y sincronía relacional. No medimos transacciones frías, sino el nivel de confianza, vulnerabilidad y alineación con el propósito de CNTXT®.
+            </p>
+          </div>
+          <div class="matriz-header-actions">
+            <button type="button" class="btn-toggle-methodology" id="btn-toggle-methodology" aria-expanded="false" title="Desplegar u ocultar los 6 criterios y 4 estados de sincronía">
+              <span>📖 Ver Metodología</span>
+              <svg class="icon-chevron" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+              </svg>
+            </button>
+            <button type="button" class="btn-toggle-matriz-calc" id="btn-toggle-matriz-calc">
+              <span>🔬 Abrir Evaluador &amp; Simulador</span>
+            </button>
           </div>
         </div>
 
-        <div class="agent-comp-item">
-          <div class="agent-comp-badge status-active">● 4 AGENTES ACTIVOS</div>
-          <div class="agent-comp-info">
-            <span class="agent-comp-name">🔬 Resonance Agents</span>
-            <span class="agent-comp-desc">Evaluación continua de KPIs vitales</span>
+        <!-- Contenedor Plegable de la Metodología (Oculto por defecto para compactar la vista) -->
+        <div class="matriz-methodology-collapsible" id="matriz-methodology-collapsible" style="display: none;">
+          <!-- Bloque Explicativo General de la Medición Relacional -->
+          <div class="matriz-methodology-overview">
+            <div class="overview-header-badge">
+              <span class="badge-dot"></span>
+              <span>SISTEMA DE CALIFICACIÓN R.E.D. · ESCALA TOTAL DE 100 PUNTOS</span>
+            </div>
+            <h3 class="overview-title">¿En qué consiste la Medición de la Matriz de Intensidad Relacional?</h3>
+            <p class="overview-lead">
+              A diferencia de un CRM convencional que mide transacciones transitorias o llamadas unidireccionales frías, la <strong>Matriz de Intensidad Relacional</strong> evalúa la <em>salud ontológica, el grado de vulnerabilidad y la sintonía de propósitos</em> entre <strong>CNTXT®</strong> y sus aliados, clientes y embajadores. Permite cuantificar si un vínculo opera por conveniencia superficial o si ha madurado hacia una <strong>asociación simbiótica de alto impacto</strong>.
+            </p>
+
+            <div class="overview-structure-grid">
+              <div class="overview-structure-card block-primary">
+                <div class="structure-card-header">
+                  <span class="structure-tag">70% Ponderación</span>
+                  <h4>1. Tracción Estructural &amp; Red de Valor (70 pts)</h4>
+                </div>
+                <p class="structure-desc">Mide el acople esencial con la identidad de marca y la proactividad del contacto para expandir orgánicamente el ecosistema.</p>
+                <ul class="structure-list">
+                  <li><strong>Afinidad Cultural &amp; Resonancia de ADN (25 pts · 25%):</strong> Sintonía natural con los pilares CNTXT (<em>Well Being, Context, Disruption, Smartness, Customization, Storytelling</em>).</li>
+                  <li><strong>Proactividad de Recomendar (25 pts · 25%):</strong> Disposición real y comprobada a conectar a CNTXT con su círculo de confianza como Embajador o Growth Partner.</li>
+                  <li><strong>Bidireccionalidad de la Interacción (20 pts · 20%):</strong> Frecuencia con la que el contacto toma la iniciativa espontánea (contacto mutuo en ambas direcciones).</li>
+                </ul>
+              </div>
+
+              <div class="overview-structure-card block-secondary">
+                <div class="structure-card-header">
+                  <span class="structure-tag">30% Ponderación</span>
+                  <h4>2. Profundidad Ontológica &amp; Visión (30 pts)</h4>
+                </div>
+                <p class="structure-desc">Mide la intimidad de la conversación y el horizonte temporal de vida para un acompañamiento estratégico proactivo.</p>
+                <ul class="structure-list">
+                  <li><strong>Nivel de Vulnerabilidad / Sandler (10 pts · 10%):</strong> Desarme de posturas corporativas defensivas; apertura sobre miedos de vida, retos de negocio y patrimonio.</li>
+                  <li><strong>Involucramiento en Comunidad / Cialdini (10 pts · 10%):</strong> Sentido de pertenencia comunitaria (Efecto Insider) en experiencias privadas y el ecosistema CNTXT.</li>
+                  <li><strong>Claridad del Mapa de Vida (10 pts · 10%):</strong> Conocimiento de su visión de metas a 3 o 5 años (familia, retiro, expansión) antes de cualquier necesidad comercial.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="overview-formula-strip">
+              <div class="formula-label">📐 Ecuación de Ponderación Relacional:</div>
+              <div class="formula-code">
+                <code>Puntaje Relacional (0 a 100) = ADN (25) + Embajador (25) + Bidireccionalidad (20) + Sandler (10) + Cialdini (10) + Mapa Vida (10)</code>
+              </div>
+              <div class="formula-legend">
+                <span>Resultado Diagnóstico: <strong>P1 Sin Pulso</strong> (0-25 pts · Latencia) · <strong>P2 Débil</strong> (26-50 pts · Exploración) · <strong>P3 Intenso</strong> (51-80 pts · Sincronía) · <strong>P4 Simbiosis</strong> (81-100 pts · Tejido Integrado)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cabecera de Criterios con Toggle de Rúbricas -->
+          <div class="matriz-criteria-section-header">
+            <div class="section-title-wrap">
+              <h4>🎯 Criterios Establecidos y Rúbrica Detallada (100 pts)</h4>
+              <span class="section-subtitle">Haz clic o pasa el cursor sobre cada tarjeta para examinar los rangos de evaluación específicos:</span>
+            </div>
+            <button type="button" class="btn-toggle-all-rubrics" id="btn-toggle-all-rubrics" onclick="window.toggleAllCriteriaRubrics()">
+              <span>Expandir todas las rúbricas</span>
+            </button>
+          </div>
+
+          <!-- 6 Criterios Grid -->
+          <div class="matriz-criteria-grid" id="matriz-criteria-grid">
+            <!-- Criterio 1 -->
+            <div class="matriz-crit-card crit-dna" tabindex="0">
+              <div class="matriz-crit-top">
+                <div class="matriz-crit-weight">25% · 25 pts</div>
+                <div class="matriz-crit-actions">
+                  <span class="matriz-crit-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <h4 class="matriz-crit-name">Afinidad Cultural &amp; Resonancia de ADN</h4>
+              <div class="matriz-crit-body">
+                <div class="matriz-crit-body-inner">
+                  <p class="matriz-crit-desc">
+                    Grado de alineación espontánea con los pilares de CNTXT (<em>Well Being, Context, Disruption, Smartness, Customization, Storytelling</em>). A mayor resonancia, menor esfuerzo de mantenimiento.
+                  </p>
+                  <div class="matriz-rubric">
+                    <div class="rubric-row"><span class="pts">0 - 8 pts</span><span class="txt">Desalineado; busca solo precio / transacción.</span></div>
+                    <div class="rubric-row"><span class="pts">9 - 17 pts</span><span class="txt">Conecta con 1 a 3 Conceptos Maestros.</span></div>
+                    <div class="rubric-row"><span class="pts">18 - 25 pts</span><span class="txt">Vibra orgánicamente con 4+ Conceptos Maestros.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 2 -->
+            <div class="matriz-crit-card crit-ambassador" tabindex="0">
+              <div class="matriz-crit-top">
+                <div class="matriz-crit-weight">25% · 25 pts</div>
+                <div class="matriz-crit-actions">
+                  <span class="matriz-crit-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <h4 class="matriz-crit-name">Proactividad de Recomendar (Embajadores)</h4>
+              <div class="matriz-crit-body">
+                <div class="matriz-crit-body-inner">
+                  <p class="matriz-crit-desc">
+                    Nivel de disposición para conectar a CNTXT con su círculo de influencia o actuar como un embajador natural, compartiendo la deseabilidad del diseño con su red de confianza.
+                  </p>
+                  <div class="matriz-rubric">
+                    <div class="rubric-row"><span class="pts">0 - 8 pts</span><span class="txt">Pasivo; no menciona a su red ni genera contactos.</span></div>
+                    <div class="rubric-row"><span class="pts">9 - 17 pts</span><span class="txt">Recomienda de palabra o sugiere prospectos.</span></div>
+                    <div class="rubric-row"><span class="pts">18 - 25 pts</span><span class="txt">Actúa como Growth Partner activo o Embajador de alto valor.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 3 -->
+            <div class="matriz-crit-card crit-bi" tabindex="0">
+              <div class="matriz-crit-top">
+                <div class="matriz-crit-weight">20% · 20 pts</div>
+                <div class="matriz-crit-actions">
+                  <span class="matriz-crit-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <h4 class="matriz-crit-name">Bidireccionalidad de la Interacción</h4>
+              <div class="matriz-crit-body">
+                <div class="matriz-crit-body-inner">
+                  <p class="matriz-crit-desc">
+                    Evalúa la reciprocidad del contacto; no sólo cuántas veces CNTXT lo busca, sino qué tan seguido toma la iniciativa para saludar, consultar una idea o compartir contenido de interés.
+                  </p>
+                  <div class="matriz-rubric">
+                    <div class="rubric-row"><span class="pts">0 - 6 pts</span><span class="txt">Unilateral; CNTXT siempre debe buscarlo.</span></div>
+                    <div class="rubric-row"><span class="pts">7 - 13 pts</span><span class="txt">Fluida; responde ágilmente y mantiene la conversación.</span></div>
+                    <div class="rubric-row"><span class="pts">14 - 20 pts</span><span class="txt">Proactiva; la persona toma iniciativa constante.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 4 -->
+            <div class="matriz-crit-card crit-sandler" tabindex="0">
+              <div class="matriz-crit-top">
+                <div class="matriz-crit-weight">10% · 10 pts</div>
+                <div class="matriz-crit-actions">
+                  <span class="matriz-crit-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <h4 class="matriz-crit-name">Nivel de Vulnerabilidad (Índice Sandler)</h4>
+              <div class="matriz-crit-body">
+                <div class="matriz-crit-body-inner">
+                  <p class="matriz-crit-desc">
+                    Profundidad de las conversaciones. Indica qué tanto comparte sus miedos reales de vida, retos, proyecciones financieras o situaciones familiares sin posturas a la defensiva.
+                  </p>
+                  <div class="matriz-rubric">
+                    <div class="rubric-row"><span class="pts">0 - 3 pts</span><span class="txt">Superficial; postura corporativa o a la defensiva.</span></div>
+                    <div class="rubric-row"><span class="pts">4 - 7 pts</span><span class="txt">Abierto; revela motivaciones y ciertas preocupaciones.</span></div>
+                    <div class="rubric-row"><span class="pts">8 - 10 pts</span><span class="txt">Confianza Total; comparte miedos de vida o patrimonio sin reservas.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 5 -->
+            <div class="matriz-crit-card crit-cialdini" tabindex="0">
+              <div class="matriz-crit-top">
+                <div class="matriz-crit-weight">10% · 10 pts</div>
+                <div class="matriz-crit-actions">
+                  <span class="matriz-crit-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <h4 class="matriz-crit-name">Involucramiento en Comunidad (Insider Cialdini)</h4>
+              <div class="matriz-crit-body">
+                <div class="matriz-crit-body-inner">
+                  <p class="matriz-crit-desc">
+                    Participación activa en experiencias privadas, eventos del ecosistema o interacción constante con la narrativa de la marca (Efecto Insider de Cialdini).
+                  </p>
+                  <div class="matriz-rubric">
+                    <div class="rubric-row"><span class="pts">0 - 3 pts</span><span class="txt">Observador; reacciona esporádicamente a pauta o redes.</span></div>
+                    <div class="rubric-row"><span class="pts">4 - 7 pts</span><span class="txt">Asistente; acude a espacios digitales o citas formales.</span></div>
+                    <div class="rubric-row"><span class="pts">8 - 10 pts</span><span class="txt">Insider; asiste a experiencias privadas, Figital Showroom o Mawa/Growths.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 6 -->
+            <div class="matriz-crit-card crit-map" tabindex="0">
+              <div class="matriz-crit-top">
+                <div class="matriz-crit-weight">10% · 10 pts</div>
+                <div class="matriz-crit-actions">
+                  <span class="matriz-crit-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <h4 class="matriz-crit-name">Claridad del Mapa de Vida</h4>
+              <div class="matriz-crit-body">
+                <div class="matriz-crit-body-inner">
+                  <p class="matriz-crit-desc">
+                    Nivel de conocimiento sobre los planes del contacto a 3 o 5 años (retiro, crecimiento familiar, expansión de negocios) para acompañarle proactivamente antes de la necesidad comercial.
+                  </p>
+                  <div class="matriz-rubric">
+                    <div class="rubric-row"><span class="pts">0 - 3 pts</span><span class="txt">Desconocido; solo se conoce su requerimiento actual.</span></div>
+                    <div class="rubric-row"><span class="pts">4 - 7 pts</span><span class="txt">Proyectado; se conocen metas familiares/financieras a 2 años.</span></div>
+                    <div class="rubric-row"><span class="pts">8 - 10 pts</span><span class="txt">Mapeado; hoja de ruta clara a 3-5 años para acompañar proactivamente.</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Vital Levels Strip -->
+          <div class="matriz-levels-strip">
+            <div class="matriz-level-box lvl-p1" tabindex="0">
+              <div class="lvl-head">
+                <div class="lvl-head-left">
+                  <span class="lvl-dot dot-p1"></span>
+                  <span class="lvl-title">P1: SIN PULSO</span>
+                </div>
+                <div class="lvl-head-right">
+                  <span class="lvl-pts">0 a 25 Pts</span>
+                  <span class="lvl-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <div class="lvl-state">Estado de Latencia / Recapture</div>
+              <div class="lvl-body">
+                <div class="lvl-body-inner">
+                  <div class="lvl-desc">Relación congelada o estrictamente transaccional. Requiere confrontar miedos mediante descalificación pasiva Sandler o reevaluar la continuidad.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="matriz-level-box lvl-p2" tabindex="0">
+              <div class="lvl-head">
+                <div class="lvl-head-left">
+                  <span class="lvl-dot dot-p2"></span>
+                  <span class="lvl-title">P2: PULSO DÉBIL</span>
+                </div>
+                <div class="lvl-head-right">
+                  <span class="lvl-pts">26 a 50 Pts</span>
+                  <span class="lvl-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <div class="lvl-state">Estado de Exploración / Attain</div>
+              <div class="lvl-body">
+                <div class="lvl-body-inner">
+                  <div class="lvl-desc">Curiosidad o contacto inicial sin profundidad. Se activan secuencias de nutrición R.E.D. (contenido nativo y storytelling) para elevar la afinidad cultural.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="matriz-level-box lvl-p3" tabindex="0">
+              <div class="lvl-head">
+                <div class="lvl-head-left">
+                  <span class="lvl-dot dot-p3"></span>
+                  <span class="lvl-title">P3: PULSO INTENSO</span>
+                </div>
+                <div class="lvl-head-right">
+                  <span class="lvl-pts">51 a 80 Pts</span>
+                  <span class="lvl-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <div class="lvl-state">Estado de Sincronía / Expand</div>
+              <div class="lvl-body">
+                <div class="lvl-body-inner">
+                  <div class="lvl-desc">Alta reciprocidad, vulnerabilidad y alineación con ADN CNTXT. Presión arterial óptima; propensa a gestar nuevos proyectos y co-desarrollos orgánicos.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="matriz-level-box lvl-p4" tabindex="0">
+              <div class="lvl-head">
+                <div class="lvl-head-left">
+                  <span class="lvl-dot dot-p4"></span>
+                  <span class="lvl-title">P4: TEJIDO INTEGRADO</span>
+                </div>
+                <div class="lvl-head-right">
+                  <span class="lvl-pts">81 a 100 Pts</span>
+                  <span class="lvl-chevron" aria-hidden="true">▾</span>
+                </div>
+              </div>
+              <div class="lvl-state">Simbiosis / Growth Partner &amp; Keep</div>
+              <div class="lvl-body">
+                <div class="lvl-body-inner">
+                  <div class="lvl-desc">Simbiosis total. Insider de la comunidad, defiende la marca, consume la experiencia y multiplica el crecimiento mediante referidos de alto nivel.</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="agent-comp-item">
-          <div class="agent-comp-badge status-gold">● ORQUESTACIÓN READY</div>
-          <div class="agent-comp-info">
-            <span class="agent-comp-name">🧠 Orchestration Agent</span>
-            <span class="agent-comp-desc">Detonador intersistémico (C.O.R., C.A.S.H., N.E.O.)</span>
+        <!-- Interactive Calculator Drawer (Collapsible) -->
+        <div class="matriz-calculator-drawer" id="matriz-calculator-drawer" style="display:none;">
+          <div class="calc-drawer-header">
+            <h4>🎛️ Simulador &amp; Evaluador de Pulso Relacional</h4>
+            <span class="calc-hint">Ajusta las ponderaciones para estimar el puntaje total (0-100 pts) y ver el diagnóstico agéntico:</span>
+          </div>
+          <div class="calc-sliders-grid">
+            <div class="calc-slider-item">
+              <div class="calc-slider-top">
+                <span>🧬 Afinidad ADN (Max 25)</span>
+                <span class="calc-val-badge" id="val-calc-dna">15 pts</span>
+              </div>
+              <input type="range" class="calc-range" id="range-calc-dna" min="0" max="25" value="15">
+            </div>
+            <div class="calc-slider-item">
+              <div class="calc-slider-top">
+                <span>👑 Recomendar (Max 25)</span>
+                <span class="calc-val-badge" id="val-calc-ambassador">12 pts</span>
+              </div>
+              <input type="range" class="calc-range" id="range-calc-ambassador" min="0" max="25" value="12">
+            </div>
+            <div class="calc-slider-item">
+              <div class="calc-slider-top">
+                <span>🔁 Bidireccionalidad (Max 20)</span>
+                <span class="calc-val-badge" id="val-calc-bi">10 pts</span>
+              </div>
+              <input type="range" class="calc-range" id="range-calc-bi" min="0" max="20" value="10">
+            </div>
+            <div class="calc-slider-item">
+              <div class="calc-slider-top">
+                <span>🛡️ Vulnerabilidad Sandler (Max 10)</span>
+                <span class="calc-val-badge" id="val-calc-sandler">5 pts</span>
+              </div>
+              <input type="range" class="calc-range" id="range-calc-sandler" min="0" max="10" value="5">
+            </div>
+            <div class="calc-slider-item">
+              <div class="calc-slider-top">
+                <span>🏛️ Comunidad Insider (Max 10)</span>
+                <span class="calc-val-badge" id="val-calc-cialdini">6 pts</span>
+              </div>
+              <input type="range" class="calc-range" id="range-calc-cialdini" min="0" max="10" value="6">
+            </div>
+            <div class="calc-slider-item">
+              <div class="calc-slider-top">
+                <span>🗺️ Mapa de Vida (Max 10)</span>
+                <span class="calc-val-badge" id="val-calc-map">5 pts</span>
+              </div>
+              <input type="range" class="calc-range" id="range-calc-map" min="0" max="10" value="5">
+            </div>
+          </div>
+          <div class="calc-result-banner" id="calc-result-banner">
+            <div class="calc-score-display">
+              <span class="calc-score-num" id="calc-total-pts">53</span>
+              <span class="calc-score-denom">/ 100 PTS</span>
+            </div>
+            <div class="calc-score-info">
+              <div class="calc-score-level" id="calc-level-tag">🔴 P3: PULSO INTENSO (51 a 80 pts)</div>
+              <div class="calc-score-state" id="calc-state-tag">Estado de Sincronía / Expand</div>
+              <div class="calc-score-action" id="calc-action-tag">Alta reciprocidad, vulnerabilidad y alineación con el ADN CNTXT. La presión arterial del vínculo es óptima; propensión alta para gestar nuevos proyectos y co-desarrollos.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -860,7 +1304,7 @@
       <!-- PULSE SCALE FILTER BAR -->
       <div class="pulse-scale-filter-container">
         <div class="pulse-filter-label">
-          <span>🫀 Escala de Pulsos (The Pulse Scale)</span>
+          <span>🫀 Escala de Pulsos (The Pulse Scale · 100 Puntos)</span>
           <span class="pulse-filter-sub font-mono" id="pulse-active-count">Mostrando todos los entes</span>
         </div>
         <div class="pulse-scale-pills">
@@ -868,24 +1312,24 @@
             <span class="pulse-dot dot-all"></span>
             <span>Todos los Pulsos</span>
           </button>
-          <button class="pulse-pill-btn pulse-p1" data-pulse-filter="1">
+          <button class="pulse-pill-btn pulse-p1" data-pulse-filter="1" title="0 a 25 Pts · Estado de Latencia / Recapture">
             <span class="pulse-dot dot-p1"></span>
-            <span>Pulso 1: SIN PULSO</span>
+            <span>P1: SIN PULSO (0-25 pts)</span>
             <span class="pulse-badge-count" id="count-p1">0</span>
           </button>
-          <button class="pulse-pill-btn pulse-p2" data-pulse-filter="2">
+          <button class="pulse-pill-btn pulse-p2" data-pulse-filter="2" title="26 a 50 Pts · Estado de Exploración / Attain">
             <span class="pulse-dot dot-p2"></span>
-            <span>Pulso 2: PULSO DÉBIL</span>
+            <span>P2: PULSO DÉBIL (26-50 pts)</span>
             <span class="pulse-badge-count" id="count-p2">0</span>
           </button>
-          <button class="pulse-pill-btn pulse-p3" data-pulse-filter="3">
+          <button class="pulse-pill-btn pulse-p3" data-pulse-filter="3" title="51 a 80 Pts · Estado de Sincronía / Expand">
             <span class="pulse-dot dot-p3"></span>
-            <span>Pulso 3: PULSO INTENSO</span>
+            <span>P3: PULSO INTENSO (51-80 pts)</span>
             <span class="pulse-badge-count" id="count-p3">0</span>
           </button>
-          <button class="pulse-pill-btn pulse-p4" data-pulse-filter="4">
+          <button class="pulse-pill-btn pulse-p4" data-pulse-filter="4" title="81 a 100 Pts · Simbiosis / Growth Partner & Keep">
             <span class="pulse-dot dot-p4"></span>
-            <span>Pulso 4: TEJIDO</span>
+            <span>P4: TEJIDO INTEGRADO (81-100 pts)</span>
             <span class="pulse-badge-count" id="count-p4">0</span>
           </button>
         </div>
@@ -926,6 +1370,72 @@
           </button>
         </div>
       </div>
+      <!-- ══════════════════════════════════════════════════════════════════════ -->
+      <!-- SELECTOR SUPERIOR DE FLUJOS DE PROYECTOS (B2B, B2C, SELECT, SHOWROOM) -->
+      <!-- ══════════════════════════════════════════════════════════════════════ -->
+      <div class="globulos-flow-selector-bar">
+        <div class="flow-selector-header">
+          <div class="flow-selector-title-wrap">
+            <span class="flow-selector-glow-dot"></span>
+            <span class="flow-selector-label">EMBUDOS DE CONVERSIÓN R.E.D.</span>
+            <span class="flow-selector-hint">Selecciona el flujo para alternar dinámicamente métricas, etapas y torrente celular</span>
+          </div>
+        </div>
+        <div class="flow-tabs-grid" id="globulos-flow-buttons">
+          <button type="button" class="flow-tab-card active" data-flow="b2b" id="btn-flow-b2b" title="Embudo Principal B2B para desarrolladores y proyectos empresariales">
+            <div class="flow-tab-top">
+              <span class="flow-tab-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="22.01"></line><line x1="15" y1="22" x2="15" y2="22.01"></line><line x1="8" y1="6" x2="8" y2="6.01"></line><line x1="16" y1="6" x2="16" y2="6.01"></line><line x1="8" y1="10" x2="8" y2="10.01"></line><line x1="16" y1="10" x2="16" y2="10.01"></line><line x1="8" y1="14" x2="8" y2="14.01"></line><line x1="16" y1="14" x2="16" y2="14.01"></line><line x1="8" y1="18" x2="8" y2="18.01"></line><line x1="16" y1="18" x2="16" y2="18.01"></line></svg>
+              </span>
+              <span class="flow-tab-badge" id="flow-badge-b2b">0 Proyectos</span>
+            </div>
+            <div class="flow-tab-name">Flujo de Proyectos MADE B2B</div>
+            <div class="flow-tab-sub">Servicios Inmobiliarios & Corporativos</div>
+            <div class="flow-tab-financial" id="flow-financial-b2b">$0</div>
+            <div class="flow-tab-active-indicator"></div>
+          </button>
+
+          <button type="button" class="flow-tab-card" data-flow="b2c" id="btn-flow-b2c" title="Embudo B2C para familias, vivienda campestre y reformas personales">
+            <div class="flow-tab-top">
+              <span class="flow-tab-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              </span>
+              <span class="flow-tab-badge" id="flow-badge-b2c">0 Proyectos</span>
+            </div>
+            <div class="flow-tab-name">Proyectos MADE B2C</div>
+            <div class="flow-tab-sub">Vivienda Campestre & Familias</div>
+            <div class="flow-tab-financial" id="flow-financial-b2c">$0</div>
+            <div class="flow-tab-active-indicator"></div>
+          </button>
+
+          <button type="button" class="flow-tab-card" data-flow="select" id="btn-flow-select" title="Embudo SELECT rápido de viviendas por catálogo (5M, 7M, 10M COP - máx 15 días)">
+            <div class="flow-tab-top">
+              <span class="flow-tab-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </span>
+              <span class="flow-tab-badge" id="flow-badge-select">0 Proyectos</span>
+            </div>
+            <div class="flow-tab-name">Proyectos SELECT</div>
+            <div class="flow-tab-sub">Catálogo Ágil ≤ 15 Días (5, 7, 10M)</div>
+            <div class="flow-tab-financial" id="flow-financial-select">$0</div>
+            <div class="flow-tab-active-indicator"></div>
+          </button>
+
+          <button type="button" class="flow-tab-card" data-flow="showroom" id="btn-flow-showroom" title="Embudo ShowRoom de comercialización y venta de propiedades inmobiliarias">
+            <div class="flow-tab-top">
+              <span class="flow-tab-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"></path><path d="M5 20V8l7-4 7 4v12"></path><path d="M10 12v8"></path><path d="M14 12v8"></path></svg>
+              </span>
+              <span class="flow-tab-badge" id="flow-badge-showroom">0 Proyectos</span>
+            </div>
+            <div class="flow-tab-name">ShowRoom CNTXT</div>
+            <div class="flow-tab-sub">Venta de Propiedades Inmobiliarias</div>
+            <div class="flow-tab-financial" id="flow-financial-showroom">$0</div>
+            <div class="flow-tab-active-indicator"></div>
+          </button>
+        </div>
+      </div>
+
       <!-- VITAL PIPELINE METRICS BAR -->
       <div class="globulos-metrics-grid">
         <div class="globulo-metric-card">
@@ -971,132 +1481,71 @@
         <div class="ecg-canvas-header">
           <div class="ecg-canvas-title">
             <span class="ecg-live-dot"></span>
-            <span>FLUJO DE PROYECTOS ACTIVOS MADE</span>
+            <span id="ecg-canvas-flow-title">FLUJO DE PROYECTOS ACTIVOS MADE B2B</span>
           </div>
           <div class="ecg-canvas-hint">Arrastra libremente cualquier Glóbulo Rojo entre etapas o haz clic para editar
           </div>
         </div>
 
         <div class="globulos-ecg-canvas" id="globulos-ecg-canvas">
-          <!-- Floating background micro blood cells (NatGeo Vessel Stream Animation) -->
-          <div class="arterial-stream-particles">
-            <span class="micro-cell c1"></span>
-            <span class="micro-cell c2"></span>
-            <span class="micro-cell c3"></span>
-            <span class="micro-cell c4"></span>
-            <span class="micro-cell c5"></span>
-            <span class="micro-cell c6"></span>
-            <span class="micro-cell c7"></span>
-            <span class="micro-cell c8"></span>
+          <!-- Funnel Stages ECG Zones Header (Dynamically Populated by app.js according to active flow) -->
+          <div class="ecg-stage-zones-header" id="ecg-stage-zones-header">
+            <!-- Dynamic stage columns rendered by JS -->
           </div>
 
-          <!-- Funnel Stages ECG Zones Header -->
-          <div class="ecg-stage-zones-header">
-            <div class="ecg-zone" data-stage="mql"
-              data-tooltip="Contacto cualificado por marketing. Interés inicial identificado (10%)."><span>🩸 MQL |
-                Plasma (10%)</span><br><span class="ecg-zone-amount" id="ecg-amount-mql">$0</span></div>
-            <div class="ecg-zone" data-stage="conversacion"
-              data-tooltip="Diástole comercial. Escucha activa y diagnóstico preliminar de necesidades (20%)."><span>💓
-                1ra Conversación (20%)</span><br><span class="ecg-zone-amount" id="ecg-amount-conversacion">$0</span>
+          <!-- Arterial Vessel Stream Channel below Stage Name Boxes -->
+          <div class="globulos-stream-area" id="globulos-stream-area">
+            <!-- Floating background micro blood cells (NatGeo Vessel Stream Animation) -->
+            <div class="arterial-stream-particles">
+              <span class="micro-cell c1"></span>
+              <span class="micro-cell c2"></span>
+              <span class="micro-cell c3"></span>
+              <span class="micro-cell c4"></span>
+              <span class="micro-cell c5"></span>
+              <span class="micro-cell c6"></span>
+              <span class="micro-cell c7"></span>
+              <span class="micro-cell c8"></span>
             </div>
-            <div class="ecg-zone" data-stage="sql"
-              data-tooltip="Contacto cualificado para ventas. Presupuesto y decisión validados (40%)."><span>🔬 SQL |
-                Válvula (40%)</span><br><span class="ecg-zone-amount" id="ecg-amount-sql">$0</span></div>
-            <div class="ecg-zone" data-stage="propuesta"
-              data-tooltip="Oferta co-creada y entregada. Evaluación de valor en curso (60%)."><span>⚡ Propuesta
-                Presentada (60%)</span><br><span class="ecg-zone-amount" id="ecg-amount-propuesta">$0</span></div>
-            <div class="ecg-zone" data-stage="negociacion"
-              data-tooltip="Ajuste de términos y condiciones. Impulso previo al cierre (80%)."><span>🫀 En Negociación
-                (80%)</span><br><span class="ecg-zone-amount" id="ecg-amount-negociacion">$0</span></div>
-            <div class="ecg-zone" data-stage="ejecucion"
-              data-tooltip="Proyecto cerrado y activo. Integración total en el ecosistema (100%)."><span>🧬 Tejido
-                Consolidado (100%)</span><br><span class="ecg-zone-amount" id="ecg-amount-ejecucion">$0</span></div>
-            <div class="ecg-zone" data-stage="pausa" data-tooltip="Proyecto en estasis o pausa temporal (0%)."><span>⏸️
-                Estasis / Pausa (0%)</span><br><span class="ecg-zone-amount" id="ecg-amount-pausa">$0</span></div>
+
+            <!-- Subtle Vertical Separators Grid between stages (Dynamically Populated by app.js) -->
+            <div class="ecg-vertical-separators" id="ecg-vertical-separators">
+              <!-- Dynamic vertical separators rendered by JS -->
+            </div>
+
+            <svg class="globulos-ecg-svg" viewBox="0 0 1200 200" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="arterialStreamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ff2a4b" stop-opacity="0.3" />
+                  <stop offset="50%" stop-color="#ff2a4b" stop-opacity="0.95" />
+                  <stop offset="100%" stop-color="#00e676" stop-opacity="0.7" />
+                </linearGradient>
+                <filter id="arterialGlowFilter" x="-10%" y="-10%" width="120%" height="120%">
+                  <feGaussianBlur stdDeviation="6" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <!-- Background Grid Lines -->
+              <pattern id="ecgArterialGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 42, 75, 0.05)" stroke-width="1" />
+              </pattern>
+              <rect width="1200" height="200" fill="url(#ecgArterialGrid)" rx="0" />
+            </svg>
+
+            <!-- Interactive Red Blood Cell Nodes overlay placed dynamically via JS -->
+            <div class="globulo-nodes-layer" id="globulo-nodes-layer"></div>
           </div>
-
-          <!-- Subtle Vertical Separators Grid between stages -->
-          <div class="ecg-vertical-separators">
-            <div class="ecg-v-sep"></div>
-            <div class="ecg-v-sep"></div>
-            <div class="ecg-v-sep"></div>
-            <div class="ecg-v-sep"></div>
-            <div class="ecg-v-sep"></div>
-            <div class="ecg-v-sep"></div>
-          </div>
-
-          <svg class="globulos-ecg-svg" viewBox="0 0 1200 240" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="arterialStreamGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ff2a4b" stop-opacity="0.3" />
-                <stop offset="50%" stop-color="#ff2a4b" stop-opacity="0.95" />
-                <stop offset="100%" stop-color="#00e676" stop-opacity="0.7" />
-              </linearGradient>
-              <filter id="arterialGlowFilter" x="-10%" y="-10%" width="120%" height="120%">
-                <feGaussianBlur stdDeviation="6" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            <!-- Background Grid Lines -->
-            <pattern id="ecgArterialGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 42, 75, 0.05)" stroke-width="1" />
-            </pattern>
-            <rect width="1200" height="240" fill="url(#ecgArterialGrid)" rx="12" />
-          </svg>
-
-          <!-- Interactive Red Blood Cell Nodes overlay placed dynamically via JS -->
-          <div class="globulo-nodes-layer" id="globulo-nodes-layer"></div>
         </div>
       </div>
 
       <!-- PROJECTS CONTROLS BAR -->
       <div class="projects-bar-container">
         <div class="projects-bar-left">
-          <div class="project-status-pills">
-            <button class="project-pill-btn active" data-project-filter="all"
-              data-tooltip="Ver todos los proyectos del embudo">
-              <span>Todos</span>
-              <span class="pill-amount-badge" id="pill-amount-all">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="mql"
-              data-tooltip="Contacto cualificado por marketing. Interés inicial identificado (10%).">
-              <span>MQL | Plasma (10%)</span>
-              <span class="pill-amount-badge" id="pill-amount-mql">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="conversacion"
-              data-tooltip="Diástole comercial. Escucha activa y diagnóstico preliminar de necesidades (20%).">
-              <span>1ra Conversación (20%)</span>
-              <span class="pill-amount-badge" id="pill-amount-conversacion">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="sql"
-              data-tooltip="Contacto cualificado para ventas. Presupuesto y decisión validados (40%).">
-              <span>SQL | Válvula (40%)</span>
-              <span class="pill-amount-badge" id="pill-amount-sql">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="propuesta"
-              data-tooltip="Oferta co-creada y entregada. Evaluación de valor en curso (60%).">
-              <span>Propuesta Presentada (60%)</span>
-              <span class="pill-amount-badge" id="pill-amount-propuesta">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="negociacion"
-              data-tooltip="Ajuste de términos y condiciones. Impulso previo al cierre (80%).">
-              <span>En Negociación (80%)</span>
-              <span class="pill-amount-badge" id="pill-amount-negociacion">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="ejecucion"
-              data-tooltip="Proyecto cerrado y activo. Integración total en el ecosistema (100%).">
-              <span>Tejido Consolidado (100%)</span>
-              <span class="pill-amount-badge" id="pill-amount-ejecucion">$0</span>
-            </button>
-            <button class="project-pill-btn" data-project-filter="pausa"
-              data-tooltip="Proyecto en estasis o pausa temporal (0%).">
-              <span>Estasis / Pausa (0%)</span>
-              <span class="pill-amount-badge" id="pill-amount-pausa">$0</span>
-            </button>
+          <div class="project-status-pills" id="project-status-pills">
+            <!-- Rendered by JS per flow -->
           </div>
         </div>
 
@@ -1114,7 +1563,7 @@
           </button>
           <button id="btn-export-projects-csv" title="Descargar base de datos indexada en formato CSV"
             style="background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
-            <span>📥 Flujo de proyectos</span>
+            <span>📥 Exportar CSV</span>
           </button>
         </div>
       </div>
@@ -1129,9 +1578,9 @@
   </div>
 
   <!-- Client Detail Modal -->
-  <div class="modal-overlay" id="modal-overlay">
+  <div class="modal-overlay" id="modal-overlay" style="display:none;">
     <div class="modal-card">
-      <button class="modal-close-btn" id="modal-close">&times;</button>
+      <button type="button" class="modal-close-btn" id="modal-close">&times;</button>
 
       <div class="modal-header-profile">
         <div class="modal-avatar" id="modal-avatar">AC</div>
@@ -1139,7 +1588,7 @@
           <h2 class="modal-title" id="modal-name">Nombre Cliente</h2>
           <div class="modal-subtitle" id="modal-company">Empresa</div>
         </div>
-        <button class="btn-edit-toggle" id="btn-toggle-edit-mode" title="Editar datos principales de este contacto">
+        <button type="button" class="btn-edit-toggle" id="btn-toggle-edit-mode" title="Editar datos principales de este contacto">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
@@ -1175,6 +1624,10 @@
           <div class="detail-value" id="modal-fname">-</div>
         </div>
         <div class="detail-item-box">
+          <div class="detail-label">Segundo Nombre</div>
+          <div class="detail-value" id="modal-sname">-</div>
+        </div>
+        <div class="detail-item-box">
           <div class="detail-label">Apellidos</div>
           <div class="detail-value" id="modal-lname">-</div>
         </div>
@@ -1186,9 +1639,17 @@
           <div class="detail-label">Correo Electrónico</div>
           <div class="detail-value" id="modal-email">-</div>
         </div>
-        <div class="detail-item-box" style="grid-column: 1 / -1;">
+        <div class="detail-item-box">
           <div class="detail-label">Tipo de Persona</div>
           <div class="detail-value" id="modal-persona-display">-</div>
+        </div>
+        <div class="detail-item-box">
+          <div class="detail-label">Canal de Prospección</div>
+          <div class="detail-value" id="modal-channel-display" style="color: #ff6680;">-</div>
+        </div>
+        <div class="detail-item-box" style="grid-column: 1 / -1;">
+          <div class="detail-label">🎯 Siguiente Acción / Próximo Paso</div>
+          <div class="detail-value" id="modal-next-action-display" style="color: var(--accent-gold); font-weight: 600;">-</div>
         </div>
       </div>
 
@@ -1244,6 +1705,10 @@
           <input type="text" class="edit-input" id="edit-input-fname" placeholder="Primer Nombre">
         </div>
         <div class="detail-item-box-edit">
+          <label class="detail-label">Segundo Nombre</label>
+          <input type="text" class="edit-input" id="edit-input-sname" placeholder="Segundo Nombre">
+        </div>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
           <label class="detail-label">Apellidos</label>
           <input type="text" class="edit-input" id="edit-input-lname" placeholder="Apellidos">
         </div>
@@ -1255,87 +1720,85 @@
           <label class="detail-label">Correo Electrónico</label>
           <input type="email" class="edit-input" id="edit-input-email" placeholder="correo@ejemplo.com">
         </div>
-        <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
-          <button class="btn-cancel-edit" id="btn-cancel-contact-edit">Cancelar</button>
-          <button class="btn-save-edit" id="btn-save-contact-edit">💾 Guardar Cambios</button>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
+          <label class="detail-label">🎯 Siguiente Acción / Próximo Paso</label>
+          <input type="text" class="edit-input" id="edit-input-next-action" placeholder="Ej: Enviar propuesta comercial el viernes">
         </div>
+        <!-- Botones de edición unificados en la barra global inferior -->
       </div>
 
-      <!-- Tag Assignment Selector -->
+      <!-- Tag Assignment Selector (Dropdown) -->
       <div class="modal-tag-selector">
         <div class="modal-tag-selector-title">
-          <span>🏷️ Asignar Tipo de Relación (Lazo CNTXT)</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color: var(--accent-gold);">
+            <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+          </svg>
+          <span>Tipo de Relación</span>
         </div>
-        <div class="modal-tag-options" id="modal-tag-options-container">
-          <span class="rel-tag modal-tag-option" data-assign-tag="embajador" data-tag="embajador">Embajador de
-            Marca</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="growth" data-tag="growth">Growth Partner</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="cliente_black" data-tag="cliente_black">Cliente
-            Black</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="cliente_gold" data-tag="cliente_gold">Cliente
-            Gold</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="cliente_silver" data-tag="cliente_silver">Cliente
-            Silver</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="lead" data-tag="lead">Lead</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="media" data-tag="media">Media & Influencers</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="aliados" data-tag="aliados">Aliados
-            Estratégicos</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="servicios_claves"
-            data-tag="servicios_claves">Servicios Claves</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="servicios_aux" data-tag="servicios_aux">Servicios
-            Auxiliares</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="equipo" data-tag="equipo">Equipo CNTXT</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="candidatos" data-tag="candidatos">Candidatos y
-            Talento</span>
-          <span class="rel-tag modal-tag-option" data-assign-tag="mentores" data-tag="mentores">Mentores y
-            Asesores</span>
-        </div>
+        <select id="modal-select-tag" class="edit-select modal-select-dropdown">
+          <option value="embajador">Embajador de Marca</option>
+          <option value="growth">Growth Partner</option>
+          <option value="cliente_black">Cliente Black</option>
+          <option value="cliente_gold">Cliente Gold</option>
+          <option value="cliente_silver">Cliente Silver</option>
+          <option value="cliente_bronze">Cliente Bronze</option>
+          <option value="lead">Lead / Prospecto</option>
+          <option value="media">Media & Influencers</option>
+          <option value="aliados">Aliados Estratégicos</option>
+          <option value="servicios_claves">Servicios Claves</option>
+          <option value="servicios_aux">Servicios Auxiliares</option>
+          <option value="equipo">Equipo CNTXT</option>
+          <option value="candidatos">Candidatos y Talento</option>
+          <option value="mentores">Mentores y Asesores</option>
+          <option value="prospecto">Prospecto</option>
+        </select>
       </div>
 
-      <!-- Prospecting Channel Assignment Selector -->
+      <!-- Prospecting Channel Assignment Selector (Dropdown) -->
       <div class="modal-channel-selector">
         <div class="modal-tag-selector-title">
-          <span>🩸 Canal de Entrada / Prospección</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color: #ff4d6d;">
+            <path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z" />
+          </svg>
+          <span>Canal de Entrada / Prospección</span>
         </div>
-        <div class="modal-channel-options" id="modal-channel-options-container">
-          <button class="channel-pill-btn channel-fb modal-channel-option" data-assign-channel="fb">Media |
-            Facebook</button>
-          <button class="channel-pill-btn channel-ig modal-channel-option" data-assign-channel="ig">Media |
-            Instagram</button>
-          <button class="channel-pill-btn channel-gg modal-channel-option" data-assign-channel="gg">Media |
-            Google</button>
-          <button class="channel-pill-btn channel-gmaps modal-channel-option" data-assign-channel="gmaps">Media | Google
-            Maps</button>
-          <button class="channel-pill-btn channel-referidos modal-channel-option"
-            data-assign-channel="referidos">Referidos</button>
-          <button class="channel-pill-btn channel-prospeccion modal-channel-option"
-            data-assign-channel="prospeccion">Prospección Activa</button>
-          <button class="channel-pill-btn channel-ferias modal-channel-option" data-assign-channel="ferias">Ferias o
-            Activaciones</button>
-          <button class="channel-pill-btn channel-oficinas modal-channel-option" data-assign-channel="oficinas">Oficinas
-            CNTXT</button>
-          <button class="channel-pill-btn channel-capital modal-channel-option" data-assign-channel="capital">Capital
-            Relacional</button>
-        </div>
+        <select id="modal-select-channel" class="edit-select modal-select-dropdown">
+          <option value="fb">Media | Facebook</option>
+          <option value="ig">Media | Instagram</option>
+          <option value="gg">Media | Google</option>
+          <option value="gmaps">Media | Google Maps</option>
+          <option value="referidos">Referidos</option>
+          <option value="prospeccion">Prospección Activa</option>
+          <option value="ferias">Ferias o Activaciones</option>
+          <option value="oficinas">Oficinas CNTXT</option>
+          <option value="capital">Capital Relacional</option>
+          <option value="whatsapp">WhatsApp Directo</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="web">Sitio Web</option>
+          <option value="directo">Contacto Directo</option>
+        </select>
       </div>
 
-      <!-- Pulse Scale Selector in Modal -->
+      <!-- Pulse Intensity Selector in Modal -->
       <div class="modal-pulse-selector">
         <div class="modal-tag-selector-title">
-          <span>🫀 Escala de Pulso Relacional (Pulse Scale)</span>
+          <svg class="pulse-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff2a4b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(255, 42, 75, 0.6));">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          <span>Intensidad del Pulso</span>
         </div>
         <div class="modal-pulse-options" id="modal-pulse-options">
-          <button class="modal-pulse-btn pulse-opt-1" data-pulse-opt="1" title="Lead en frío absoluto (>30d inerte)">
-            <span class="pulse-opt-dot p1"></span> 1: Sin Pulso
+          <button type="button" class="modal-pulse-btn pulse-opt-1" data-pulse-opt="1" title="0 a 25 Pts | P1: Sin Pulso (Estado de Latencia / Recapture)">
+            <span class="pulse-opt-dot p1"></span> 1: Sin Pulso (0-25 pts)
           </button>
-          <button class="modal-pulse-btn pulse-opt-2" data-pulse-opt="2" title="Interacción irregular / bajo valor">
-            <span class="pulse-opt-dot p2"></span> 2: Pulso Débil
+          <button type="button" class="modal-pulse-btn pulse-opt-2" data-pulse-opt="2" title="26 a 50 Pts | P2: Pulso Débil (Estado de Exploración / Attain)">
+            <span class="pulse-opt-dot p2"></span> 2: Pulso Débil (26-50 pts)
           </button>
-          <button class="modal-pulse-btn pulse-opt-3" data-pulse-opt="3" title="Sincronía total / listo para cierre">
-            <span class="pulse-opt-dot p3"></span> 3: Pulso Intenso
+          <button type="button" class="modal-pulse-btn pulse-opt-3" data-pulse-opt="3" title="51 a 80 Pts | P3: Pulso Intenso (Estado de Sincronía / Expand)">
+            <span class="pulse-opt-dot p3"></span> 3: Pulso Intenso (51-80 pts)
           </button>
-          <button class="modal-pulse-btn pulse-opt-4" data-pulse-opt="4" title="Cliente integrado / Tejido vital">
-            <span class="pulse-opt-dot p4"></span> 4: Tejido Integrado
+          <button type="button" class="modal-pulse-btn pulse-opt-4" data-pulse-opt="4" title="81 a 100 Pts | P4: Tejido Integrado (Simbiosis / Growth Partner &amp; Keep)">
+            <span class="pulse-opt-dot p4"></span> 4: Tejido Integrado (81-100 pts)
           </button>
         </div>
       </div>
@@ -1349,36 +1812,9 @@
           Bitácora de Lazos y Notas de Relacionamiento
         </div>
 
-        <!-- Fase R.E.D. Selector -->
-        <div class="red-phase-selector">
-          <div class="red-phase-selector-label">🫀 Asignar Fase R.E.D. del Contacto</div>
-          <div class="red-phase-selector-options" id="modal-phase-options">
-            <button class="red-phase-btn phase-btn-r" data-phase="R"
-              title="Relación — Diástole / Escucha Activa Sandler">
-              <span class="phase-btn-letter">R</span>
-              <span class="phase-btn-name">Relación</span>
-              <span class="phase-btn-bio">Diástole · Aurícula</span>
-            </button>
-            <div class="phase-btn-arrow">→</div>
-            <button class="red-phase-btn phase-btn-d" data-phase="D"
-              title="Diseño — Oxigenación / Neuromarketing Klaric">
-              <span class="phase-btn-letter">D</span>
-              <span class="phase-btn-name">Diseño</span>
-              <span class="phase-btn-bio">Pulmones · Oxigenación</span>
-            </button>
-            <div class="phase-btn-arrow">→</div>
-            <button class="red-phase-btn phase-btn-e" data-phase="E"
-              title="Expansión — Sístole / Cialdini Reciprocidad">
-              <span class="phase-btn-letter">E</span>
-              <span class="phase-btn-name">Expansión</span>
-              <span class="phase-btn-bio">Ventrículo Izq. · Sístole</span>
-            </button>
-          </div>
-        </div>
-
         <textarea class="notes-textarea" id="modal-notes-input"
           placeholder="Escribe aquí notas sobre preferencias del cliente, cumpleaños, acuerdos o temas clave de conversación..."></textarea>
-        <button class="btn-save-notes" id="modal-save-notes">Guardar Nota</button>
+        <!-- Notas del contacto -->
       </div>
 
       <div class="modal-action-buttons-row">
@@ -1406,21 +1842,19 @@
 
       <div style="margin-bottom: 20px;">
         <h2 class="modal-title">➕ Crear Nueva Relación</h2>
-        <div class="modal-subtitle">Ingresa la información para añadirla al Directorio CNTXT® R.E.D.</div>
+        <div class="modal-subtitle">Registra un nuevo tercero en el tejido de R.E.D.</div>
       </div>
 
       <div class="modal-grid-details-edit">
         <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
           <label class="detail-label">Oficio / Rol</label>
           <input type="text" class="edit-input" id="add-input-oficio"
-            placeholder="Ej: Médico, Empresaria, Arquitecto...">
+            placeholder="Ej: Director Creativo, Inversionista, CEO...">
         </div>
         <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
           <label class="detail-label">Tipo de Persona</label>
           <div class="persona-toggle-group" id="add-persona-toggle">
-            <button type="button" class="persona-toggle-btn active" data-persona-val="" id="add-persona-none">Sin
-              asignar</button>
-            <button type="button" class="persona-toggle-btn persona-toggle-b2c" data-persona-val="b2c"
+            <button type="button" class="persona-toggle-btn persona-toggle-b2c active" data-persona-val="b2c"
               id="add-persona-b2c">B2C | Persona Natural</button>
             <button type="button" class="persona-toggle-btn persona-toggle-b2b" data-persona-val="b2b"
               id="add-persona-b2b">B2B | Persona Jurídica</button>
@@ -1428,8 +1862,8 @@
         </div>
         <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
           <label class="detail-label">📍 Ciudad / País <span
-              style="font-size:10px; color:var(--text-muted); font-weight:400; margin-left:6px;">Listo para
-              mapificación</span></label>
+              style="font-size:10px; color:var(--text-muted); font-weight:400; margin-left:6px;">Escribe para buscar —
+              listo para mapificación</span></label>
           <div style="position: relative;">
             <input type="text" class="edit-input" id="add-input-ciudad" placeholder="Ej: Medellín, Colombia"
               autocomplete="off" data-lat="" data-lng="" style="padding-right: 110px;">
@@ -1460,6 +1894,10 @@
           <input type="text" class="edit-input" id="add-input-fname" placeholder="Ej: María">
         </div>
         <div class="detail-item-box-edit">
+          <label class="detail-label">Segundo Nombre</label>
+          <input type="text" class="edit-input" id="add-input-sname" placeholder="Ej: Camila">
+        </div>
+        <div class="detail-item-box-edit" style="grid-column: 1 / -1;">
           <label class="detail-label">Apellidos</label>
           <input type="text" class="edit-input" id="add-input-lname" placeholder="Ej: Restrepo">
         </div>
@@ -1473,31 +1911,47 @@
         </div>
       </div>
 
-      <div class="modal-tag-selector" style="margin-top: 16px;">
-        <div class="modal-tag-selector-title">
-          <span>🏷️ Seleccionar Tipo de Relación Inicial</span>
-        </div>
-        <div class="modal-tag-options" id="add-tag-options-container">
-          <span class="rel-tag modal-tag-option selected" data-add-tag="cliente_gold" data-tag="cliente_gold">Cliente
-            Gold</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="cliente_black" data-tag="cliente_black">Cliente
-            Black</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="cliente_silver" data-tag="cliente_silver">Cliente
-            Silver</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="embajador" data-tag="embajador">Embajador de Marca</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="growth" data-tag="growth">Growth Partner</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="lead" data-tag="lead">Lead</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="media" data-tag="media">Media & Influencers</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="aliados" data-tag="aliados">Aliados Estratégicos</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="servicios_claves" data-tag="servicios_claves">Servicios
-            Claves</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="servicios_aux" data-tag="servicios_aux">Servicios
-            Auxiliares</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="equipo" data-tag="equipo">Equipo CNTXT</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="candidatos" data-tag="candidatos">Candidatos y
-            Talento</span>
-          <span class="rel-tag modal-tag-option" data-add-tag="mentores" data-tag="mentores">Mentores y Asesores</span>
-        </div>
+      <div class="detail-item-box-edit" style="grid-column: 1 / -1; margin-top: 14px;">
+        <label class="detail-label">🏷️ Tipo de Relación Inicial *</label>
+        <select class="edit-input" id="add-select-tag" style="font-weight: 600; font-size: 13px; padding: 10px 14px; background: rgba(22, 16, 26, 0.95); border: 1px solid rgba(255, 42, 75, 0.35); border-radius: var(--radius-sm); color: #ffffff;">
+          <option value="cliente_gold">🥇 Cliente Gold</option>
+          <option value="cliente_black">🖤 Cliente Black</option>
+          <option value="cliente_silver">🥈 Cliente Silver</option>
+          <option value="embajador">👑 Embajador de Marca</option>
+          <option value="growth">🚀 Growth Partner</option>
+          <option value="lead">🎯 Lead</option>
+          <option value="media">📢 Media &amp; Influencers</option>
+          <option value="aliados">🤝 Aliados Estratégicos</option>
+          <option value="servicios_claves">⚙️ Servicios Claves</option>
+          <option value="servicios_aux">🔧 Servicios Auxiliares</option>
+          <option value="equipo">👥 Equipo CNTXT</option>
+          <option value="candidatos">💼 Candidatos y Talento</option>
+          <option value="mentores">🧠 Mentores y Asesores</option>
+        </select>
+      </div>
+
+      <div class="detail-item-box-edit" style="grid-column: 1 / -1; margin-top: 14px;">
+        <label class="detail-label">🩸 Canal de Prospección / Origen</label>
+        <select class="edit-input" id="add-select-channel" style="font-weight: 600; font-size: 13px; padding: 10px 14px; background: rgba(22, 16, 26, 0.95); border: 1px solid rgba(255, 42, 75, 0.35); border-radius: var(--radius-sm); color: #ffffff;">
+          <option value="directo">Contacto Directo / Networking</option>
+          <option value="fb">Media | Facebook</option>
+          <option value="ig">Media | Instagram</option>
+          <option value="gg">Media | Google</option>
+          <option value="gmaps">Media | Google Maps</option>
+          <option value="referidos">Referidos</option>
+          <option value="prospeccion">Prospección Activa</option>
+          <option value="ferias">Ferias o Activaciones</option>
+          <option value="oficinas">Oficinas CNTXT</option>
+          <option value="capital">Capital Relacional</option>
+          <option value="whatsapp">WhatsApp Directo</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="web">Sitio Web</option>
+        </select>
+      </div>
+
+      <div class="detail-item-box-edit" style="grid-column: 1 / -1; margin-top: 14px;">
+        <label class="detail-label">🎯 Siguiente Acción / Próximo Paso</label>
+        <input type="text" class="edit-input" id="add-input-next-action" placeholder="Ej: Llamada de presentación el lunes">
       </div>
 
       <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
@@ -1529,21 +1983,29 @@
             <input type="text" class="edit-input" id="project-input-title"
               placeholder="Ej: Implementación CRM CNTXT Gold" required>
           </div>
-          <div class="detail-item-box-edit">
-            <label class="detail-label">
-              Relación R.E.D. *
-              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:6px;">
-                — Contacto o Empresa del Directorio
-              </span>
+          <div class="detail-item-box-edit" style="grid-column: span 2;">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Relación R.E.D. * — Contacto o Empresa del Directorio</span>
+              <span id="project-relacion-status-badge" style="font-size:10px; color:#ff8095; font-weight:700; display:none;"></span>
             </label>
-            <select class="edit-input" id="project-select-relacion" required>
-              <option value="" disabled selected>Cargando relaciones del Directorio R.E.D…</option>
-            </select>
+            <div class="searchable-combobox-wrap" id="project-relacion-combobox-wrap">
+              <div class="searchable-input-box">
+                <input type="text" class="edit-input" id="project-search-relacion"
+                  placeholder="🔍 Escribe para buscar contacto o empresa (ej: nombre, empresa, cargo)..."
+                  autocomplete="off" required>
+                <button type="button" class="combobox-clear-btn" id="project-search-relacion-clear" style="display:none;" title="Limpiar selección">✕</button>
+                <input type="hidden" id="project-select-relacion" value="">
+                <input type="hidden" id="project-selected-empresa-id" value="">
+              </div>
+              <div class="combobox-dropdown-list" id="project-relacion-dropdown" style="display: none;">
+                <!-- Opciones filtradas dinámicamente -->
+              </div>
+            </div>
             <small style="display:block; margin-top:5px; font-size:11px; color:var(--text-muted); line-height:1.4;">
-              🔒 Solo se listan entes preexistentes. Para añadir uno nuevo,
-              ve al <strong>Directorio R.E.D.</strong> primero.
+              🔒 Escribe cualquier letra o palabra para filtrar la lista en tiempo real. Al seleccionar, se cargarán sus datos automáticamente.
             </small>
           </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
               <span>Cargo / Oficio de la Persona</span>
@@ -1552,12 +2014,28 @@
                 ⚡ Sincronizado con Directorio
               </span>
             </label>
-            <input type="text" class="edit-input" id="project-input-contact-role"
-              placeholder="Autocompletado desde el Directorio R.E.D.">
+            <input type="text" class="edit-input edit-input-readonly" id="project-input-contact-role"
+              placeholder="Autocompletado desde el Directorio R.E.D." readonly tabindex="-1">
             <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
-              Sincronizado automáticamente con la información del contacto en el Directorio R.E.D.
+              🔒 Solo visualización. Se edita desde la pestaña de Relaciones.
             </small>
           </div>
+
+          <div class="detail-item-box-edit">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Nombre de la Empresa / Organización</span>
+              <span id="project-company-sync-badge"
+                style="font-size:10px; color:#00e676; font-weight:700; background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.3); padding:2px 7px; border-radius:10px; display:none;">
+                ⚡ Sincronizado con Directorio
+              </span>
+            </label>
+            <input type="text" class="edit-input edit-input-readonly" id="project-input-company-name"
+              placeholder="Autocompletado desde el Directorio R.E.D." readonly tabindex="-1">
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              🔒 Solo visualización. Se edita desde la pestaña de Relaciones.
+            </small>
+          </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
               <span>Tipo de Relación R.E.D. (Clasificación)</span>
@@ -1566,24 +2044,57 @@
                 ⚡ Sincronizado con Directorio
               </span>
             </label>
-            <select class="edit-input" id="project-input-relationship-type">
-              <option value="" disabled selected>— Seleccionar Clasificación R.E.D. —</option>
-              <option value="cliente_black">Cliente Black</option>
-              <option value="cliente_gold">Cliente Gold</option>
-              <option value="cliente_silver">Cliente Silver</option>
-              <option value="embajador">Embajador de Marca</option>
-              <option value="growth">Growth Partner</option>
-              <option value="lead">Lead</option>
-              <option value="media">Media & Influencers</option>
-              <option value="aliados">Aliados Estratégicos</option>
-              <option value="servicios_claves">Servicios Claves</option>
-              <option value="servicios_aux">Servicios Auxiliares</option>
-              <option value="equipo">Equipo CNTXT</option>
-              <option value="candidatos">Candidatos y Talento</option>
-              <option value="mentores">Mentores y Asesores</option>
-            </select>
+            <input type="text" class="edit-input edit-input-readonly" id="project-input-relationship-type"
+              placeholder="Autocompletado desde el Directorio R.E.D." readonly tabindex="-1">
             <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
-              Se vincula directamente a la clasificación activa del contacto en el Directorio.
+              🔒 Solo visualización. Se edita desde la pestaña de Relaciones.
+            </small>
+          </div>
+
+          <div class="detail-item-box-edit">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Tipo de Persona / Régimen</span>
+              <span id="project-person-type-sync-badge"
+                style="font-size:10px; color:#00e676; font-weight:700; background:rgba(0,230,118,0.12); border:1px solid rgba(0,230,118,0.3); padding:2px 7px; border-radius:10px; display:none;">
+                ⚡ Sincronizado con Directorio
+              </span>
+            </label>
+            <input type="text" class="edit-input edit-input-readonly" id="project-input-person-type"
+              placeholder="Autocompletado desde el Directorio R.E.D." readonly tabindex="-1">
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              🔒 Solo visualización. Se edita desde la pestaña de Relaciones.
+            </small>
+          </div>
+          <!-- FILA DE SELECCIÓN ENTRE FLUJOS DE PROYECTOS -->
+          <div class="detail-item-box-edit" style="grid-column: span 2;">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>⚡ Flujo de Proyecto (Embudo) *</span>
+              <span style="font-size:10.5px; color:var(--accent-gold); font-weight:700;">Filtra las etapas del embudo</span>
+            </label>
+            <div class="project-flujo-radios" id="project-flujo-radios">
+              <label class="project-flujo-pill active" data-flow="b2b">
+                <input type="radio" name="project_flujo" value="b2b" checked>
+                <span class="p-flujo-icon">🏢</span>
+                <span class="p-flujo-label">MADE B2B</span>
+              </label>
+              <label class="project-flujo-pill" data-flow="b2c">
+                <input type="radio" name="project_flujo" value="b2c">
+                <span class="p-flujo-icon">🏡</span>
+                <span class="p-flujo-label">MADE B2C</span>
+              </label>
+              <label class="project-flujo-pill" data-flow="select">
+                <input type="radio" name="project_flujo" value="select">
+                <span class="p-flujo-icon">⚡</span>
+                <span class="p-flujo-label">SELECT (Catálogo)</span>
+              </label>
+              <label class="project-flujo-pill" data-flow="showroom">
+                <input type="radio" name="project_flujo" value="showroom">
+                <span class="p-flujo-icon">🏛️</span>
+                <span class="p-flujo-label">ShowRoom CNTXT</span>
+              </label>
+            </div>
+            <small style="display:block; margin-top:5px; font-size:11px; color:var(--text-muted);">
+              Al cambiar el flujo, la selección de la etapa del embudo se adaptará automáticamente.
             </small>
           </div>
           <div class="detail-item-box-edit">
@@ -1592,16 +2103,9 @@
               required>
           </div>
           <div class="detail-item-box-edit">
-            <label class="detail-label">Estado de Flujo Arterial</label>
+            <label class="detail-label">Etapa del Embudo (Flujo Arterial) *</label>
             <select class="edit-input" id="project-input-status">
-              <option value="mql">🩸 MQL | Plasma (10%)</option>
-              <option value="conversacion">💓 1ra Conversación (20%)</option>
-              <option value="sql">🔬 SQL | Válvula (40%)</option>
-              <option value="propuesta">⚡ Propuesta Presentada (60%)</option>
-              <option value="negociacion">🫀 En Negociación (80%)</option>
-              <option value="ejecucion" selected>🧬 Sangre Oxigenada (100%)</option>
-              <option value="finalizado">🏆 Tejido Finalizado</option>
-              <option value="pausa">⏸️ Estasis / Pausa (0%)</option>
+              <!-- Populated dynamically based on selected flow -->
             </select>
           </div>
           <div class="detail-item-box-edit">
@@ -1689,6 +2193,38 @@
         </div>
       </form>
 
+    </div>
+  </div>
+
+  <!-- Delete Project Confirmation Modal (Solo Superusuario) -->
+  <div class="modal-overlay" id="project-delete-modal-overlay" style="display:none;">
+    <div class="modal-card project-delete-modal-card">
+      <button class="modal-close-btn" id="project-delete-modal-close" type="button">&times;</button>
+      
+      <div class="project-delete-icon-wrap">
+        🗑️
+      </div>
+      
+      <h3 style="font-size: 19px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">¿Eliminar este Proyecto?</h3>
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-bottom: 16px;">
+        Estás a punto de eliminar de forma definitiva el proyecto <strong id="delete-project-title-preview" style="color: #ffffff;"></strong> del torrente de proyectos. Esta acción no se puede deshacer.
+      </p>
+
+      <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 10px; padding: 10px 14px; font-size: 11.5px; color: #fca5a5; margin-bottom: 22px; text-align: left; display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 15px;">🛡️</span>
+        <span>Acción con impacto estructural reservada exclusivamente para el <strong>Superusuario</strong>.</span>
+      </div>
+
+      <input type="hidden" id="delete-project-target-id" value="">
+
+      <div style="display: flex; gap: 12px; justify-content: center; align-items: center;">
+        <button type="button" id="btn-cancel-delete-project" class="btn-cancel-delete-proj">
+          Cancelar
+        </button>
+        <button type="button" id="btn-confirm-delete-project" class="btn-confirm-delete-proj">
+          Sí, eliminar proyecto
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1825,13 +2361,16 @@
     </div>
   </div>
 
+  <!-- Backdrop de spotlight en hover de tarjeta de empresa -->
+  <div class="empresa-hover-backdrop" id="empresa-hover-backdrop"></div>
+
   <!-- Floating Agent Notification Toast Container -->
   <div class="agent-toast-container" id="agent-toast-container"></div>
 
   <!-- Include Central Configuration & Embedded Contacts Data for Instant Offline Execution -->
   <script src="config.js"></script>
   <script src="contacts_data.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=2.4"></script>
 </body>
 
 </html>
