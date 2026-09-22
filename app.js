@@ -131,7 +131,19 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
+
+      const contentType = res.headers.get('content-type') || '';
+      let data = {};
+      if (contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        if (res.status === 502) {
+          throw new Error('Error 502 (Bad Gateway): El backend Gunicorn no está corriendo en el VPS. Inicia el servicio cntxt con: sudo systemctl restart cntxt');
+        }
+        const text = await res.text();
+        throw new Error(`Error del servidor (HTTP ${res.status}): ${text.substring(0, 100)}`);
+      }
+
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
 
       this._saveTokens(data.access, data.refresh);
