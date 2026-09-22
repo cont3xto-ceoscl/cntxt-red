@@ -4,6 +4,12 @@ set -e
 echo "==> Aplicando migraciones de base de datos..."
 python manage.py migrate --noinput
 
+echo "==> Inicializando usuarios base del sistema..."
+python manage.py seed_usuarios
+
+echo "==> Cargando contactos y datos iniciales en la base de datos..."
+python manage.py migrar_datos || true
+
 echo "==> Recolectando archivos estáticos..."
 python manage.py collectstatic --noinput
 
