@@ -10,8 +10,8 @@ ExecStart=/var/www/cntxt/venv/bin/gunicorn \
     --workers 3 \
     --bind 127.0.0.1:8000 \
     --timeout 120 \
-    --access-logfile /var/log/gunicorn-cntxt-access.log \
-    --error-logfile /var/log/gunicorn-cntxt-error.log \
+    --access-logfile - \
+    --error-logfile - \
     cntxt_system.wsgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
 KillMode=mixed

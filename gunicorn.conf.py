@@ -21,8 +21,8 @@ keepalive = 5
 proc_name = "cntxt_red_gunicorn"
 
 # Logging
-accesslog = os.getenv("GUNICORN_ACCESS_LOG", "/var/log/cntxt_red/gunicorn_access.log")
-errorlog = os.getenv("GUNICORN_ERROR_LOG", "/var/log/cntxt_red/gunicorn_error.log")
+accesslog = os.getenv("GUNICORN_ACCESS_LOG", "-")
+errorlog = os.getenv("GUNICORN_ERROR_LOG", "-")
 loglevel = os.getenv("GUNICORN_LOG_LEVEL", "info")
 capture_output = True
 
