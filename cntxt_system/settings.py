@@ -213,8 +213,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'frontend_legacy',
+    d for d in [
+        BASE_DIR / 'static',
+        BASE_DIR / 'frontend_legacy',
+    ] if d.exists()
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
