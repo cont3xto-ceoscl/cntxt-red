@@ -1,3 +1,7 @@
 Para activar el Backend del Servidor
 
 .\start_server.ps1
+
+Servidor en VPS Hostinger
+
+ssh -o StrictHostKeyChecking=no root@2.25.68.160

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,11 +84,19 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5500',
     'http://127.0.0.1:8000',
     'http://localhost:8000',
+    'https://*.contextoarquitectura.com',
+    'https://contextoarquitectura.com',
+    'https://*.centralcntxt.tech',
     'https://centralcntxt.tech',
     'https://www.centralcntxt.tech',
     'http://centralcntxt.tech',
     'http://www.centralcntxt.tech',
 ]
+
+# Agregar orígenes adicionales desde variable de entorno si existen
+extra_csrf = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+if extra_csrf:
+    CSRF_TRUSTED_ORIGINS.extend([origin.strip() for origin in extra_csrf.split(',') if origin.strip()])
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
