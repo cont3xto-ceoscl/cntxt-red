@@ -133,6 +133,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / 'templates',
             BASE_DIR / 'frontend_legacy',
+        BASE_DIR / 'tasks',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -216,6 +217,7 @@ STATICFILES_DIRS = [
     d for d in [
         BASE_DIR / 'static',
         BASE_DIR / 'frontend_legacy',
+        BASE_DIR / 'tasks',
     ] if d.exists()
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

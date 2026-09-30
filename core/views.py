@@ -562,3 +562,15 @@ class LegacyFrontendView(View):
                 with open(candidate, 'r', encoding='utf-8') as f:
                     return HttpResponse(f.read(), content_type='text/html')
         return JsonResponse({'message': 'index.html not found.'}, status=404)
+
+
+class TasksAppView(View):
+    """Serve the standalone CNTXT Tasks & Checklist application."""
+    def get(self, request, *args, **kwargs):
+        index_file = settings.BASE_DIR / 'tasks' / 'index.html'
+        if not index_file.exists():
+            index_file = settings.BASE_DIR / 'tasks' / 'checklist.html'
+        if index_file.exists():
+            with open(index_file, 'r', encoding='utf-8') as f:
+                return HttpResponse(f.read(), content_type='text/html')
+        return JsonResponse({'error': 'Tasks app not found'}, status=404)

@@ -12,9 +12,9 @@ urlpatterns = [
     path('', include('core.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += [
-        re_path(r'^(?P<path>.*\.(?:css|js|png|jpg|jpeg|jfif|svg|ico|gif|woff2?|ttf|eot|csv|json))$', serve, {'document_root': settings.BASE_DIR}),
-    ]
+# Media and static file routing (including tasks assets)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += [
+    re_path(r'^(?P<path>.*\.(?:css|js|png|jpg|jpeg|jfif|svg|ico|gif|woff2?|ttf|eot|csv|json))$', serve, {'document_root': settings.BASE_DIR}),
+]

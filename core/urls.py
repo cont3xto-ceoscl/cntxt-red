@@ -1,3 +1,4 @@
+from django.views.generic import RedirectView
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -14,6 +15,7 @@ from .views import (
     InitialDataView,
     SystemStatusView,
     LegacyFrontendView,
+    TasksAppView,
 )
 
 app_name = 'core'
@@ -29,6 +31,10 @@ router.register(r'actividades', ActividadViewSet, basename='actividad')
 urlpatterns = [
     # Frontend SPA entrypoint
     path('', LegacyFrontendView.as_view(), name='home'),
+    # CNTXT Tasks App
+    path('tasks/', TasksAppView.as_view(), name='tasks_app'),
+    path('tasks', RedirectView.as_view(url='/tasks/', permanent=False)),
+
 
     # REST API — recursos del CRM
     path('api/', include(router.urls)),
