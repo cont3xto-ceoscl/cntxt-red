@@ -12,8 +12,10 @@ from .views import (
     MeView,
     DashboardStatsView,
     InitialDataView,
+    UsersListView,
     SystemStatusView,
     LegacyFrontendView,
+    ChecklistFrontendView,
 )
 
 app_name = 'core'
@@ -29,6 +31,8 @@ router.register(r'actividades', ActividadViewSet, basename='actividad')
 urlpatterns = [
     # Frontend SPA entrypoint
     path('', LegacyFrontendView.as_view(), name='home'),
+    path('checklist/', ChecklistFrontendView.as_view(), name='checklist'),
+    path('tareas/', ChecklistFrontendView.as_view(), name='tareas'),
 
     # REST API — recursos del CRM
     path('api/', include(router.urls)),
@@ -40,6 +44,7 @@ urlpatterns = [
     path('api/auth/me/', MeView.as_view(), name='auth_me'),
 
     # Dashboard & Utilitarios
+    path('api/users/', UsersListView.as_view(), name='users_list'),
     path('api/dashboard/stats/', DashboardStatsView.as_view(), name='dashboard_stats'),
     path('api/initial-data/', InitialDataView.as_view(), name='initial_data'),
     path('api/status/', SystemStatusView.as_view(), name='system_status'),

@@ -1,10 +1,13 @@
 import json
+import uuid
 from decimal import Decimal
 from pathlib import Path
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from django.views import View
+from django.utils import timezone
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User as DjangoUser
 from django.db.models import Sum, Count, Q
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
@@ -353,25 +356,131 @@ class ProyectoViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
+        user = self.request.user
+        user_name = "Sistema"
+        if user and user.is_authenticated:
+            user_name = user.get_full_name() or user.username
+        elif self.request.data.get('responsable'):
+            user_name = self.request.data.get('responsable')
+
         proyecto = serializer.save()
+
+        # Iniciar Bitácora de Trazabilidad si no existe
+        if not proyecto.bitacora:
+            init_entry = {
+                'id': str(uuid.uuid4())[:8],
+                'fecha': timezone.now().isoformat(),
+                'usuario': user_name,
+                'accion': 'Creación del Proyecto',
+                'detalles': f'Proyecto "{proyecto.titulo}" creado en el embudo {proyecto.get_flujo_display()} con estado {proyecto.get_estado_display()}.',
+                'cambios': {
+                    'flujo': {'nuevo': proyecto.flujo},
+                    'estado': {'nuevo': proyecto.estado},
+                    'monto_proyectado': {'nuevo': str(proyecto.monto_proyectado)},
+                    'responsable': {'nuevo': proyecto.responsable},
+                    'proximo_paso': {'nuevo': proyecto.proximo_paso},
+                    'fecha_limite': {'nuevo': str(proyecto.fecha_limite) if proyecto.fecha_limite else None},
+                }
+            }
+            proyecto.bitacora = [init_entry]
+            proyecto.save(update_fields=['bitacora'])
+
         _log_actividad(
             tipo='proyecto_creado',
             descripcion=f'Proyecto creado: {proyecto.titulo} — Estado: {proyecto.get_estado_display()}',
-            usuario=self.request.user,
+            usuario=self.request.user if (user and user.is_authenticated) else None,
             proyecto=proyecto,
             empresa=proyecto.empresa
         )
 
     def perform_update(self, serializer):
-        estado_anterior = serializer.instance.estado
+        old_inst = serializer.instance
+        old_flujo = old_inst.flujo
+        old_estado = old_inst.estado
+        old_monto = str(old_inst.monto_proyectado)
+        old_responsable = old_inst.responsable
+        old_paso = old_inst.proximo_paso
+        old_limite = str(old_inst.fecha_limite) if old_inst.fecha_limite else ''
+        old_linea = old_inst.linea_operativa
+        old_cat = old_inst.categoria
+        old_titulo = old_inst.titulo
+
         proyecto = serializer.save()
-        tipo = 'estado_cambiado' if proyecto.estado != estado_anterior else 'proyecto_editado'
+
+        user = self.request.user
+        user_name = "Sistema"
+        if user and user.is_authenticated:
+            user_name = user.get_full_name() or user.username
+        elif proyecto.responsable:
+            user_name = proyecto.responsable
+
+        # Detectar cambios
+        changes = {}
+        if proyecto.titulo != old_titulo:
+            changes['titulo'] = {'anterior': old_titulo, 'nuevo': proyecto.titulo}
+        if proyecto.flujo != old_flujo:
+            changes['flujo'] = {'anterior': old_flujo, 'nuevo': proyecto.flujo}
+        if proyecto.estado != old_estado:
+            changes['estado'] = {'anterior': old_estado, 'nuevo': proyecto.estado}
+        if str(proyecto.monto_proyectado) != old_monto:
+            changes['monto_proyectado'] = {'anterior': old_monto, 'nuevo': str(proyecto.monto_proyectado)}
+        if proyecto.responsable != old_responsable:
+            changes['responsable'] = {'anterior': old_responsable, 'nuevo': proyecto.responsable}
+        if proyecto.proximo_paso != old_paso:
+            changes['proximo_paso'] = {'anterior': old_paso, 'nuevo': proyecto.proximo_paso}
+        new_limite = str(proyecto.fecha_limite) if proyecto.fecha_limite else ''
+        if new_limite != old_limite:
+            changes['fecha_limite'] = {'anterior': old_limite, 'nuevo': new_limite}
+        if proyecto.linea_operativa != old_linea:
+            changes['linea_operativa'] = {'anterior': old_linea, 'nuevo': proyecto.linea_operativa}
+        if proyecto.categoria != old_cat:
+            changes['categoria'] = {'anterior': old_cat, 'nuevo': proyecto.categoria}
+
+        current_bitacora = list(proyecto.bitacora or [])
+        if not current_bitacora:
+            current_bitacora.append({
+                'id': str(uuid.uuid4())[:8],
+                'fecha': proyecto.created_at.isoformat() if proyecto.created_at else timezone.now().isoformat(),
+                'usuario': user_name,
+                'accion': 'Creación del Proyecto',
+                'detalles': f'Registro inicial del proyecto "{proyecto.titulo}".',
+                'cambios': {}
+            })
+
+        action_name = 'Cambio de Etapa' if 'estado' in changes else ('Modificación de Proyecto' if changes else 'Edición de Glóbulo')
+        detalles_list = []
+        if 'estado' in changes:
+            detalles_list.append(f"Etapa: {changes['estado']['anterior']} → {changes['estado']['nuevo']}")
+        if 'monto_proyectado' in changes:
+            detalles_list.append(f"Monto: ${changes['monto_proyectado']['anterior']} → ${changes['monto_proyectado']['nuevo']}")
+        if 'proximo_paso' in changes:
+            detalles_list.append(f"Próxima acción actualizada")
+        if 'fecha_limite' in changes:
+            detalles_list.append(f"Fecha límite: {changes['fecha_limite']['anterior'] or 'Sin definir'} → {changes['fecha_limite']['nuevo'] or 'Sin definir'}")
+        if 'responsable' in changes:
+            detalles_list.append(f"Responsable: {changes['responsable']['nuevo']}")
+
+        detalles_str = " | ".join(detalles_list) if detalles_list else "Actualización de datos del glóbulo."
+
+        new_entry = {
+            'id': str(uuid.uuid4())[:8],
+            'fecha': timezone.now().isoformat(),
+            'usuario': user_name,
+            'accion': action_name,
+            'detalles': detalles_str,
+            'cambios': changes
+        }
+        current_bitacora.append(new_entry)
+        proyecto.bitacora = current_bitacora
+        proyecto.save(update_fields=['bitacora'])
+
+        tipo = 'estado_cambiado' if proyecto.estado != old_estado else 'proyecto_editado'
         desc = (
-            f'Estado cambiado en {proyecto.titulo}: {estado_anterior} → {proyecto.estado}'
+            f'Estado cambiado en {proyecto.titulo}: {old_estado} → {proyecto.estado}'
             if tipo == 'estado_cambiado'
             else f'Proyecto actualizado: {proyecto.titulo}'
         )
-        _log_actividad(tipo=tipo, descripcion=desc, usuario=self.request.user,
+        _log_actividad(tipo=tipo, descripcion=desc, usuario=self.request.user if (user and user.is_authenticated) else None,
                        proyecto=proyecto, empresa=proyecto.empresa)
 
     def destroy(self, request, *args, **kwargs):
@@ -466,92 +575,85 @@ class ActividadViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 # ─────────────────────────────────────────────────────────────
-# Legacy Views
+# Usuarios y Vistas Consolidadas
 # ─────────────────────────────────────────────────────────────
 
-class InitialDataView(APIView):
-    """Endpoint consolidado para carga inicial rápida de la aplicación."""
-    permission_classes = [IsAuthenticatedUser]
+class UsersListView(APIView):
+    """
+    GET /api/users/ — Retorna lista de usuarios activos para asignación de responsables.
+    """
+    permission_classes = []
 
-    def get(self, request, *args, **kwargs):
-        empresas = Empresa.objects.all()
-        contactos = Contacto.objects.select_related('empresa').all()
-        proyectos = Proyecto.objects.select_related('empresa', 'contacto').all()
-
-        return Response({
-            'status': 'success',
-            'empresas': EmpresaSerializer(empresas, many=True).data,
-            'contactos': ContactoSerializer(contactos, many=True).data,
-            'proyectos': ProyectoSerializer(proyectos, many=True).data,
-        })
-
-
-class SystemStatusView(View):
-    """Health check endpoint — público."""
-    def get(self, request, *args, **kwargs):
-        db_engine = settings.DATABASES['default']['ENGINE'].split('.')[-1]
-        return JsonResponse({
-            'status': 'healthy',
-            'system': 'CNTXT R.E.D. System',
-            'version': '5.1.0-rbac',
-            'database': db_engine,
-            'core_app': 'active'
-        })
-
-
-class LegacyFrontendView(View):
-    """Bridge view para servir index.html desde Django."""
-    def get(self, request, *args, **kwargs):
-        index_candidates = [
-            settings.BASE_DIR / 'index.html',
-            settings.BASE_DIR / 'frontend_legacy' / 'index.html'
-        ]
-        for candidate in index_candidates:
-            if candidate.exists():
-                with open(candidate, 'r', encoding='utf-8') as f:
-                    return HttpResponse(f.read(), content_type='text/html')
-        return JsonResponse({'message': 'index.html not found.'}, status=404)
-
+    def get(self, request):
+        users = DjangoUser.objects.filter(is_active=True).order_by('first_name', 'username')
+        data = []
+        for u in users:
+            nombre = u.get_full_name() or u.username
+            rol_label = ''
+            if hasattr(u, 'perfil') and u.perfil:
+                rol_label = u.perfil.get_rol_display()
+            data.append({
+                'id': u.id,
+                'username': u.username,
+                'nombre_completo': nombre,
+                'email': u.email,
+                'rol': rol_label,
+                'display': f"{nombre} — {rol_label}" if rol_label else nombre
+            })
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class InitialDataView(APIView):
     """
     Endpoint consolidado para carga inicial rápida de la aplicación.
-    Devuelve empresas, contactos y proyectos en una única solicitud.
+    Devuelve empresas, contactos, proyectos y usuarios en una única solicitud.
     """
     permission_classes = []
+
     def get(self, request, *args, **kwargs):
         empresas = Empresa.objects.prefetch_related('contactos', 'proyectos').all()
         contactos = Contacto.objects.select_related('empresa').prefetch_related('evaluaciones_pulso').all()
         proyectos = Proyecto.objects.select_related('empresa', 'contacto').all()
+        users = DjangoUser.objects.filter(is_active=True).order_by('first_name', 'username')
+        usuarios_data = []
+        for u in users:
+            nombre = u.get_full_name() or u.username
+            rol_label = ''
+            if hasattr(u, 'perfil') and u.perfil:
+                rol_label = u.perfil.get_rol_display()
+            usuarios_data.append({
+                'id': u.id,
+                'username': u.username,
+                'nombre_completo': nombre,
+                'email': u.email,
+                'rol': rol_label,
+                'display': f"{nombre} — {rol_label}" if rol_label else nombre
+            })
 
         return Response({
             'status': 'success',
             'empresas': EmpresaSerializer(empresas, many=True).data,
             'contactos': ContactoSerializer(contactos, many=True).data,
             'proyectos': ProyectoSerializer(proyectos, many=True).data,
+            'usuarios': usuarios_data,
         })
 
 
 class SystemStatusView(View):
-    """
-    Health check and system status endpoint.
-    """
+    """Health check and system status endpoint."""
     def get(self, request, *args, **kwargs):
         db_engine = settings.DATABASES['default']['ENGINE'].split('.')[-1]
         return JsonResponse({
             'status': 'healthy',
             'system': 'CNTXT System',
-            'version': '5.1.0',
+            'version': '5.2.0',
             'database': db_engine,
             'core_app': 'active'
         })
 
 
 class LegacyFrontendView(View):
-    """
-    Bridge view to serve index.html with the Django backend.
-    """
+    """Bridge view to serve index.html with the Django backend."""
     def get(self, request, *args, **kwargs):
         index_candidates = [
             settings.BASE_DIR / 'index.html',
@@ -562,3 +664,18 @@ class LegacyFrontendView(View):
                 with open(candidate, 'r', encoding='utf-8') as f:
                     return HttpResponse(f.read(), content_type='text/html')
         return JsonResponse({'message': 'index.html not found.'}, status=404)
+
+
+
+class ChecklistFrontendView(View):
+    """Bridge view to serve checklist.html (Checklist and Gestor de Tareas v1.0)."""
+    def get(self, request, *args, **kwargs):
+        checklist_candidates = [
+            settings.BASE_DIR / 'checklist.html',
+            settings.BASE_DIR / 'frontend_legacy' / 'checklist.html'
+        ]
+        for candidate in checklist_candidates:
+            if candidate.exists():
+                with open(candidate, 'r', encoding='utf-8') as f:
+                    return HttpResponse(f.read(), content_type='text/html')
+        return JsonResponse({'message': 'checklist.html not found.'}, status=404)

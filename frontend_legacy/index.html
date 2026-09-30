@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CNTXT | R.E.D. System</title>
-  <link rel="stylesheet" href="styles.css?v=2.4">
+  <link rel="stylesheet" href="styles.css?v=2.7">
 </head>
 
 <body>
@@ -255,6 +255,14 @@
             <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
           </svg>
         </button>
+        <a href="/tareas/" class="tab-btn tab-btn-tasks" title="Gestor de Tareas y Checklist v1.0" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+          Checklist & Tareas
+          <span class="globulo-tab-badge" style="background: rgba(200, 168, 122, 0.2); color: #C8A87A; border: 1px solid rgba(200, 168, 122, 0.4);">v1.0</span>
+        </a>
       </div>
     </header>
 
@@ -1382,54 +1390,72 @@
           </div>
         </div>
         <div class="flow-tabs-grid" id="globulos-flow-buttons">
-          <button type="button" class="flow-tab-card active" data-flow="b2b" id="btn-flow-b2b" title="Embudo Principal B2B para desarrolladores y proyectos empresariales">
+          <button type="button" class="flow-tab-card active" data-flow="total" id="btn-flow-total" title="Flujo Totalizador Consolidado con todos los glóbulos de todos los embudos">
             <div class="flow-tab-top">
-              <span class="flow-tab-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="22.01"></line><line x1="15" y1="22" x2="15" y2="22.01"></line><line x1="8" y1="6" x2="8" y2="6.01"></line><line x1="16" y1="6" x2="16" y2="6.01"></line><line x1="8" y1="10" x2="8" y2="10.01"></line><line x1="16" y1="10" x2="16" y2="10.01"></line><line x1="8" y1="14" x2="8" y2="14.01"></line><line x1="16" y1="14" x2="16" y2="14.01"></line><line x1="8" y1="18" x2="8" y2="18.01"></line><line x1="16" y1="18" x2="16" y2="18.01"></line></svg>
-              </span>
+              <span class="flow-tab-badge" id="flow-badge-total">0 Proyectos</span>
+            </div>
+            <div class="flow-tab-name">Torrente Consolidado</div>
+            <div class="flow-tab-sub">Flujo Totalizador Multi-Embudo</div>
+            <div class="flow-tab-cycle" style="color: #FFFFFF !important;">
+              <span class="flow-tab-cycle-label" style="color: #FFFFFF !important;">Vista General:</span>
+              <span class="flow-tab-cycle-val" style="color: #FFFFFF !important; font-weight: 800;">Todos los Embudos</span>
+            </div>
+            <div class="flow-tab-financial" id="flow-financial-total">$0</div>
+            <div class="flow-tab-active-indicator"></div>
+          </button>
+
+          <button type="button" class="flow-tab-card" data-flow="b2b" id="btn-flow-b2b" title="Embudo Principal B2B para desarrolladores y proyectos empresariales">
+            <div class="flow-tab-top">
               <span class="flow-tab-badge" id="flow-badge-b2b">0 Proyectos</span>
             </div>
             <div class="flow-tab-name">Flujo de Proyectos MADE B2B</div>
             <div class="flow-tab-sub">Servicios Inmobiliarios & Corporativos</div>
+            <div class="flow-tab-cycle" style="color: #FFFFFF !important;">
+              <span class="flow-tab-cycle-label" style="color: #FFFFFF !important;">Ciclo de venta:</span>
+              <span class="flow-tab-cycle-val" style="color: #FFFFFF !important; font-weight: 800;">1 - 3 meses</span>
+            </div>
             <div class="flow-tab-financial" id="flow-financial-b2b">$0</div>
             <div class="flow-tab-active-indicator"></div>
           </button>
 
           <button type="button" class="flow-tab-card" data-flow="b2c" id="btn-flow-b2c" title="Embudo B2C para familias, vivienda campestre y reformas personales">
             <div class="flow-tab-top">
-              <span class="flow-tab-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-              </span>
               <span class="flow-tab-badge" id="flow-badge-b2c">0 Proyectos</span>
             </div>
             <div class="flow-tab-name">Proyectos MADE B2C</div>
             <div class="flow-tab-sub">Vivienda Campestre & Familias</div>
+            <div class="flow-tab-cycle" style="color: #FFFFFF !important;">
+              <span class="flow-tab-cycle-label" style="color: #FFFFFF !important;">Ciclo de venta:</span>
+              <span class="flow-tab-cycle-val" style="color: #FFFFFF !important; font-weight: 800;">15 días a 1 mes</span>
+            </div>
             <div class="flow-tab-financial" id="flow-financial-b2c">$0</div>
             <div class="flow-tab-active-indicator"></div>
           </button>
 
           <button type="button" class="flow-tab-card" data-flow="select" id="btn-flow-select" title="Embudo SELECT rápido de viviendas por catálogo (5M, 7M, 10M COP - máx 15 días)">
             <div class="flow-tab-top">
-              <span class="flow-tab-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              </span>
               <span class="flow-tab-badge" id="flow-badge-select">0 Proyectos</span>
             </div>
             <div class="flow-tab-name">Proyectos SELECT</div>
             <div class="flow-tab-sub">Catálogo Ágil ≤ 15 Días (5, 7, 10M)</div>
+            <div class="flow-tab-cycle" style="color: #FFFFFF !important;">
+              <span class="flow-tab-cycle-label" style="color: #FFFFFF !important;">Ciclo de venta:</span>
+              <span class="flow-tab-cycle-val" style="color: #FFFFFF !important; font-weight: 800;">1 semana a 3 semanas</span>
+            </div>
             <div class="flow-tab-financial" id="flow-financial-select">$0</div>
             <div class="flow-tab-active-indicator"></div>
           </button>
 
           <button type="button" class="flow-tab-card" data-flow="showroom" id="btn-flow-showroom" title="Embudo ShowRoom de comercialización y venta de propiedades inmobiliarias">
             <div class="flow-tab-top">
-              <span class="flow-tab-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"></path><path d="M5 20V8l7-4 7 4v12"></path><path d="M10 12v8"></path><path d="M14 12v8"></path></svg>
-              </span>
               <span class="flow-tab-badge" id="flow-badge-showroom">0 Proyectos</span>
             </div>
             <div class="flow-tab-name">ShowRoom CNTXT</div>
             <div class="flow-tab-sub">Venta de Propiedades Inmobiliarias</div>
+            <div class="flow-tab-cycle" style="color: #FFFFFF !important;">
+              <span class="flow-tab-cycle-label" style="color: #FFFFFF !important;">Ciclo de venta:</span>
+              <span class="flow-tab-cycle-val" style="color: #FFFFFF !important; font-weight: 800;">15 días a 3 meses</span>
+            </div>
             <div class="flow-tab-financial" id="flow-financial-showroom">$0</div>
             <div class="flow-tab-active-indicator"></div>
           </button>
@@ -1978,11 +2004,48 @@
         <input type="hidden" id="project-edit-id" value="">
 
         <div class="detail-grid-edit" style="margin-top: 16px;">
+          <!-- 1. PASO PRIMORDIAL: SELECCIÓN DEL EMBUDO / FLUJO -->
+          <div class="detail-item-box-edit project-flow-highlight-box" style="grid-column: span 2;">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="display:inline-flex; align-items:center; gap:8px;">
+                <span class="badge-step-tag">PASO 1</span>
+                <span style="font-weight:700; color:#fff; font-size:12px;">⚡ FLUJO DE PROYECTO (EMBUDO) *</span>
+              </span>
+              <span style="font-size:10.5px; color:var(--accent-gold); font-weight:700;">Define las etapas y datos del glóbulo</span>
+            </label>
+            <div class="project-flujo-radios" id="project-flujo-radios">
+              <label class="project-flujo-pill active" data-flow="b2b">
+                <input type="radio" name="project_flujo" value="b2b" checked>
+                <span class="p-flujo-icon">🏢</span>
+                <span class="p-flujo-label">MADE B2B</span>
+              </label>
+              <label class="project-flujo-pill" data-flow="b2c">
+                <input type="radio" name="project_flujo" value="b2c">
+                <span class="p-flujo-icon">🏡</span>
+                <span class="p-flujo-label">MADE B2C</span>
+              </label>
+              <label class="project-flujo-pill" data-flow="select">
+                <input type="radio" name="project_flujo" value="select">
+                <span class="p-flujo-icon">⚡</span>
+                <span class="p-flujo-label">SELECT (Catálogo)</span>
+              </label>
+              <label class="project-flujo-pill" data-flow="showroom">
+                <input type="radio" name="project_flujo" value="showroom">
+                <span class="p-flujo-icon">🏛️</span>
+                <span class="p-flujo-label">ShowRoom CNTXT</span>
+              </label>
+            </div>
+            <small style="display:block; margin-top:5px; font-size:11px; color:var(--text-muted);">
+              Al cambiar el embudo, las etapas y características específicas se adaptan en tiempo real.
+            </small>
+          </div>
+
           <div class="detail-item-box-edit" style="grid-column: span 2;">
             <label class="detail-label">Nombre del Proyecto *</label>
             <input type="text" class="edit-input" id="project-input-title"
               placeholder="Ej: Implementación CRM CNTXT Gold" required>
           </div>
+
           <div class="detail-item-box-edit" style="grid-column: span 2;">
             <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
               <span>Relación R.E.D. * — Contacto o Empresa del Directorio</span>
@@ -2065,54 +2128,30 @@
               🔒 Solo visualización. Se edita desde la pestaña de Relaciones.
             </small>
           </div>
-          <!-- FILA DE SELECCIÓN ENTRE FLUJOS DE PROYECTOS -->
-          <div class="detail-item-box-edit" style="grid-column: span 2;">
-            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
-              <span>⚡ Flujo de Proyecto (Embudo) *</span>
-              <span style="font-size:10.5px; color:var(--accent-gold); font-weight:700;">Filtra las etapas del embudo</span>
-            </label>
-            <div class="project-flujo-radios" id="project-flujo-radios">
-              <label class="project-flujo-pill active" data-flow="b2b">
-                <input type="radio" name="project_flujo" value="b2b" checked>
-                <span class="p-flujo-icon">🏢</span>
-                <span class="p-flujo-label">MADE B2B</span>
-              </label>
-              <label class="project-flujo-pill" data-flow="b2c">
-                <input type="radio" name="project_flujo" value="b2c">
-                <span class="p-flujo-icon">🏡</span>
-                <span class="p-flujo-label">MADE B2C</span>
-              </label>
-              <label class="project-flujo-pill" data-flow="select">
-                <input type="radio" name="project_flujo" value="select">
-                <span class="p-flujo-icon">⚡</span>
-                <span class="p-flujo-label">SELECT (Catálogo)</span>
-              </label>
-              <label class="project-flujo-pill" data-flow="showroom">
-                <input type="radio" name="project_flujo" value="showroom">
-                <span class="p-flujo-icon">🏛️</span>
-                <span class="p-flujo-label">ShowRoom CNTXT</span>
-              </label>
-            </div>
-            <small style="display:block; margin-top:5px; font-size:11px; color:var(--text-muted);">
-              Al cambiar el flujo, la selección de la etapa del embudo se adaptará automáticamente.
-            </small>
-          </div>
+
+          <!-- MONTO COP Y ETAPA DEL EMBUDO -->
           <div class="detail-item-box-edit">
             <label class="detail-label">Monto Proyectado ($ COP) *</label>
-            <input type="number" class="edit-input" id="project-input-amount" placeholder="Ej: 150000000" min="0"
-              required>
+            <div class="cop-input-container">
+              <input type="text" inputmode="numeric" class="edit-input cop-currency-field" id="project-input-amount"
+                placeholder="$ 0 COP" required>
+            </div>
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Formato automático en Pesos Colombianos (COP).
+            </small>
           </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label">Etapa del Embudo (Flujo Arterial) *</label>
             <select class="edit-input" id="project-input-status">
               <!-- Populated dynamically based on selected flow -->
             </select>
           </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label">
               <span>Línea Operativa (C.O.R.)</span>
-              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:4px;">—
-                Operativo</span>
+              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:4px;">— Operativo</span>
             </label>
             <select class="edit-input" id="project-input-linea-operativa">
               <option value="" disabled selected>— Seleccionar Línea Operativa (C.O.R.) —</option>
@@ -2128,11 +2167,11 @@
               Unidad operativa responsable de la ejecución técnica.
             </small>
           </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label">
               <span>Categoría de Proyecto (C.O.R.)</span>
-              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:4px;">—
-                Tipología</span>
+              <span style="font-weight:400; font-size:11px; color:var(--text-muted); margin-left:4px;">— Tipología</span>
             </label>
             <select class="edit-input" id="project-input-categoria">
               <option value="" disabled selected>— Seleccionar Categoría de Proyecto —</option>
@@ -2146,11 +2185,28 @@
               Tipología y alcance arquitectónico del proyecto.
             </small>
           </div>
-          <div class="detail-item-box-edit" style="grid-column: span 2;">
+
+          <!-- PRÓXIMA ACCIÓN Y FECHA LÍMITE ATADA -->
+          <div class="detail-item-box-edit project-action-due-box">
             <label class="detail-label">Próxima Acción / Siguiente Paso *</label>
             <input type="text" class="edit-input" id="project-input-next-step"
-              placeholder="Ej: Presentación de propuesta ejecutiva el 15 de Agosto" required>
+              placeholder="Ej: Entrega de planos constructivos para radicación de licencia" required>
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Hito u objetivo inmediato a desbloquear.
+            </small>
           </div>
+
+          <div class="detail-item-box-edit project-action-due-box">
+            <label class="detail-label">
+              <span>📅 Fecha Límite de la Próxima Acción</span>
+              <span style="font-size:10px; color:#ff8095; font-weight:700; margin-left:4px;">(Atada a la acción)</span>
+            </label>
+            <input type="date" class="edit-input" id="project-input-due-date">
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Vencimiento límite para ejecutar la próxima acción.
+            </small>
+          </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label">📄 Link del Brief (Encargo del Cliente)</label>
             <input type="url" class="edit-input" id="project-input-brief-url"
@@ -2159,6 +2215,7 @@
               Enlace directo al documento del Brief o encargo inicial.
             </small>
           </div>
+
           <div class="detail-item-box-edit">
             <label class="detail-label">💼 Link de la Propuesta (Proposal Enviada)</label>
             <input type="url" class="edit-input" id="project-input-proposal-url"
@@ -2167,14 +2224,46 @@
               Enlace directo para consultar y revisar la propuesta comercial enviada.
             </small>
           </div>
-          <div class="detail-item-box-edit">
-            <label class="detail-label">📅 Fecha Límite (Due Date)</label>
-            <input type="date" class="edit-input" id="project-input-due-date">
+
+          <!-- RESPONSABLE / OWNER CON LISTA DESPLEGABLE -->
+          <div class="detail-item-box-edit" style="grid-column: span 2;">
+            <label class="detail-label" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>👤 Responsable / Owner del Glóbulo *</span>
+              <span style="font-size:10.5px; color:#4ade80; font-weight:600;">Usuarios asignables de CNTXT</span>
+            </label>
+            <select class="edit-input" id="project-input-owner" required>
+              <option value="" disabled selected>— Seleccionar Responsable Asignado —</option>
+            </select>
+            <small style="display:block; margin-top:4px; font-size:10.5px; color:var(--text-muted);">
+              Selecciona el usuario que lidera y responde por el avance de este glóbulo.
+            </small>
           </div>
-          <div class="detail-item-box-edit">
-            <label class="detail-label">👤 Responsable / Owner</label>
-            <input type="text" class="edit-input" id="project-input-owner"
-              placeholder="Ej: Juan Pérez, Director Comercial">
+
+          <!-- 🧬 BITÁCORA DE TRAZABILIDAD Y ANÁLISIS PREDICTIVO -->
+          <div class="project-bitacora-section" id="project-bitacora-section" style="grid-column: span 2;">
+            <div class="bitacora-header-card">
+              <div class="bitacora-header-title-wrap">
+                <span class="bitacora-dna-icon">🧬</span>
+                <div>
+                  <h4 class="bitacora-title">Bitácora de Trazabilidad y Comportamiento</h4>
+                  <p class="bitacora-subtitle">Registro histórico inmutable para trazabilidad y entrenamiento del modelo predictivo</p>
+                </div>
+              </div>
+              <span class="bitacora-count-pill" id="project-bitacora-count">0 eventos</span>
+            </div>
+
+            <!-- Entrada opcional de observación para este guardado -->
+            <div class="bitacora-note-box" style="margin-top: 10px;">
+              <input type="text" class="edit-input" id="project-bitacora-custom-note"
+                placeholder="📝 Comentario u observación sobre este cambio (opcional, se grabará en la bitácora)..."
+                style="font-size: 11.5px; padding: 8px 12px; background: rgba(0,0,0,0.25);">
+            </div>
+
+            <div class="bitacora-timeline-container" id="project-bitacora-container">
+              <div class="bitacora-timeline" id="project-bitacora-timeline">
+                <!-- Se inyecta dinámicamente -->
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2370,7 +2459,7 @@
   <!-- Include Central Configuration & Embedded Contacts Data for Instant Offline Execution -->
   <script src="config.js"></script>
   <script src="contacts_data.js"></script>
-  <script src="app.js?v=2.4"></script>
+  <script src="app.js?v=2.7"></script>
 </body>
 
 </html>

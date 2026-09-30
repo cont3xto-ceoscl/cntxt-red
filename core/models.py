@@ -399,7 +399,6 @@ class Proyecto(TimeStampedModel):
         verbose_name=_("Link de la Propuesta")
     )
 
-    # Campos Operativos Adicionales
     proximo_paso = models.CharField(
         max_length=255,
         blank=True,
@@ -410,6 +409,17 @@ class Proyecto(TimeStampedModel):
         null=True,
         blank=True,
         verbose_name=_("Fecha Límite / Due Date")
+    )
+    responsable = models.CharField(
+        max_length=150,
+        blank=True,
+        default="",
+        verbose_name=_("Responsable / Owner")
+    )
+    bitacora = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name=_("Bitácora de Trazabilidad")
     )
     notas = models.TextField(
         blank=True,

@@ -1,4 +1,4 @@
-﻿# ============================================================
+# ============================================================
 #  R.E.D. -- Script de arranque del servidor Django
 #  Uso: .\start_server.ps1
 #
@@ -24,10 +24,15 @@ if (-not (Test-Path $VenvPython)) {
     Write-Host "[!] Entorno virtual no encontrado." -ForegroundColor Yellow
     $NeedsRebuild = $true
 } else {
-    $TestDjango = & $VenvPython -c "import django; print('ok')" 2>&1
+    $TestDjango = & $VenvPython -c "import cntxt_system.wsgi; print('ok')" 2>&1
     if ($LASTEXITCODE -ne 0 -or ($TestDjango -notmatch "ok")) {
-        Write-Host "[!] Django no responde correctamente. Reconstruyendo..." -ForegroundColor Yellow
-        $NeedsRebuild = $true
+        Write-Host "[!] Dependencias incompletas o error en WSGI. Reinstalando requirements..." -ForegroundColor Yellow
+        & $VenvPython -m pip install -r "$PSScriptRoot\requirements.txt" --quiet
+        $TestDjangoRetry = & $VenvPython -c "import cntxt_system.wsgi; print('ok')" 2>&1
+        if ($LASTEXITCODE -ne 0 -or ($TestDjangoRetry -notmatch "ok")) {
+            Write-Host "[!] Entorno corrupto. Reconstruyendo..." -ForegroundColor Yellow
+            $NeedsRebuild = $true
+        }
     }
 }
 
