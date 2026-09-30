@@ -1253,11 +1253,6 @@ document.addEventListener('DOMContentLoaded', () => {
         notas: e.notas || ''
       }));
 
-      // Adaptar Usuarios del Sistema
-      if (Array.isArray(data.usuarios) && data.usuarios.length > 0) {
-        systemUsers = data.usuarios;
-      }
-
       // Adaptar Proyectos
       savedProjects = (data.proyectos || []).map(p => ({
         id: p.id,
@@ -1274,8 +1269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         proposalUrl: p.proposal_url || '',
         nextStep: p.proximo_paso || '',
         dueDate: p.fecha_limite || '',
-        responsable: p.responsable || '',
-        bitacora: Array.isArray(p.bitacora) ? p.bitacora : [],
         notes: p.notas || '',
         createdAt: p.created_at
       }));
@@ -2978,28 +2971,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // GLÓBULOS ROJOS — TORRENTE DE PROYECTOS (CRUD /api/proyectos/)
   // ═══════════════════════════════════════════════════════════════════
   // ═══════════════════════════════════════════════════════════════════
-  // GLÓBULOS ROJOS — 5 FLUJOS DE PROYECTOS (TOTAL, B2B, B2C, SELECT, SHOWROOM)
+  // GLÓBULOS ROJOS — 4 FLUJOS DE PROYECTOS (B2B, B2C, SELECT, SHOWROOM)
   // ═══════════════════════════════════════════════════════════════════
   const PROJECT_FLOWS = {
-    total: {
-      id: 'total',
-      title: 'Torrente Consolidado R.E.D.',
-      shortTitle: 'Consolidado',
-      icon: '',
-      badge: 'Ecosistema Completo',
-      salesCycle: 'Todos los Embudos',
-      heroSubtitle: 'Flujo Totalizador Multi-Embudo con Visión Integral del Ecosistema',
-      canvasTitle: 'TORRENTE CONSOLIDADO R.E.D. — TODOS LOS EMBUDOS CENTRALIZADOS',
-      description: 'Vista holística del pipeline completo reuniendo todos los glóbulos celulares de B2B, B2C, SELECT y SHOWROOM sin división de etapas.',
-      stages: {}
-    },
     b2b: {
       id: 'b2b',
       title: 'Flujo de Proyectos MADE B2B',
       shortTitle: 'MADE B2B',
       icon: '',
       badge: 'B2B Inmobiliario',
-      salesCycle: '1 - 3 meses',
       heroSubtitle: 'Embudo Principal de Servicios Corporativos e Inmobiliarios (Empresas y Desarrolladores)',
       canvasTitle: 'FLUJO DE PROYECTOS ACTIVOS MADE B2B',
       description: 'Proyectos inmobiliarios y empresariales de estructuración, diseño, visualización y gerencia.',
@@ -3019,7 +2999,6 @@ document.addEventListener('DOMContentLoaded', () => {
       shortTitle: 'MADE B2C',
       icon: '',
       badge: 'B2C Familias & Hogar',
-      salesCycle: '15 días a 1 mes',
       heroSubtitle: 'Embudo de Vivienda Campestre, Reformas y Espacios Personales',
       canvasTitle: 'FLUJO DE PROYECTOS MADE B2C (VIVIENDA CAMPESTRE & REFORMAS)',
       description: 'Proyectos dirigidos a familias y personas particulares: diseño campestre, remodelaciones y reformas integrales.',
@@ -3039,7 +3018,6 @@ document.addEventListener('DOMContentLoaded', () => {
       shortTitle: 'SELECT Catálogo',
       icon: '',
       badge: 'Catálogo Ágil ≤15 Días',
-      salesCycle: '1 semana a 3 semanas',
       heroSubtitle: 'Embudo Rápido de Viviendas por Catálogo (Tickets 5M, 7M y 10M COP)',
       canvasTitle: 'FLUJO DE PROYECTOS SELECT (CATÁLOGO RÁPIDO ≤ 15 DÍAS)',
       description: 'Viviendas pre-diseñadas por catálogo: ciclo ágil de máximo 15 días con tickets de 5M, 7M y 10M COP.',
@@ -3057,7 +3035,6 @@ document.addEventListener('DOMContentLoaded', () => {
       shortTitle: 'ShowRoom Inmobiliario',
       icon: '',
       badge: 'Propiedades Inmobiliarias',
-      salesCycle: '15 días a 3 meses',
       heroSubtitle: 'Embudo de Comercialización y Venta de Activos Inmobiliarios',
       canvasTitle: 'FLUJO SHOWROOM CNTXT (VENTA DE PROPIEDADES INMOBILIARIAS)',
       description: 'Comercialización de inmuebles, lotes campestres, casas y unidades en proyectos del portafolio CNTXT.',
@@ -3072,45 +3049,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  let activeProjectFlow = 'total';
+  let activeProjectFlow = 'b2b';
   let currentProjectSearch = '';
   let currentProjectStage = 'all';
 
   function getActiveFlowObj() {
-    return PROJECT_FLOWS[activeProjectFlow] || PROJECT_FLOWS.total || PROJECT_FLOWS.b2b;
+    return PROJECT_FLOWS[activeProjectFlow] || PROJECT_FLOWS.b2b;
   }
 
   function getActiveFlowStages() {
-    return getActiveFlowObj().stages || {};
+    return getActiveFlowObj().stages;
   }
 
   function getStageObj(status, flujo = activeProjectFlow) {
-    if (flujo === 'total') {
-      for (const fKey in PROJECT_FLOWS) {
-        if (PROJECT_FLOWS[fKey].stages && PROJECT_FLOWS[fKey].stages[status]) {
-          return PROJECT_FLOWS[fKey].stages[status];
-        }
-      }
-      return { name: status, prob: 0.10, icon: '', desc: '' };
-    }
     const flowObj = PROJECT_FLOWS[flujo] || PROJECT_FLOWS.b2b;
-    if (flowObj.stages && flowObj.stages[status]) return flowObj.stages[status];
+    if (flowObj.stages[status]) return flowObj.stages[status];
     // Fallback: check other flows
     for (const fKey in PROJECT_FLOWS) {
-      if (PROJECT_FLOWS[fKey].stages && PROJECT_FLOWS[fKey].stages[status]) {
-        return PROJECT_FLOWS[fKey].stages[status];
-      }
+      if (PROJECT_FLOWS[fKey].stages[status]) return PROJECT_FLOWS[fKey].stages[status];
     }
-    const firstKey = Object.keys(flowObj.stages || {})[0];
-    return (flowObj.stages && flowObj.stages[firstKey]) || { name: status, prob: 0.10, icon: '', desc: '' };
+    const firstKey = Object.keys(flowObj.stages)[0];
+    return flowObj.stages[firstKey] || { name: status, prob: 0.10, icon: '🩸', desc: '' };
   }
 
   function getStageXPositions(flujo = activeProjectFlow) {
     const flowObj = PROJECT_FLOWS[flujo] || PROJECT_FLOWS.b2b;
-    const keys = Object.keys(flowObj.stages || {});
+    const keys = Object.keys(flowObj.stages);
     const count = keys.length;
     const positions = {};
-    if (count === 0) return positions;
     keys.forEach((key, idx) => {
       positions[key] = Math.round(((idx + 0.5) / count) * 100);
     });
@@ -3119,9 +3085,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function detectStageFromX(pct, flujo = activeProjectFlow) {
     const flowObj = PROJECT_FLOWS[flujo] || PROJECT_FLOWS.b2b;
-    const keys = Object.keys(flowObj.stages || {});
+    const keys = Object.keys(flowObj.stages);
     const count = keys.length;
-    if (count === 0) return null;
     const idx = Math.max(0, Math.min(count - 1, Math.floor((pct / 100) * count)));
     return keys[idx] || keys[0];
   }
@@ -3131,29 +3096,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderGlobulosPanel() {
-    const isTotalFlow = activeProjectFlow === 'total';
     const activeFlowObj = getActiveFlowObj();
-    const activeStages = activeFlowObj.stages || {};
+    const activeStages = activeFlowObj.stages;
     const activeStageKeys = Object.keys(activeStages);
     const numStages = activeStageKeys.length;
 
-    // ── 1. Update summaries for the 5 Top Flow Switcher Cards ──
+    // ── 1. Update summaries for the 4 Top Flow Switcher Cards ──
     Object.keys(PROJECT_FLOWS).forEach(fKey => {
+      const fObj = PROJECT_FLOWS[fKey];
+      const fProjects = savedProjects.filter(p => (p.flujo || 'b2b') === fKey);
       let fWeighted = 0;
-      let fProjects = [];
-      if (fKey === 'total') {
-        fProjects = savedProjects;
-        fProjects.forEach(p => {
-          const sObj = getStageObj(p.status, p.flujo || 'b2b');
-          fWeighted += (p.amount || 0) * (sObj.prob !== undefined ? sObj.prob : 0.10);
-        });
-      } else {
-        fProjects = savedProjects.filter(p => (p.flujo || 'b2b') === fKey);
-        fProjects.forEach(p => {
-          const sObj = getStageObj(p.status, fKey);
-          fWeighted += (p.amount || 0) * (sObj.prob !== undefined ? sObj.prob : 0.10);
-        });
-      }
+      fProjects.forEach(p => {
+        const sObj = getStageObj(p.status, fKey);
+        fWeighted += (p.amount || 0) * (sObj.prob !== undefined ? sObj.prob : 0.10);
+      });
 
       const badgeEl = document.getElementById(`flow-badge-${fKey}`);
       const finEl = document.getElementById(`flow-financial-${fKey}`);
@@ -3172,10 +3128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (canvasTitleEl) canvasTitleEl.textContent = activeFlowObj.canvasTitle;
 
     // ── 3. Calculate Financial KPIs for Active Flow ──
-    const flowProjects = isTotalFlow
-      ? savedProjects
-      : savedProjects.filter(p => (p.flujo || 'b2b') === activeProjectFlow);
-
+    const flowProjects = savedProjects.filter(p => (p.flujo || 'b2b') === activeProjectFlow);
     let totalNominal = 0;
     let totalWeighted = 0;
     const stageAmounts = { all: 0 };
@@ -3183,14 +3136,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     flowProjects.forEach(p => {
       const amt = p.amount || 0;
-      const pFlujo = p.flujo || 'b2b';
-      const stageObj = getStageObj(p.status, pFlujo);
-      const weighted = amt * (stageObj.prob !== undefined ? stageObj.prob : 0.10);
+      const stageObj = getStageObj(p.status, activeProjectFlow);
+      const weighted = amt * stageObj.prob;
       totalNominal += amt;
       totalWeighted += weighted;
       const st = p.status;
       if (stageAmounts[st] !== undefined) stageAmounts[st] += weighted;
-      else if (!isTotalFlow && activeStageKeys.length > 0) {
+      else {
+        // Fallback to first stage if status not in this flow
         stageAmounts[activeStageKeys[0]] += weighted;
       }
       stageAmounts.all += weighted;
@@ -3209,343 +3162,240 @@ document.addEventListener('DOMContentLoaded', () => {
       elAvg.textContent = formatCOP(avg);
     }
 
-    // ── 4. Dynamically Render ECG Stage Zones Header ──
+    // ── 4. Dynamically Render ECG Stage Zones Header (NO EMOJIS) ──
     const zonesHeader = document.getElementById('ecg-stage-zones-header');
     if (zonesHeader) {
-      if (isTotalFlow) {
-        // En el flujo consolidado NO SE MUESTRAN ETAPAS (los 4 embudos ya tienen sus etapas)
-        const countB2B = savedProjects.filter(p => (p.flujo || 'b2b') === 'b2b').length;
-        const countB2C = savedProjects.filter(p => p.flujo === 'b2c').length;
-        const countSEL = savedProjects.filter(p => p.flujo === 'select').length;
-        const countSHW = savedProjects.filter(p => p.flujo === 'showroom').length;
-
-        zonesHeader.innerHTML = `
-          <div class="ecg-consolidated-banner">
-            <div class="ecg-consolidated-title">
-              <span class="ecg-consolidated-dot"></span>
-              <span>Torrente Consolidado R.E.D. · Visión Holística Sin División de Etapas</span>
-            </div>
-            <div class="ecg-consolidated-chips">
-              <div class="ecg-chip chip-b2b" title="Ver Embudo B2B">
-                <span class="chip-dot"></span>
-                <span class="chip-name">B2B (Rojo)</span>
-                <span class="chip-count" id="chip-count-b2b">${countB2B}</span>
-              </div>
-              <div class="ecg-chip chip-b2c" title="Ver Embudo B2C">
-                <span class="chip-dot"></span>
-                <span class="chip-name">B2C (Rosado)</span>
-                <span class="chip-count" id="chip-count-b2c">${countB2C}</span>
-              </div>
-              <div class="ecg-chip chip-select" title="Ver Embudo SELECT">
-                <span class="chip-dot"></span>
-                <span class="chip-name">SELECT (Amarillo)</span>
-                <span class="chip-count" id="chip-count-select">${countSEL}</span>
-              </div>
-              <div class="ecg-chip chip-showroom" title="Ver Embudo SHOWROOM">
-                <span class="chip-dot"></span>
-                <span class="chip-name">SHOWROOM (Verde)</span>
-                <span class="chip-count" id="chip-count-showroom">${countSHW}</span>
-              </div>
-            </div>
+      zonesHeader.innerHTML = activeStageKeys.map(stKey => {
+        const st = activeStages[stKey];
+        const isActive = currentProjectStage === stKey;
+        const amt = stageAmounts[stKey] || 0;
+        return `
+          <div class="ecg-zone ${isActive ? 'active' : ''}" data-stage="${stKey}" data-tooltip="${escapeHtml(st.desc || '')}">
+            <span class="ecg-zone-title">${escapeHtml(st.name)}</span>
+            <span class="ecg-zone-amount" id="ecg-amount-${stKey}">${formatCOP(amt)}</span>
           </div>
         `;
-        zonesHeader.querySelectorAll('.ecg-chip').forEach(chip => {
-          chip.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (chip.classList.contains('chip-b2b')) {
-              const b = document.getElementById('btn-flow-b2b'); if (b) b.click();
-            } else if (chip.classList.contains('chip-b2c')) {
-              const b = document.getElementById('btn-flow-b2c'); if (b) b.click();
-            } else if (chip.classList.contains('chip-select')) {
-              const b = document.getElementById('btn-flow-select'); if (b) b.click();
-            } else if (chip.classList.contains('chip-showroom')) {
-              const b = document.getElementById('btn-flow-showroom'); if (b) b.click();
-            }
-          });
-        });
-      } else {
-        zonesHeader.innerHTML = activeStageKeys.map(stKey => {
-          const st = activeStages[stKey];
-          const isActive = currentProjectStage === stKey;
-          const amt = stageAmounts[stKey] || 0;
-          return `
-            <div class="ecg-zone ${isActive ? 'active' : ''}" data-stage="${stKey}" data-tooltip="${escapeHtml(st.desc || '')}">
-              <span class="ecg-zone-title">${escapeHtml(st.name)}</span>
-              <span class="ecg-zone-amount" id="ecg-amount-${stKey}">${formatCOP(amt)}</span>
-            </div>
-          `;
-        }).join('');
+      }).join('');
 
-        // Attach click listeners to dynamically created ECG zones
-        zonesHeader.querySelectorAll('.ecg-zone').forEach(zone => {
-          zone.addEventListener('click', () => {
-            const stage = zone.dataset.stage;
-            if (currentProjectStage === stage) {
-              currentProjectStage = 'all';
-            } else {
-              currentProjectStage = stage;
-            }
-            renderGlobulosPanel();
-          });
+      // Attach click listeners to dynamically created ECG zones
+      zonesHeader.querySelectorAll('.ecg-zone').forEach(zone => {
+        zone.addEventListener('click', () => {
+          const stage = zone.dataset.stage;
+          if (currentProjectStage === stage) {
+            currentProjectStage = 'all';
+          } else {
+            currentProjectStage = stage;
+          }
+          renderGlobulosPanel();
         });
-      }
+      });
     }
 
     // ── 5. Dynamically Render Vertical Separators Grid ──
     const separatorsContainer = document.getElementById('ecg-vertical-separators');
     if (separatorsContainer) {
       separatorsContainer.innerHTML = '';
-      if (!isTotalFlow && numStages > 1) {
-        for (let i = 1; i < numStages; i++) {
-          const sep = document.createElement('div');
-          sep.className = 'ecg-v-sep';
-          sep.style.position = 'absolute';
-          sep.style.left = `${(i * (100 / numStages)).toFixed(2)}%`;
-          sep.style.top = '0';
-          sep.style.bottom = '0';
-          separatorsContainer.appendChild(sep);
-        }
+      for (let i = 1; i < numStages; i++) {
+        const sep = document.createElement('div');
+        sep.className = 'ecg-v-sep';
+        sep.style.position = 'absolute';
+        sep.style.left = `${(i * (100 / numStages)).toFixed(2)}%`;
+        sep.style.top = '0';
+        sep.style.bottom = '0';
+        separatorsContainer.appendChild(sep);
       }
     }
 
-    // ── 6. Dynamically Render Project Filter Pill Buttons ──
+    // ── 6. Dynamically Render Project Filter Pill Buttons (NO EMOJIS) ──
     const pillsContainer = document.getElementById('project-status-pills');
     if (pillsContainer) {
-      if (isTotalFlow) {
-        pillsContainer.innerHTML = `
-          <button class="project-pill-btn active" data-project-filter="all" data-tooltip="Todos los ${savedProjects.length} proyectos del ecosistema">
-            <span>Todos los Embudos</span>
-            <span class="pill-amount-badge" id="pill-amount-all">${formatCOP(totalWeighted)}</span>
+      const isAllActive = currentProjectStage === 'all';
+      let pillsHtml = `
+        <button class="project-pill-btn ${isAllActive ? 'active' : ''}" data-project-filter="all" data-tooltip="Ver todos los proyectos de ${escapeHtml(activeFlowObj.title)}">
+          <span>Todos</span>
+          <span class="pill-amount-badge" id="pill-amount-all">${formatCOP(stageAmounts.all)}</span>
+        </button>
+      `;
+
+      activeStageKeys.forEach(stKey => {
+        const st = activeStages[stKey];
+        const isActive = currentProjectStage === stKey;
+        const amt = stageAmounts[stKey] || 0;
+        pillsHtml += `
+          <button class="project-pill-btn ${isActive ? 'active' : ''}" data-project-filter="${stKey}" data-tooltip="${escapeHtml(st.desc || '')}">
+            <span>${escapeHtml(st.short || st.name)}</span>
+            <span class="pill-amount-badge" id="pill-amount-${stKey}">${formatCOP(amt)}</span>
           </button>
         `;
-      } else {
-        const isAllActive = currentProjectStage === 'all';
-        let pillsHtml = `
-          <button class="project-pill-btn ${isAllActive ? 'active' : ''}" data-project-filter="all" data-tooltip="Ver todos los proyectos de ${escapeHtml(activeFlowObj.title)}">
-            <span>Todos</span>
-            <span class="pill-amount-badge" id="pill-amount-all">${formatCOP(stageAmounts.all)}</span>
-          </button>
-        `;
+      });
 
-        activeStageKeys.forEach(stKey => {
-          const st = activeStages[stKey];
-          const isActive = currentProjectStage === stKey;
-          const amt = stageAmounts[stKey] || 0;
-          pillsHtml += `
-            <button class="project-pill-btn ${isActive ? 'active' : ''}" data-project-filter="${stKey}" data-tooltip="${escapeHtml(st.desc || '')}">
-              <span>${escapeHtml(st.short || st.name)}</span>
-              <span class="pill-amount-badge" id="pill-amount-${stKey}">${formatCOP(amt)}</span>
-            </button>
-          `;
+      pillsContainer.innerHTML = pillsHtml;
+
+      // Attach click listeners to pill buttons
+      pillsContainer.querySelectorAll('.project-pill-btn').forEach(pill => {
+        pill.addEventListener('click', () => {
+          const filter = pill.dataset.projectFilter;
+          if (currentProjectStage === filter) {
+            currentProjectStage = 'all';
+          } else {
+            currentProjectStage = filter;
+          }
+          renderGlobulosPanel();
         });
-
-        pillsContainer.innerHTML = pillsHtml;
-
-        pillsContainer.querySelectorAll('.project-pill-btn').forEach(pill => {
-          pill.addEventListener('click', () => {
-            const filter = pill.dataset.projectFilter;
-            if (currentProjectStage === filter) {
-              currentProjectStage = 'all';
-            } else {
-              currentProjectStage = filter;
-            }
-            renderGlobulosPanel();
-          });
-        });
-      }
+      });
     }
 
-    // ── 7. Render Interactive Red Blood Cell Nodes in Stream ──
+    // ── 7. Render Interactive Red Blood Cell Nodes in Stream (ALWAYS BELOW STAGE NAMES) ──
     const nodesLayer = document.getElementById('globulo-nodes-layer');
     if (nodesLayer) {
       nodesLayer.innerHTML = '';
-      const flowLabelMap = { b2b: 'B2B', b2c: 'B2C', select: 'SELECT', showroom: 'SHOWROOM' };
+      const stagePositions = getStageXPositions(activeProjectFlow);
 
-      if (isTotalFlow) {
-        // En el flujo consolidado: distribuir todos los glóbulos a lo largo del canal arterial
-        const totalCount = flowProjects.length;
-        const yCurve = [34, 62, 42, 70, 30, 56, 74, 38, 64, 46, 72, 32, 58, 40, 66, 48];
+      // Group projects by effective stage to position them strictly in the column under their stage name
+      const projectsByStage = {};
+      activeStageKeys.forEach(k => { projectsByStage[k] = []; });
+      flowProjects.forEach(proj => {
+        const effectiveStatus = activeStages[proj.status] ? proj.status : activeStageKeys[0];
+        projectsByStage[effectiveStatus].push(proj);
+      });
 
-        flowProjects.forEach((proj, pIdx) => {
-          const pctX = totalCount > 1
-            ? 6 + (pIdx / (totalCount - 1)) * 88
-            : 50;
-          const posY = yCurve[pIdx % yCurve.length];
-          const pFlujo = (proj.flujo || 'b2b').toLowerCase();
+      flowProjects.forEach((proj) => {
+        const effectiveStatus = activeStages[proj.status] ? proj.status : activeStageKeys[0];
+        const stageIdx = activeStageKeys.indexOf(effectiveStatus);
+        const colCenter = stagePositions[effectiveStatus] !== undefined
+          ? stagePositions[effectiveStatus]
+          : (((stageIdx + 0.5) / numStages) * 100);
+        const colWidth = 100 / numStages;
 
-          const node = document.createElement('div');
-          node.className = `globulo-node flow-${pFlujo} stage-${proj.status}`;
-          node.style.left = `${pctX.toFixed(1)}%`;
-          node.style.top  = `${posY.toFixed(1)}%`;
-          node.dataset.projectId = String(proj.id);
-          node.dataset.flujo = pFlujo;
+        const siblings = projectsByStage[effectiveStatus] || [];
+        const sCount = siblings.length;
+        const pIdx = siblings.indexOf(proj);
 
-          node.innerHTML = `
-            <div class="globulo-disc"></div>
-            <div class="globulo-node-info">
-              <span class="globulo-node-flow-tag flow-${pFlujo}">${flowLabelMap[pFlujo] || 'PROYECTO'}</span>
-              <span>${escapeHtml(proj.title)}</span>
-              <span class="globulo-node-amount">${formatCOP(proj.amount)}</span>
-            </div>
-          `;
+        // Calculate clean coordinates strictly inside the column beneath the stage name box
+        let posX, posY;
+        if (sCount <= 1) {
+          posX = colCenter;
+          posY = 50;
+        } else if (sCount === 2) {
+          posX = colCenter + (pIdx === 0 ? -colWidth * 0.12 : colWidth * 0.12);
+          posY = pIdx === 0 ? 36 : 64;
+        } else if (sCount === 3) {
+          if (pIdx === 0) { posX = colCenter; posY = 28; }
+          else if (pIdx === 1) { posX = colCenter - colWidth * 0.14; posY = 52; }
+          else { posX = colCenter + colWidth * 0.14; posY = 74; }
+        } else {
+          // 4 or more projects: distribute neatly in vertical waves inside column
+          const staggerX = (pIdx % 2 === 0 ? -colWidth * 0.12 : colWidth * 0.12);
+          posX = colCenter + staggerX;
+          posY = 24 + ((pIdx % 4) / 3) * 52;
+        }
 
-          // Click on node in total flow: filtrar búsqueda o alternar
-          node.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const searchInput = document.getElementById('project-search-input');
-            if (currentProjectSearch === proj.title.toLowerCase().trim()) {
-              currentProjectSearch = ''; if (searchInput) searchInput.value = '';
-            } else {
-              currentProjectSearch = proj.title.toLowerCase().trim(); if (searchInput) searchInput.value = proj.title;
-            }
-            renderGlobulosPanel();
-          });
+        posX = Math.max(colCenter - colWidth * 0.38, Math.min(colCenter + colWidth * 0.38, posX));
+        posY = Math.max(22, Math.min(78, posY));
 
-          nodesLayer.appendChild(node);
-        });
-      } else {
-        // Render dentro de columnas de etapas del flujo específico
-        const stagePositions = getStageXPositions(activeProjectFlow);
-        const projectsByStage = {};
-        activeStageKeys.forEach(k => { projectsByStage[k] = []; });
-        flowProjects.forEach(proj => {
-          const effectiveStatus = activeStages[proj.status] ? proj.status : activeStageKeys[0];
-          projectsByStage[effectiveStatus].push(proj);
-        });
+        const node = document.createElement('div');
+        node.className = `globulo-node stage-${effectiveStatus}`;
+        node.style.left = `${posX.toFixed(1)}%`;
+        node.style.top  = `${posY.toFixed(1)}%`;
+        node.dataset.projectId = String(proj.id);
 
-        flowProjects.forEach((proj) => {
-          const effectiveStatus = activeStages[proj.status] ? proj.status : activeStageKeys[0];
-          const stageIdx = activeStageKeys.indexOf(effectiveStatus);
-          const colCenter = stagePositions[effectiveStatus] !== undefined
-            ? stagePositions[effectiveStatus]
-            : (((stageIdx + 0.5) / numStages) * 100);
-          const colWidth = 100 / numStages;
+        node.innerHTML = `
+          <div class="globulo-disc"></div>
+          <div class="globulo-node-info">
+            <span>${escapeHtml(proj.title)}</span>
+            <span class="globulo-node-amount">${formatCOP(proj.amount)}</span>
+          </div>
+        `;
 
-          const siblings = projectsByStage[effectiveStatus] || [];
-          const sCount = siblings.length;
-          const pIdx = siblings.indexOf(proj);
+        // Drag & Drop Engine with active flow stage detection constrained to stream channel
+        let isDragging = false;
+        let startPX, startPY;
 
-          let posX, posY;
-          if (sCount <= 1) {
-            posX = colCenter;
-            posY = 50;
-          } else if (sCount === 2) {
-            posX = colCenter + (pIdx === 0 ? -colWidth * 0.12 : colWidth * 0.12);
-            posY = pIdx === 0 ? 36 : 64;
-          } else if (sCount === 3) {
-            if (pIdx === 0) { posX = colCenter; posY = 28; }
-            else if (pIdx === 1) { posX = colCenter - colWidth * 0.14; posY = 52; }
-            else { posX = colCenter + colWidth * 0.14; posY = 74; }
-          } else {
-            const staggerX = (pIdx % 2 === 0 ? -colWidth * 0.12 : colWidth * 0.12);
-            posX = colCenter + staggerX;
-            posY = 24 + ((pIdx % 4) / 3) * 52;
-          }
+        const onPointerDown = (e) => {
+          e.preventDefault();
+          isDragging = false;
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+          startPX = clientX; startPY = clientY;
 
-          posX = Math.max(colCenter - colWidth * 0.38, Math.min(colCenter + colWidth * 0.38, posX));
-          posY = Math.max(22, Math.min(78, posY));
+          const streamEl = document.getElementById('globulos-stream-area') || document.getElementById('globulos-ecg-canvas');
+          if (!streamEl) return;
+          const rect = streamEl.getBoundingClientRect();
 
-          const pFlujo = (proj.flujo || activeProjectFlow || 'b2b').toLowerCase();
-          const node = document.createElement('div');
-          node.className = `globulo-node flow-${pFlujo} stage-${effectiveStatus}`;
-          node.style.left = `${posX.toFixed(1)}%`;
-          node.style.top  = `${posY.toFixed(1)}%`;
-          node.dataset.projectId = String(proj.id);
-          node.dataset.flujo = pFlujo;
+          const onPointerMove = (mv) => {
+            const cx = mv.touches ? mv.touches[0].clientX : mv.clientX;
+            const cy = mv.touches ? mv.touches[0].clientY : mv.clientY;
+            if (Math.hypot(cx - startPX, cy - startPY) > 4) {
+              isDragging = true;
+              node.classList.add('dragging');
+              // X spans horizontally across the stage columns
+              let relX = Math.max(2, Math.min(98, ((cx - rect.left) / rect.width) * 100));
+              // Y is clamped strictly below the stage name headers (20% to 80% of stream area)
+              let relY = Math.max(20, Math.min(80, ((cy - rect.top) / rect.height) * 100));
+              node.style.left = `${relX}%`;
+              node.style.top  = `${relY}%`;
 
-          node.innerHTML = `
-            <div class="globulo-disc"></div>
-            <div class="globulo-node-info">
-              <span>${escapeHtml(proj.title)}</span>
-              <span class="globulo-node-amount">${formatCOP(proj.amount)}</span>
-            </div>
-          `;
-
-          // Drag & Drop Engine with active flow stage detection constrained to stream channel
-          let isDragging = false;
-          let startPX, startPY;
-
-          const onPointerDown = (e) => {
-            e.preventDefault();
-            isDragging = false;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            startPX = clientX; startPY = clientY;
-
-            const streamEl = document.getElementById('globulos-stream-area') || document.getElementById('globulos-ecg-canvas');
-            if (!streamEl) return;
-            const rect = streamEl.getBoundingClientRect();
-
-            const onPointerMove = (mv) => {
-              const cx = mv.touches ? mv.touches[0].clientX : mv.clientX;
-              const cy = mv.touches ? mv.touches[0].clientY : mv.clientY;
-              if (Math.hypot(cx - startPX, cy - startPY) > 4) {
-                isDragging = true;
-                node.classList.add('dragging');
-                let relX = Math.max(2, Math.min(98, ((cx - rect.left) / rect.width) * 100));
-                let relY = Math.max(20, Math.min(80, ((cy - rect.top) / rect.height) * 100));
-                node.style.left = `${relX}%`;
-                node.style.top  = `${relY}%`;
-
-                const hoveredStage = detectStageFromX(relX, activeProjectFlow);
-                document.querySelectorAll('.ecg-zone').forEach(z => z.classList.remove('drag-over'));
-                const hz = document.querySelector(`.ecg-zone[data-stage="${hoveredStage}"]`);
-                if (hz) hz.classList.add('drag-over');
-              }
-            };
-
-            const onPointerUp = async (up) => {
-              document.removeEventListener('mousemove', onPointerMove);
-              document.removeEventListener('mouseup',   onPointerUp);
-              document.removeEventListener('touchmove', onPointerMove);
-              document.removeEventListener('touchend',  onPointerUp);
+              // Highlight hovered stage name zone in active flow
+              const hoveredStage = detectStageFromX(relX, activeProjectFlow);
               document.querySelectorAll('.ecg-zone').forEach(z => z.classList.remove('drag-over'));
-              node.classList.remove('dragging');
-
-              if (isDragging) {
-                const ux = up.changedTouches ? up.changedTouches[0].clientX : up.clientX;
-                let finalX = Math.max(2, Math.min(98, ((ux - rect.left) / rect.width) * 100));
-
-                const newStatus  = detectStageFromX(finalX, activeProjectFlow);
-                const prevStatus = proj.status;
-                if (newStatus && proj.status !== newStatus) {
-                  proj.status = newStatus;
-                  proj.stageEnteredAt = new Date().toISOString();
-                  node.className = `globulo-node flow-${pFlujo} stage-${newStatus}`;
-                  try {
-                    await ApiService.updateProyecto(proj.id, { estado: newStatus });
-                    const stName = activeStages[newStatus]?.name || newStatus;
-                    showAgentToast('🩸 Etapa Actualizada', `"${proj.title}" → <strong>${stName}</strong>`, '✅');
-                  } catch (err) {
-                    proj.status = prevStatus;
-                    node.className = `globulo-node flow-${pFlujo} stage-${prevStatus}`;
-                    console.error('Error updating stage:', err);
-                    showAgentToast('❌ Error', 'No se pudo actualizar la etapa en la base de datos.', '⚠️');
-                  }
-                }
-                renderGlobulosPanel();
-              } else {
-                const searchInput = document.getElementById('project-search-input');
-                if (currentProjectSearch === proj.title.toLowerCase().trim()) {
-                  currentProjectSearch = ''; if (searchInput) searchInput.value = '';
-                } else {
-                  currentProjectSearch = proj.title.toLowerCase().trim(); if (searchInput) searchInput.value = proj.title;
-                }
-                renderGlobulosPanel();
-              }
-            };
-
-            document.addEventListener('mousemove', onPointerMove);
-            document.addEventListener('mouseup',   onPointerUp);
-            document.addEventListener('touchmove', onPointerMove, { passive: false });
-            document.addEventListener('touchend',  onPointerUp);
+              const hz = document.querySelector(`.ecg-zone[data-stage="${hoveredStage}"]`);
+              if (hz) hz.classList.add('drag-over');
+            }
           };
 
-          node.addEventListener('mousedown',  onPointerDown);
-          node.addEventListener('touchstart', onPointerDown, { passive: false });
-          nodesLayer.appendChild(node);
-        });
-      }
+          const onPointerUp = async (up) => {
+            document.removeEventListener('mousemove', onPointerMove);
+            document.removeEventListener('mouseup',   onPointerUp);
+            document.removeEventListener('touchmove', onPointerMove);
+            document.removeEventListener('touchend',  onPointerUp);
+            document.querySelectorAll('.ecg-zone').forEach(z => z.classList.remove('drag-over'));
+            node.classList.remove('dragging');
+
+            if (isDragging) {
+              const ux = up.changedTouches ? up.changedTouches[0].clientX : up.clientX;
+              let finalX = Math.max(2, Math.min(98, ((ux - rect.left) / rect.width) * 100));
+
+              const newStatus  = detectStageFromX(finalX, activeProjectFlow);
+              const prevStatus = proj.status;
+              if (newStatus && proj.status !== newStatus) {
+                proj.status = newStatus;
+                proj.stageEnteredAt = new Date().toISOString();
+                node.className = `globulo-node stage-${newStatus}`;
+                try {
+                  await ApiService.updateProyecto(proj.id, { estado: newStatus });
+                  const stName = activeStages[newStatus]?.name || newStatus;
+                  showAgentToast('🩸 Etapa Actualizada', `"${proj.title}" → <strong>${stName}</strong>`, '✅');
+                } catch (err) {
+                  proj.status = prevStatus;
+                  node.className = `globulo-node stage-${prevStatus}`;
+                  console.error('Error updating stage:', err);
+                  showAgentToast('❌ Error', 'No se pudo actualizar la etapa en la base de datos.', '⚠️');
+                }
+              }
+              // Snap immediately into clean column layout under the stage name
+              renderGlobulosPanel();
+            } else {
+              // Click: filter grid to this project
+              const searchInput = document.getElementById('project-search-input');
+              if (currentProjectSearch === proj.title.toLowerCase().trim()) {
+                currentProjectSearch = ''; if (searchInput) searchInput.value = '';
+              } else {
+                currentProjectSearch = proj.title.toLowerCase().trim(); if (searchInput) searchInput.value = proj.title;
+              }
+              renderGlobulosPanel();
+            }
+          };
+
+          document.addEventListener('mousemove', onPointerMove);
+          document.addEventListener('mouseup',   onPointerUp);
+          document.addEventListener('touchmove', onPointerMove, { passive: false });
+          document.addEventListener('touchend',  onPointerUp);
+        };
+
+        node.addEventListener('mousedown',  onPointerDown);
+        node.addEventListener('touchstart', onPointerDown, { passive: false });
+        nodesLayer.appendChild(node);
+      });
     }
 
     // ── 8. Render Project Grid Cards ──
@@ -3586,13 +3436,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<button class="btn-delete-proj" onclick="window.openDeleteProjectModal(${p.id}, '${escapeHtml(p.title || '').replace(/'/g, "\\'")}')" title="Eliminar proyecto permanentemente (Solo Superusuario)">🗑️ Eliminar</button>`
         : '';
 
-      const flowOptionsHtml = Object.keys(PROJECT_FLOWS)
-        .filter(fKey => fKey !== 'total')
-        .map(fKey => {
-          const fo = PROJECT_FLOWS[fKey];
-          const isSel = fKey === pFlujo ? 'selected' : '';
-          return `<option value="${fKey}" ${isSel}>${fo.icon} ${fo.shortTitle}</option>`;
-        }).join('');
+      const flowOptionsHtml = Object.keys(PROJECT_FLOWS).map(fKey => {
+        const fo = PROJECT_FLOWS[fKey];
+        const isSel = fKey === pFlujo ? 'selected' : '';
+        return `<option value="${fKey}" ${isSel}>${fo.icon} ${fo.shortTitle}</option>`;
+      }).join('');
 
       return `
         <div class="project-card stage-${p.status}" data-id="${p.id}" data-flow="${pFlujo}">
@@ -3886,177 +3734,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   }
 
-  // ── Sistema de Usuarios y Formatos del Modal de Proyectos ──
-  let systemUsers = [
-    { id: 2, username: 'admin.cntxt', nombre_completo: 'Super Admin', rol: 'Superadmin', display: 'Super Admin — Superadmin' },
-    { id: 3, username: 'ceo.cntxt', nombre_completo: 'CEO CNTXT', rol: 'CEO / COO', display: 'CEO CNTXT — CEO / COO' },
-    { id: 4, username: 'coordinadora.cntxt', nombre_completo: 'Coordinadora CNTXT', rol: 'Coordinadora', display: 'Coordinadora CNTXT — Coordinadora' },
-    { id: 5, username: 'director.cntxt', nombre_completo: 'Director CNTXT', rol: 'Director', display: 'Director CNTXT — Director' },
-    { id: 6, username: 'growth.cntxt', nombre_completo: 'Growth Partner', rol: 'Growth Partner', display: 'Growth Partner — Growth Partner' },
-    { id: 1, username: 'cont3xto', nombre_completo: 'cont3xto', rol: 'Administrador General', display: 'cont3xto — Administrador' }
-  ];
-
-  function formatCOPCurrency(val, withSuffix = false) {
-    if (val === null || val === undefined || val === '') return '';
-    const cleanStr = String(val).replace(/[^\d]/g, '');
-    if (!cleanStr) return '';
-    const num = parseInt(cleanStr, 10);
-    if (isNaN(num)) return '';
-    const formatted = '$ ' + num.toLocaleString('es-CO');
-    return withSuffix ? `${formatted} COP` : formatted;
-  }
-
-  function parseCOPCurrency(val) {
-    if (!val) return 0;
-    const clean = String(val).replace(/[^\d]/g, '');
-    return clean ? parseInt(clean, 10) : 0;
-  }
-
-  // Live input mask para monto en Pesos Colombianos
-  const inputAmountEl = document.getElementById('project-input-amount');
-  if (inputAmountEl) {
-    inputAmountEl.addEventListener('input', (e) => {
-      const raw = e.target.value.replace(/[^\d]/g, '');
-      if (!raw) {
-        e.target.value = '';
-        return;
-      }
-      const num = parseInt(raw, 10);
-      e.target.value = formatCOPCurrency(num);
-    });
-
-    inputAmountEl.addEventListener('blur', (e) => {
-      const num = parseCOPCurrency(e.target.value);
-      if (num > 0) {
-        e.target.value = formatCOPCurrency(num, true);
-      }
-    });
-
-    inputAmountEl.addEventListener('focus', (e) => {
-      const num = parseCOPCurrency(e.target.value);
-      if (num > 0) {
-        e.target.value = formatCOPCurrency(num);
-      }
-    });
-  }
-
-  function populateUsersDropdown(selectedValue = '') {
-    const select = document.getElementById('project-input-owner');
-    if (!select) return;
-    select.innerHTML = '<option value="" disabled selected>— Seleccionar Responsable Asignado —</option>';
-    systemUsers.forEach(u => {
-      const opt = document.createElement('option');
-      const val = u.nombre_completo || u.username;
-      opt.value = val;
-      opt.textContent = u.display || val;
-      if (selectedValue && (selectedValue === val || selectedValue === u.username || selectedValue.includes(u.username))) {
-        opt.selected = true;
-      }
-      select.appendChild(opt);
-    });
-    if (selectedValue && !Array.from(select.options).some(o => o.value === selectedValue)) {
-      const customOpt = document.createElement('option');
-      customOpt.value = selectedValue;
-      customOpt.textContent = `👤 ${selectedValue}`;
-      customOpt.selected = true;
-      select.appendChild(customOpt);
-    }
-  }
-
-  function renderProjectBitacora(bitacora = [], isNew = false) {
-    const container = document.getElementById('project-bitacora-timeline');
-    const countPill = document.getElementById('project-bitacora-count');
-    if (!container) return;
-
-    const list = Array.isArray(bitacora) ? [...bitacora] : [];
-    if (countPill) {
-      countPill.textContent = isNew ? '0 eventos (Nuevo)' : `${list.length} evento${list.length === 1 ? '' : 's'}`;
-    }
-
-    if (isNew || list.length === 0) {
-      container.innerHTML = `
-        <div class="bitacora-entry-card" style="border-style: dashed; border-color: rgba(239, 68, 68, 0.35);">
-          <div class="bitacora-dot dot-creation"></div>
-          <div class="bitacora-entry-header">
-            <span class="bitacora-badge-action">🌱 Registro Inicial Pendiente</span>
-            <span class="bitacora-meta">
-              <span class="bitacora-user-tag">${currentUser ? (currentUser.nombre_completo || currentUser.username) : 'Usuario Actual'}</span>
-              <span class="bitacora-time-tag">Al guardar glóbulo</span>
-            </span>
-          </div>
-          <p class="bitacora-desc" style="color: #94a3b8; font-style: italic;">
-            Al guardar este glóbulo rojo, se creará automáticamente la primera entrada de la Bitácora de Trazabilidad con fecha, hora, usuario y embudo inicial para alimentar el modelo predictivo.
-          </p>
-        </div>
-      `;
-      return;
-    }
-
-    const reversed = [...list].reverse();
-    container.innerHTML = reversed.map((entry, idx) => {
-      const isCreation = (entry.accion || '').toLowerCase().includes('creaci') || idx === reversed.length - 1;
-      const isStage = (entry.accion || '').toLowerCase().includes('etapa');
-      const dotClass = isCreation ? 'dot-creation' : (isStage ? 'dot-stage' : '');
-      const actionIcon = isCreation ? '🌱' : (isStage ? '⚡' : '✏️');
-
-      let dateFormatted = 'Fecha no registrada';
-      if (entry.fecha) {
-        try {
-          const d = new Date(entry.fecha);
-          dateFormatted = d.toLocaleString('es-CO', {
-            day: '2-digit', month: 'short', year: 'numeric',
-            hour: '2-digit', minute: '2-digit', hour12: true
-          });
-        } catch (_) {
-          dateFormatted = entry.fecha;
-        }
-      }
-
-      let chipsHtml = '';
-      if (entry.cambios && typeof entry.cambios === 'object' && Object.keys(entry.cambios).length > 0) {
-        const chipItems = Object.entries(entry.cambios).map(([k, v]) => {
-          let label = k;
-          if (k === 'monto_proyectado') label = 'Monto';
-          if (k === 'estado') label = 'Etapa';
-          if (k === 'flujo') label = 'Embudo';
-          if (k === 'proximo_paso') label = 'Próx. Acción';
-          if (k === 'fecha_limite') label = 'Fecha Límite';
-          if (k === 'responsable') label = 'Owner';
-
-          if (v && typeof v === 'object' && ('anterior' in v || 'nuevo' in v)) {
-            let ant = v.anterior || '—';
-            let nue = v.nuevo || '—';
-            if (k === 'monto_proyectado') {
-              ant = formatCOPCurrency(ant);
-              nue = formatCOPCurrency(nue);
-            }
-            return `<span class="bitacora-chip"><span class="chip-label">${label}:</span> ${escapeHtml(ant)} <span class="chip-arrow">→</span> ${escapeHtml(nue)}</span>`;
-          }
-          return `<span class="bitacora-chip"><span class="chip-label">${label}:</span> ${escapeHtml(String(v))}</span>`;
-        }).join('');
-
-        if (chipItems) {
-          chipsHtml = `<div class="bitacora-chips-wrap">${chipItems}</div>`;
-        }
-      }
-
-      return `
-        <div class="bitacora-entry-card">
-          <div class="bitacora-dot ${dotClass}"></div>
-          <div class="bitacora-entry-header">
-            <span class="bitacora-badge-action">${actionIcon} ${escapeHtml(entry.accion || 'Actualización de Glóbulo')}</span>
-            <span class="bitacora-meta">
-              <span class="bitacora-user-tag">👤 ${escapeHtml(entry.usuario || 'Sistema')}</span>
-              <span class="bitacora-time-tag">${dateFormatted}</span>
-            </span>
-          </div>
-          <p class="bitacora-desc">${escapeHtml(entry.detalles || 'Sin observaciones detalladas')}</p>
-          ${chipsHtml}
-        </div>
-      `;
-    }).join('');
-  }
-
   // Listener para los radio pills de selección de flujo en el modal
   document.querySelectorAll('.project-flujo-pill').forEach(pill => {
     pill.addEventListener('click', () => {
@@ -4082,13 +3759,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputBrief = document.getElementById('project-input-brief-url');
     const inputProposal = document.getElementById('project-input-proposal-url');
     const inputDueDate = document.getElementById('project-input-due-date');
-    const customNoteInput = document.getElementById('project-bitacora-custom-note');
 
     if (dropdownRelacion) dropdownRelacion.style.display = 'none';
-    if (customNoteInput) customNoteInput.value = '';
 
-    // 1. Determinar flujo inicial del modal (Paso 1 prioritario)
-    const targetFlow = project ? (project.flujo || 'b2b') : (activeProjectFlow === 'total' ? 'b2b' : activeProjectFlow);
+    // Determinar flujo inicial del modal
+    const targetFlow = project ? (project.flujo || 'b2b') : activeProjectFlow;
     document.querySelectorAll('input[name="project_flujo"]').forEach(r => {
       const isMatch = r.value === targetFlow;
       r.checked = isMatch;
@@ -4101,18 +3776,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     populateProjectModalStages(targetFlow, project ? project.status : null);
 
-    // 2. Poblar selector de Responsables / Owners desde usuarios del sistema
-    const currentOwner = project ? (project.responsable || '') : (currentUser ? (currentUser.nombre_completo || currentUser.username) : '');
-    populateUsersDropdown(currentOwner);
-
-    // 3. Renderizar Bitácora de Trazabilidad
-    renderProjectBitacora(project ? project.bitacora : null, !project);
-
     if (project) {
       if (titleEl) titleEl.textContent = '🩸 Editar Proyecto';
       if (editIdEl) editIdEl.value = project.id;
       if (inputTitle) inputTitle.value = project.title || '';
-      if (inputAmount) inputAmount.value = formatCOPCurrency(project.amount, true);
+      if (inputAmount) inputAmount.value = project.amount || 0;
       if (inputNextStep) inputNextStep.value = project.nextStep || '';
       if (inputLinea) inputLinea.value = project.lineaOperativa || '';
       if (inputCat) inputCat.value = project.categoria || '';
@@ -4141,7 +3809,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (titleEl) titleEl.textContent = '🩸 Nuevo Proyecto en el Torrente';
       if (editIdEl) editIdEl.value = '';
       if (inputTitle) inputTitle.value = '';
-      if (inputAmount) inputAmount.value = '';
+      if (inputAmount) inputAmount.value = 0;
       if (inputNextStep) inputNextStep.value = '';
       if (inputLinea) inputLinea.value = '';
       if (inputCat) inputCat.value = '';
@@ -4180,7 +3848,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const selectedFlujo = document.querySelector('input[name="project_flujo"]:checked')?.value || activeProjectFlow;
       let contactoId = document.getElementById('project-select-relacion')?.value;
       const empresaId = document.getElementById('project-selected-empresa-id')?.value;
-      const amount = parseCOPCurrency(document.getElementById('project-input-amount')?.value);
+      const amount = parseFloat(document.getElementById('project-input-amount')?.value) || 0;
       const status = document.getElementById('project-input-status')?.value || 'mql';
       const nextStep = document.getElementById('project-input-next-step')?.value.trim() || '';
       const lineaOperativa = document.getElementById('project-input-linea-operativa')?.value || null;
@@ -4188,8 +3856,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const briefUrl = document.getElementById('project-input-brief-url')?.value?.trim() || '';
       const proposalUrl = document.getElementById('project-input-proposal-url')?.value?.trim() || '';
       const dueDate = document.getElementById('project-input-due-date')?.value || null;
-      const responsable = document.getElementById('project-input-owner')?.value || '';
-      const customNote = document.getElementById('project-bitacora-custom-note')?.value.trim() || '';
 
       if (!title) {
         alert('Por favor ingresa el Título del Proyecto.');
@@ -4220,9 +3886,7 @@ document.addEventListener('DOMContentLoaded', () => {
         categoria: categoria,
         brief_url: briefUrl,
         proposal_url: proposalUrl,
-        fecha_limite: dueDate,
-        responsable: responsable,
-        ...(customNote ? { nota_bitacora: customNote } : {})
+        fecha_limite: dueDate
       };
 
       updateSyncStatusIndicator('saving');
@@ -4245,12 +3909,10 @@ document.addEventListener('DOMContentLoaded', () => {
               briefUrl: updated.brief_url,
               proposalUrl: updated.proposal_url,
               dueDate: updated.fecha_limite,
-              nextStep: updated.proximo_paso,
-              responsable: updated.responsable || responsable,
-              bitacora: Array.isArray(updated.bitacora) ? updated.bitacora : (savedProjects[idx].bitacora || [])
+              nextStep: updated.proximo_paso
             };
           }
-          showAgentToast('🩸 Proyecto Actualizado', `"${title}" se actualizó con nueva entrada en bitácora.`);
+          showAgentToast('🩸 Proyecto Actualizado', `"${title}" se actualizó en PostgreSQL.`);
         } else {
           const created = await ApiService.createProyecto(payload);
           savedProjects.unshift({
@@ -4267,11 +3929,9 @@ document.addEventListener('DOMContentLoaded', () => {
             briefUrl: created.brief_url,
             proposalUrl: created.proposal_url,
             dueDate: created.fecha_limite,
-            nextStep: created.proximo_paso,
-            responsable: created.responsable || responsable,
-            bitacora: Array.isArray(created.bitacora) ? created.bitacora : []
+            nextStep: created.proximo_paso
           });
-          showAgentToast('🩸 Proyecto Creado', `"${title}" agregado al torrente con registro en bitácora.`);
+          showAgentToast('🩸 Proyecto Creado', `"${title}" fue agregado al torrente en PostgreSQL.`);
         }
 
         updateSyncStatusIndicator('synced');

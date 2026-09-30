@@ -167,8 +167,6 @@ class ProyectoSerializer(serializers.ModelSerializer):
             'proposal_url',
             'proximo_paso',
             'fecha_limite',
-            'responsable',
-            'bitacora',
             'notas',
             'created_at',
             'updated_at'
