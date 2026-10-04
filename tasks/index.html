@@ -7,10 +7,11 @@
   <title>CNTXT® | Casa de Diseño — Checklist & Tareas</title>
   <meta name="description" content="Gestor inteligente y jerárquico de proyectos, tareas y checklists para el ecosistema CNTXT Casa de Diseño">
 
-  <!-- Tipografía Oficial: Space Grotesk + Manrope + Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tipografía Oficial: Rota Complete Family (Fuentes locales de alto rendimiento) -->
+  <link rel="preload" href="Rota%20Complete%20Family/Rota-Regular.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="Rota%20Complete%20Family/Rota-Medium.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="Rota%20Complete%20Family/Rota-SemiBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="Rota%20Complete%20Family/Rota-Bold.otf" as="font" type="font/otf" crossorigin>
 
   <link rel="stylesheet" href="checklist.css?v=2.0">
 </head>
@@ -71,6 +72,22 @@
        ═══════════════════════════════════════════════════════════ -->
   <div class="app-layout" id="app-layout">
 
+    <!-- BARRA VERTICAL DE USUARIOS (AUTO-COLLAPSIBLE ON HOVER / DOCK) -->
+    <div class="user-dock-container" id="user-dock-container">
+      <div class="user-dock-sensor" id="user-dock-sensor" title="Acerca el mouse para ver los usuarios del equipo"></div>
+      <div class="user-dock-cue" id="user-dock-cue" title="Miembros disponibles">
+        <div class="user-dock-cue-line"></div>
+      </div>
+      <aside class="user-dock-rail" id="user-dock-rail" aria-label="Usuarios del equipo">
+        <div class="user-dock-header">
+          <span class="user-dock-label">TEAM</span>
+        </div>
+        <div class="user-dock-list" id="user-dock-list">
+          <!-- Renderizado dinámico de avatares con fotos de perfil -->
+        </div>
+      </aside>
+    </div>
+
     <!-- SIDEBAR DE PROYECTOS -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -79,8 +96,7 @@
             <img src="01. CNTXT_BLANCO.png" alt="CNTXT®" class="sidebar-brand-logo-img">
             <span class="brand-registered-mark">®</span>
           </div>
-          <div class="brand-accent-line"></div>
-          <span class="brand-subtitle">Casa de Diseño</span>
+          <span class="brand-subtitle">TASKS</span>
         </div>
         <button class="btn-icon" id="btn-toggle-sidebar" title="Colapsar menú">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -124,18 +140,32 @@
 
       <!-- User Session Strip -->
       <div class="sidebar-user-strip" id="sidebar-user-strip">
-        <div class="user-avatar" id="sidebar-user-avatar">CX</div>
-        <div class="user-info">
-          <div class="user-name" id="sidebar-user-name">Administrador</div>
-          <div class="user-role" id="sidebar-user-role">Superadmin</div>
+        <div class="user-session-card" id="btn-open-my-profile" title="Mi Perfil · Editar datos, foto y contraseña">
+          <div class="user-avatar" id="sidebar-user-avatar">
+            <span class="user-avatar-initials">AC</span>
+          </div>
+          <div class="user-info">
+            <div class="user-name" id="sidebar-user-name">Administrador</div>
+            <div class="user-role" id="sidebar-user-role">Superadmin</div>
+          </div>
         </div>
-        <button class="btn-logout" id="btn-logout" title="Cerrar sesión">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16 17 21 12 16 7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-        </button>
+        <div class="sidebar-user-strip-btns">
+          <button type="button" class="btn-icon btn-user-strip-action" id="btn-open-team-modal" title="Gestión de Equipo CNTXT®">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </button>
+          <button type="button" class="btn-icon btn-user-strip-action btn-logout" id="btn-logout" title="Cerrar sesión">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -150,7 +180,23 @@
             <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-current" id="header-breadcrumb-project">Proyecto</span>
           </div>
-          <h1 class="project-view-title" id="project-view-title">Cargando proyecto...</h1>
+          <div class="project-title-row">
+            <h1 class="project-view-title" id="project-view-title">Cargando proyecto...</h1>
+            <div class="project-header-actions" id="project-header-actions">
+              <button class="btn-icon btn-project-header-edit" id="btn-edit-active-project" title="Editar este proyecto">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <button class="btn-icon btn-project-header-delete" id="btn-delete-active-project" title="Eliminar este proyecto">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
           <p class="project-view-desc" id="project-view-desc">Descripción del proyecto</p>
         </div>
 
@@ -196,20 +242,96 @@
             </svg>
             <span>Agregar Tarea</span>
           </button>
+
+          <!-- Botón de Pantalla Completa (Fullscreen) -->
+          <button type="button" class="btn-fullscreen-toggle" id="btn-toggle-fullscreen" title="Pantalla completa">
+            <svg class="icon-fullscreen-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+            <svg class="icon-fullscreen-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+              <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+            </svg>
+          </button>
         </div>
       </header>
 
       <!-- Barra de Filtros y Progreso del Proyecto -->
       <section class="project-toolbar">
-        <div class="progress-bar-card">
-          <div class="progress-header">
-            <span class="progress-label">Avance del Proyecto</span>
-            <span class="progress-percentage" id="project-progress-percent">0%</span>
+        <!-- Barra de Métricas: 4 KPIs Eisenhower (Misma altura) + Barra de Avance a la derecha -->
+        <div class="project-metrics-dashboard">
+          <div class="eisenhower-kpi-bar">
+            <!-- KPI Q1: Urgente e Importante -->
+            <div class="kpi-eisenhower-card kpi-q1" id="kpi-card-q1" data-priority="urgente-importante" title="Filtrar por Q1: Urgente e Importante (Hacer Ya)">
+              <div class="kpi-card-top">
+                <span class="kpi-badge-quadrant">Q1 · Hacer Ya</span>
+                <span class="kpi-dot"></span>
+              </div>
+              <div class="kpi-card-main">
+                <span class="kpi-number" id="kpi-val-q1">0</span>
+                <div class="kpi-meta">
+                  <span class="kpi-title">Urgente & Imp.</span>
+                  <span class="kpi-sub">Tareas activas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI Q2: Importante, No Urgente -->
+            <div class="kpi-eisenhower-card kpi-q2" id="kpi-card-q2" data-priority="importante-no-urgente" title="Filtrar por Q2: Importante, No Urgente (Planificar)">
+              <div class="kpi-card-top">
+                <span class="kpi-badge-quadrant">Q2 · Planificar</span>
+                <span class="kpi-dot"></span>
+              </div>
+              <div class="kpi-card-main">
+                <span class="kpi-number" id="kpi-val-q2">0</span>
+                <div class="kpi-meta">
+                  <span class="kpi-title">Importante, No Urg.</span>
+                  <span class="kpi-sub">Tareas activas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI Q3: Urgente, No Importante -->
+            <div class="kpi-eisenhower-card kpi-q3" id="kpi-card-q3" data-priority="urgente-no-importante" title="Filtrar por Q3: Urgente, No Importante (Delegar)">
+              <div class="kpi-card-top">
+                <span class="kpi-badge-quadrant">Q3 · Delegar</span>
+                <span class="kpi-dot"></span>
+              </div>
+              <div class="kpi-card-main">
+                <span class="kpi-number" id="kpi-val-q3">0</span>
+                <div class="kpi-meta">
+                  <span class="kpi-title">Urgente, No Imp.</span>
+                  <span class="kpi-sub">Tareas activas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI Q4: No Urgente, No Importante -->
+            <div class="kpi-eisenhower-card kpi-q4" id="kpi-card-q4" data-priority="no-urgente-no-importante" title="Filtrar por Q4: No Urgente, No Importante (Descartar)">
+              <div class="kpi-card-top">
+                <span class="kpi-badge-quadrant">Q4 · Descartar</span>
+                <span class="kpi-dot"></span>
+              </div>
+              <div class="kpi-card-main">
+                <span class="kpi-number" id="kpi-val-q4">0</span>
+                <div class="kpi-meta">
+                  <span class="kpi-title">No Urg, No Imp.</span>
+                  <span class="kpi-sub">Tareas activas</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="project-progress-fill" style="width: 0%;"></div>
+
+          <!-- Barra de Avance al lado derecho (Misma Altura) -->
+          <div class="progress-bar-card">
+            <div class="progress-header">
+              <span class="progress-label">Avance del Proyecto</span>
+              <span class="progress-percentage" id="project-progress-percent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="project-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-subtext" id="project-progress-subtext">0 de 0 tareas completadas</div>
           </div>
-          <div class="progress-subtext" id="project-progress-subtext">0 de 0 tareas completadas</div>
         </div>
 
         <!-- Filtros Rápidos -->
@@ -232,6 +354,13 @@
               <option value="director@cntxt.co">Director Comercial</option>
               <option value="growth@cntxt.co">Growth Partner</option>
             </select>
+          </div>
+
+          <!-- Chip de Filtro Activo por Usuario -->
+          <div class="active-user-filter-chip" id="active-user-filter-chip" style="display: none;">
+            <div class="active-user-chip-avatar" id="active-user-chip-avatar">AC</div>
+            <span class="active-user-chip-text" id="active-user-chip-text">Admin CNTXT</span>
+            <button type="button" class="btn-clear-user-chip" id="btn-clear-user-chip" title="Ver todo el equipo">✕</button>
           </div>
 
           <div class="filter-group">
@@ -457,14 +586,16 @@
     </div>
   </div>
 
-  <!-- Modal: Nuevo Proyecto -->
+  <!-- Modal: Nuevo Proyecto / Editar Proyecto -->
   <div class="modal-backdrop" id="modal-project" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title font-headline">Crear Nuevo Proyecto</h3>
+        <h3 class="modal-title font-headline" id="modal-project-title">Crear Nuevo Proyecto</h3>
         <button type="button" class="btn-icon modal-close" id="btn-close-project-modal">✕</button>
       </div>
       <form id="form-project" class="modal-form" novalidate>
+        <input type="hidden" id="project-id-field">
+
         <div class="form-group">
           <label for="project-name-input" class="form-label">Nombre del Proyecto *</label>
           <input type="text" id="project-name-input" class="form-input" placeholder="Ej: Implementación Central CNTXT Tech" required>
@@ -506,6 +637,37 @@
     </div>
   </div>
 
+  <!-- Modal: Confirmar Eliminación de Proyecto -->
+  <div class="modal-backdrop" id="modal-delete-project" aria-hidden="true">
+    <div class="modal-card modal-card-alert" style="border-color: rgba(217, 83, 79, 0.4); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(217, 83, 79, 0.15);">
+      <div class="modal-alert-header">
+        <div class="modal-alert-icon" style="color: #d9534f;">🗑️</div>
+        <h3 class="modal-title font-headline" style="color: #ff8585;">Eliminar Proyecto</h3>
+        <button type="button" class="btn-icon modal-close" id="btn-close-delete-project-modal">✕</button>
+      </div>
+      <div class="modal-alert-body">
+        <p class="modal-alert-text">
+          ¿Estás seguro de que deseas eliminar permanentemente el proyecto <strong id="delete-project-name" style="color: #fff;"></strong>?
+        </p>
+        <div class="modal-alert-policy-box" style="background: rgba(217, 83, 79, 0.08); border-color: rgba(217, 83, 79, 0.3);">
+          <div class="policy-header" style="color: #ff8585;">
+            <span class="policy-icon">⚠️</span>
+            <strong>Advertencia Irreversible</strong>
+          </div>
+          <p class="policy-desc" id="delete-project-warning">
+            Se eliminarán el proyecto y todas sus tareas, subtareas y registros asociados. Esta acción no se puede deshacer.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-secondary" id="btn-cancel-delete-project">Cancelar</button>
+        <button type="button" class="btn-primary" id="btn-confirm-delete-project" style="background: #d9534f; color: #fff; border-color: #d9534f;">
+          Eliminar Proyecto
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: Alerta de Dependencia y Regla de 24 Horas -->
   <div class="modal-backdrop" id="modal-predecessor-alert" aria-hidden="true">
     <div class="modal-card modal-card-alert">
@@ -536,6 +698,192 @@
         <button type="button" class="btn-primary btn-alert-confirm" id="btn-confirm-pred-alert">
           Confirmar con Alerta de 24h
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Mi Perfil -->
+  <div class="modal-backdrop" id="modal-my-profile" aria-hidden="true">
+    <div class="modal-card modal-card-profile" style="max-width: 540px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="modal-title-icon" style="color: var(--color-primary); font-size: 18px;">👤</div>
+          <h3 class="modal-title font-headline">Mi Perfil CNTXT®</h3>
+        </div>
+        <button type="button" class="btn-icon modal-close" id="btn-close-my-profile-modal">✕</button>
+      </div>
+
+      <form id="form-my-profile" class="modal-form" novalidate>
+        <!-- Sección Avatar / Foto de Perfil -->
+        <div class="profile-avatar-uploader">
+          <div class="profile-avatar-preview-wrap">
+            <div class="profile-avatar-big" id="profile-avatar-big">
+              <span id="profile-avatar-initials">AC</span>
+              <img id="profile-avatar-img" src="" alt="Avatar" style="display: none;">
+            </div>
+            <button type="button" class="profile-avatar-badge-btn" id="btn-trigger-upload-photo" title="Subir foto de perfil">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </button>
+          </div>
+          <div class="profile-avatar-meta">
+            <span class="profile-avatar-title font-headline">Foto de Perfil</span>
+            <span class="profile-avatar-hint">PNG, JPG o WEBP. Se adapta y optimiza automáticamente.</span>
+            <div class="profile-avatar-actions">
+              <button type="button" class="btn-sm btn-secondary" id="btn-select-photo">Subir Foto</button>
+              <button type="button" class="btn-sm btn-secondary" id="btn-remove-photo" style="display: none; color: #ff8585; border-color: rgba(255, 133, 133, 0.3);">Eliminar Foto</button>
+              <input type="file" id="input-profile-file" accept="image/png, image/jpeg, image/webp" style="display: none;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Campos de Información Personal -->
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="profile-name-input" class="form-label">Nombre Completo *</label>
+            <input type="text" id="profile-name-input" class="form-input" required placeholder="Tu nombre">
+          </div>
+          <div class="form-group col-half">
+            <label for="profile-email-input" class="form-label">Correo Corporativo</label>
+            <input type="email" id="profile-email-input" class="form-input" readonly title="El correo es gestionado por el administrador">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="profile-phone-input" class="form-label">Teléfono / WhatsApp</label>
+            <input type="tel" id="profile-phone-input" class="form-input" placeholder="+57 300 123 4567">
+          </div>
+          <div class="form-group col-half">
+            <label for="profile-role-input" class="form-label">Rol en el Ecosistema</label>
+            <input type="text" id="profile-role-input" class="form-input" readonly style="opacity: 0.8; cursor: not-allowed;">
+          </div>
+        </div>
+
+        <!-- Sección Cambio de Contraseña -->
+        <div class="profile-security-box">
+          <div class="profile-security-header">
+            <span style="font-size: 13px;">🔒</span>
+            <span class="font-headline" style="font-size: 12px; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em; text-transform: uppercase;">Seguridad & Cambio de Contraseña</span>
+          </div>
+          <p class="profile-security-hint">Deja estos campos vacíos si no deseas modificar tu contraseña actual.</p>
+          <div class="form-row" style="margin-top: 10px;">
+            <div class="form-group col-half">
+              <label for="profile-new-pass" class="form-label">Nueva Contraseña</label>
+              <input type="password" id="profile-new-pass" class="form-input" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+            </div>
+            <div class="form-group col-half">
+              <label for="profile-confirm-pass" class="form-label">Confirmar Contraseña</label>
+              <input type="password" id="profile-confirm-pass" class="form-input" placeholder="Repite la contraseña" autocomplete="new-password">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" id="btn-cancel-my-profile">Cancelar</button>
+          <button type="submit" class="btn-primary" id="btn-save-my-profile">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Gestión de Equipo -->
+  <div class="modal-backdrop" id="modal-team-management" aria-hidden="true">
+    <div class="modal-card modal-card-team" style="max-width: 820px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="modal-title-icon" style="color: var(--color-primary); font-size: 18px;">👥</div>
+          <div>
+            <h3 class="modal-title font-headline" style="margin-bottom: 2px;">Gestión del Equipo CNTXT®</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0;">Administración de miembros, roles y asignaciones activas</p>
+          </div>
+        </div>
+        <button type="button" class="btn-icon modal-close" id="btn-close-team-modal">✕</button>
+      </div>
+
+      <!-- Barra de pestañas -->
+      <div class="team-modal-tabs">
+        <button type="button" class="team-tab-btn active" id="tab-btn-team-list" data-tab="list">
+          <span>Miembros Registrados</span>
+          <span class="badge-count" id="team-modal-count">0</span>
+        </button>
+        <button type="button" class="team-tab-btn" id="tab-btn-team-create" data-tab="create">
+          <span>+ Agregar Miembro</span>
+        </button>
+      </div>
+
+      <!-- Contenido Tab 1: Lista de Miembros -->
+      <div class="team-tab-content active" id="team-tab-list">
+        <div class="team-members-table-wrap">
+          <div class="team-table-header">
+            <div class="team-col-member">MIEMBRO</div>
+            <div class="team-col-role">ROL</div>
+            <div class="team-col-tasks">TAREAS ACTIVAS</div>
+            <div class="team-col-actions">ACCIONES</div>
+          </div>
+          <div class="team-members-list" id="team-members-list">
+            <!-- Renderizado dinámico de miembros -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido Tab 2: Crear / Editar Miembro -->
+      <div class="team-tab-content" id="team-tab-create">
+        <form id="form-team-member" class="modal-form" novalidate style="margin-top: 10px;">
+          <input type="hidden" id="team-member-edit-id">
+
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label for="member-name-input" class="form-label">Nombre del Miembro *</label>
+              <input type="text" id="member-name-input" class="form-input" required placeholder="Ej: Camilo Gómez">
+            </div>
+            <div class="form-group col-half">
+              <label for="member-email-input" class="form-label">Correo Electrónico *</label>
+              <input type="email" id="member-email-input" class="form-input" required placeholder="nombre@cntxt.co">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label for="member-role-select" class="form-label">Rol Operativo / Estratégico *</label>
+              <select id="member-role-select" class="form-input" required>
+                <option value="Superadmin / Dirección Técnica">Superadmin / Dirección Técnica</option>
+                <option value="CEO / Dirección General">CEO / Dirección General</option>
+                <option value="Coordinación de Operaciones">Coordinación de Operaciones</option>
+                <option value="Director Comercial">Director Comercial</option>
+                <option value="Growth Partner">Growth Partner</option>
+                <option value="Diseñador / Creativo">Diseñador / Creativo</option>
+                <option value="Desarrollador / Tech">Desarrollador / Tech</option>
+                <option value="Colaborador Externo">Colaborador Externo</option>
+              </select>
+            </div>
+            <div class="form-group col-half">
+              <label for="member-color-input" class="form-label">Color de Identidad</label>
+              <div class="member-color-picker-row">
+                <input type="color" id="member-color-input" value="#C8A87A" class="form-color-picker">
+                <span class="member-color-preview-label" id="member-color-val">#C8A87A</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-half">
+              <label for="member-avatar-input" class="form-label">URL de Foto de Perfil (Opcional)</label>
+              <input type="url" id="member-avatar-input" class="form-input" placeholder="https://ejemplo.com/foto.jpg">
+            </div>
+            <div class="form-group col-half">
+              <label for="member-password-input" class="form-label">Contraseña de Acceso</label>
+              <input type="password" id="member-password-input" class="form-input" placeholder="Contraseña para iniciar sesión">
+            </div>
+          </div>
+
+          <div class="modal-footer" style="margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-secondary" id="btn-cancel-team-form">Cancelar</button>
+            <button type="submit" class="btn-primary" id="btn-save-team-member">Guardar Miembro</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

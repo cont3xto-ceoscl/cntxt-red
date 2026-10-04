@@ -43,6 +43,143 @@
     return p;
   }
 
+  // ─── Perfiles y Miembros del Equipo CNTXT ──────────────────────
+  const DEFAULT_TEAM_USERS = [
+    {
+      id: 'all',
+      email: 'all',
+      name: 'Todo el Equipo',
+      shortName: 'Todos',
+      role: 'Vista Global',
+      avatar: '',
+      isAll: true,
+      initials: 'ALL'
+    },
+    {
+      id: 'admin@cntxt.co',
+      email: 'admin@cntxt.co',
+      name: 'Admin CNTXT®',
+      shortName: 'Admin',
+      role: 'Superadmin / Dirección Técnica',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&h=160&q=80',
+      initials: 'AC',
+      color: '#C8A87A'
+    },
+    {
+      id: 'ceo@cntxt.co',
+      email: 'ceo@cntxt.co',
+      name: 'Camilo · CEO',
+      shortName: 'Camilo',
+      role: 'Dirección General & Estrategia',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&h=160&q=80',
+      initials: 'CC',
+      color: '#D4AF37'
+    },
+    {
+      id: 'coordinadora@cntxt.co',
+      email: 'coordinadora@cntxt.co',
+      name: 'Coordinadora',
+      shortName: 'Coordinación',
+      role: 'Operaciones & Seguimiento',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=160&h=160&q=80',
+      initials: 'CO',
+      color: '#4CAF50'
+    },
+    {
+      id: 'director@cntxt.co',
+      email: 'director@cntxt.co',
+      name: 'Director Comercial',
+      shortName: 'Director',
+      role: 'Desarrollo de Negocio',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&h=160&q=80',
+      initials: 'DC',
+      color: '#2196F3'
+    },
+    {
+      id: 'growth@cntxt.co',
+      email: 'growth@cntxt.co',
+      name: 'Growth Partner',
+      shortName: 'Growth',
+      role: 'Crecimiento & B2B',
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=160&h=160&q=80',
+      initials: 'GP',
+      color: '#9C27B0'
+    }
+  ];
+
+  const TEAM_USERS_KEY = 'cntxt_team_users_v2';
+
+  function loadTeamUsers() {
+    try {
+      const saved = localStorage.getItem(TEAM_USERS_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          if (!parsed.some(u => u.isAll)) {
+            parsed.unshift(DEFAULT_TEAM_USERS[0]);
+          }
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Error reading team users from storage:', e);
+    }
+    return [...DEFAULT_TEAM_USERS];
+  }
+
+  function saveTeamUsers(users) {
+    try {
+      localStorage.setItem(TEAM_USERS_KEY, JSON.stringify(users));
+    } catch (e) {
+      console.error('Error saving team users to storage:', e);
+    }
+  }
+
+  let TEAM_USERS = loadTeamUsers();
+
+  function getTeamUserByEmail(email) {
+    if (!email || email === 'all') return TEAM_USERS[0];
+    const found = TEAM_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (found) return found;
+    const namePart = email.split('@')[0];
+    return {
+      id: email,
+      email: email,
+      name: namePart.charAt(0).toUpperCase() + namePart.slice(1),
+      shortName: namePart,
+      role: 'Miembro del Equipo',
+      avatar: '',
+      initials: getInitials(email),
+      color: '#C8A87A'
+    };
+  }
+
+  function getAllTeamUsers() {
+    const list = [...TEAM_USERS];
+    const knownEmails = new Set(list.map(u => u.email.toLowerCase()));
+
+    AppState.projects.forEach(p => {
+      (p.tasks || []).forEach(t => {
+        if (t.assignee && t.assignee !== 'all' && !knownEmails.has(t.assignee.toLowerCase())) {
+          const email = t.assignee.toLowerCase();
+          knownEmails.add(email);
+          const namePart = email.split('@')[0];
+          list.push({
+            id: email,
+            email: email,
+            name: namePart.charAt(0).toUpperCase() + namePart.slice(1),
+            shortName: namePart,
+            role: 'Miembro del Equipo',
+            avatar: '',
+            initials: getInitials(email),
+            color: '#888888'
+          });
+        }
+      });
+    });
+    return list;
+  }
+
   // ─── Priorizador Inteligente Eisenhower (Anti-Tareitis) ───────
   function calculateEisenhowerSuggestion({ dueDate, dueTime, estimatedHours, objective }) {
     // 1. Criterio de Importancia (Combate a la Tareitis)
@@ -118,167 +255,8 @@
     };
   }
 
-  // ─── Proyectos y Tareas Semilla Directas (Sin Fases) ───────────
-  const DEFAULT_PROJECTS = [
-    {
-      id: 'proj-central-tech',
-      name: 'Integración Central CNTXT® Tech',
-      desc: 'Consolidación de suite de aplicaciones y módulo de tareas bajo el dominio centralcntxt.tech',
-      category: 'OPERACIONES',
-      color: '#C8A87A',
-      objectives: [
-        'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-        'Orquestar arquitectura modular para apps hijas del Admin Hub',
-        'Asegurar experiencia gráfica y tipográfica premium CNTXT® Casa de Diseño'
-      ],
-      tasks: [
-        {
-          id: 'task-101',
-          title: 'Revisión de configuración DNS y certificados SSL en EasyPanel',
-          desc: 'Comprobar certificados Let\'s Encrypt y puertos 80/443 en el VPS 2.25.68.160.',
-          priority: 'importante-no-urgente',
-          assignee: 'admin@cntxt.co',
-          dueDate: '2026-10-02',
-          dueTime: '15:00',
-          estimatedHours: 4,
-          strategicObjective: 'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-          completed: true,
-          predecessorId: null,
-          subtasks: [
-            { id: 'st-1', text: 'Validar registro A en Hostinger DNS', done: true },
-            { id: 'st-2', text: 'Comprobar auto-renovación en Traefik', done: true }
-          ]
-        },
-        {
-          id: 'task-102',
-          title: 'Mapeo de rutas para aplicaciones hijas del Admin Hub',
-          desc: 'Definir si se orquestan como subdominios o rutas de proxy inverso para Creador de Propuestas y ProjectBriefs.',
-          priority: 'urgente-importante',
-          assignee: 'ceo@cntxt.co',
-          dueDate: '2026-10-06',
-          dueTime: '18:00',
-          estimatedHours: 6,
-          strategicObjective: 'Orquestar arquitectura modular para apps hijas del Admin Hub',
-          completed: false,
-          predecessorId: 'task-101', // Amarrada a la 101
-          subtasks: [
-            { id: 'st-3', text: 'Reunión de alineación de arquitectura', done: true },
-            { id: 'st-4', text: 'Aprobar estructura de URLs', done: false }
-          ]
-        },
-        {
-          id: 'task-103',
-          title: 'Diseño de interfaz de checklist con estética CNTXT® Casa de Diseño',
-          desc: 'Implementar fondos puros #000000, paleta arena #C8A87A y tipografías Space Grotesk + Manrope.',
-          priority: 'importante-no-urgente',
-          assignee: 'coordinadora@cntxt.co',
-          dueDate: '2026-10-09',
-          dueTime: '17:00',
-          estimatedHours: 8,
-          strategicObjective: 'Asegurar experiencia gráfica y tipográfica premium CNTXT® Casa de Diseño',
-          completed: true,
-          predecessorId: null,
-          subtasks: [
-            { id: 'st-5', text: 'Maquetación HTML5 y CSS3 glassmorphism', done: true },
-            { id: 'st-6', text: 'Componentes de filtros y buscador rápido', done: true }
-          ]
-        },
-        {
-          id: 'task-104',
-          title: 'Persistencia reactiva y sincronización de datos con Django REST',
-          desc: 'CRUD completo de tareas, subtareas y amarres de predecesoras en tiempo real.',
-          priority: 'importante-no-urgente',
-          assignee: 'admin@cntxt.co',
-          dueDate: '2026-10-14',
-          dueTime: '19:00',
-          estimatedHours: 12,
-          strategicObjective: 'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-          completed: false,
-          predecessorId: 'task-103', // Amarrada a la 103
-          subtasks: [
-            { id: 'st-7', text: 'Validación de estructura de modelos', done: true },
-            { id: 'st-8', text: 'Conector de endpoints Django REST', done: false }
-          ]
-        },
-        {
-          id: 'task-105',
-          title: 'Calendario dinámico colombiano con conector visual de dependencias',
-          desc: 'Visualizar tareas por persona con festivos de Colombia y líneas sutiles entre predecesoras.',
-          priority: 'urgente-importante',
-          assignee: 'director@cntxt.co',
-          dueDate: '2026-10-19',
-          dueTime: '16:00',
-          estimatedHours: 10,
-          strategicObjective: 'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-          completed: false,
-          predecessorId: 'task-104', // Amarrada a la 104
-          subtasks: [
-            { id: 'st-9', text: 'Cálculo algorítmico de festivos Emiliani', done: true },
-            { id: 'st-10', text: 'Capa SVG con curvas Bézier interactivas', done: true }
-          ]
-        },
-        {
-          id: 'task-106',
-          title: 'Despliegue y verificación en vivo en centralcntxt.tech',
-          desc: 'Subir cambios a GitHub rama main e implementar en EasyPanel.',
-          priority: 'urgente-importante',
-          assignee: 'admin@cntxt.co',
-          dueDate: '2026-10-23',
-          dueTime: '14:00',
-          estimatedHours: 5,
-          strategicObjective: 'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-          completed: false,
-          predecessorId: 'task-105', // Amarrada a la 105
-          subtasks: []
-        }
-      ]
-    },
-    {
-      id: 'proj-made-b2b',
-      name: 'Flujo Inmobiliario MADE B2B',
-      desc: 'Pipeline operativo para prospección y estructuración corporativa de metros cuadrados',
-      category: 'MADE B2B',
-      color: '#d97736',
-      objectives: [
-        'Estructurar pipeline de 10.000 m² corporativos en MADE B2B',
-        'Optimizar viabilidad normativa POT y aprovechamiento m²',
-        'Comité de inversión y propuesta de valor comercial'
-      ],
-      tasks: [
-        {
-          id: 'b2b-task-1',
-          title: 'Evaluación de viabilidad normativa del lote',
-          desc: 'Verificar POT y usos del suelo con el equipo de arquitectura.',
-          priority: 'importante-no-urgente',
-          assignee: 'growth@cntxt.co',
-          dueDate: '2026-10-07',
-          dueTime: '12:00',
-          estimatedHours: 16,
-          strategicObjective: 'Optimizar viabilidad normativa POT y aprovechamiento m²',
-          completed: false,
-          predecessorId: null,
-          subtasks: [
-            { id: 'b2b-st-1', text: 'Solicitar certificado de tradición y libertad', done: true },
-            { id: 'b2b-st-2', text: 'Emitir concepto de aprovechamiento m²', done: false }
-          ]
-        },
-        {
-          id: 'b2b-task-2',
-          title: 'Comité de inversión y estructuración de la propuesta de valor',
-          desc: 'Revisión con directiva de márgenes comerciales y plazos de obra.',
-          priority: 'urgente-importante',
-          assignee: 'ceo@cntxt.co',
-          dueDate: '2026-10-15',
-          dueTime: '10:00',
-          estimatedHours: 8,
-          strategicObjective: 'Comité de inversión y propuesta de valor comercial',
-          completed: false,
-          predecessorId: 'b2b-task-1', // Amarrada a viabilidad
-          subtasks: []
-        }
-      ]
-    }
-  ];
+  // ─── Proyectos y Tareas (Limpio para Producción) ───────────────
+  const DEFAULT_PROJECTS = [];
 
   // ─── Motor de Semanas ISO 8601 y Festivos de Colombia ─────────
   function getISOWeekNumber(d) {
@@ -442,48 +420,26 @@
 
   // ─── Módulo de Persistencia y Migración ───────────────────────
   const Storage = {
-    STORAGE_KEY: 'cntxt_tasks_ecosystem_data_v3',
+    STORAGE_KEY: 'cntxt_tasks_ecosystem_data_v4',
 
     loadProjects() {
       try {
+        // Limpieza proactiva de claves anteriores con datos de prueba
+        ['cntxt_tasks_ecosystem_data_v3', 'cntxt_tasks_ecosystem_data_v2', 'cntxt_tasks_ecosystem_data', 'cntxt_tasks_data'].forEach(oldKey => {
+          localStorage.removeItem(oldKey);
+        });
+
         const raw = localStorage.getItem(this.STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            // Migrador transparente: aplanar phases si existen y normalizar prioridades a Eisenhower
-            parsed.forEach(proj => {
-              if (proj.phases && !proj.tasks) {
-                proj.tasks = [];
-                proj.phases.forEach(ph => {
-                  if (ph.tasks) proj.tasks.push(...ph.tasks);
-                });
-                delete proj.phases;
-              }
-              if (!proj.objectives || proj.objectives.length === 0) {
-                proj.objectives = proj.id === 'proj-made-b2b' ? [
-                  'Estructurar pipeline de 10.000 m² corporativos en MADE B2B',
-                  'Optimizar viabilidad normativa POT y aprovechamiento m²',
-                  'Comité de inversión y propuesta de valor comercial'
-                ] : [
-                  'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-                  'Orquestar arquitectura modular para apps hijas del Admin Hub',
-                  'Asegurar experiencia gráfica y tipográfica premium CNTXT® Casa de Diseño'
-                ];
-              }
-              if (proj.tasks) {
-                proj.tasks.forEach(t => {
-                  if (t.priority) t.priority = normalizePriority(t.priority);
-                  if (!t.estimatedHours) t.estimatedHours = 2;
-                });
-              }
-            });
+          if (Array.isArray(parsed)) {
             return parsed;
           }
         }
       } catch (e) {
         console.error('Error al leer proyectos de localStorage', e);
       }
-      return JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+      return [];
     },
 
     saveProjects(projects) {
@@ -591,7 +547,7 @@
   }
 
   function getActiveProject() {
-    return AppState.projects.find(p => p.id === AppState.activeProjectId) || AppState.projects[0];
+    return AppState.projects.find(p => p.id === AppState.activeProjectId) || AppState.projects[0] || null;
   }
 
   // ─── Renderizado de Sidebar y Métricas ─────────────────────────
@@ -603,31 +559,82 @@
     listEl.innerHTML = '';
     badgeEl.textContent = AppState.projects.length;
 
+    if (AppState.projects.length === 0) {
+      listEl.innerHTML = `
+        <div style="padding: 24px 12px; text-align: center; color: var(--text-muted); font-size: 11px; font-family: var(--font-label); border: 1px dashed rgba(255,255,255,0.08); border-radius: var(--radius-md); margin: 6px 0;">
+          No hay proyectos activos
+        </div>
+      `;
+      renderGlobalStats();
+      return;
+    }
+
     AppState.projects.forEach(proj => {
       const item = document.createElement('div');
       item.className = `project-nav-item ${proj.id === AppState.activeProjectId ? 'active' : ''}`;
       
-      const tasks = proj.tasks || [];
+      const allTasks = proj.tasks || [];
+      const isUserFiltered = AppState.filters.assignee !== 'all';
+      const tasks = isUserFiltered ? allTasks.filter(t => t.assignee === AppState.filters.assignee) : allTasks;
       const totalTasks = tasks.length;
       const completedTasks = tasks.filter(t => t.completed).length;
+      const progressPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+      const projColor = proj.color || 'var(--color-primary)';
 
       item.innerHTML = `
-        <span class="project-nav-dot" style="background-color: ${proj.color || 'var(--color-primary)'};"></span>
-        <div class="project-nav-info">
-          <div class="project-nav-name">${proj.name}</div>
-          <div class="project-nav-meta">
-            <span>${proj.category || 'General'}</span>
-            <span>·</span>
-            <span>${completedTasks}/${totalTasks}</span>
+        <div class="project-nav-item-top">
+          <span class="project-nav-dot" style="background-color: ${projColor};"></span>
+          <div class="project-nav-info">
+            <div class="project-nav-name" title="${proj.name}">${proj.name}</div>
+            <div class="project-nav-meta">
+              <span>${proj.category || 'General'}</span>
+              <span>·</span>
+              <span>${completedTasks}/${totalTasks}</span>
+            </div>
+          </div>
+          <span class="project-nav-badge">${totalTasks}</span>
+          <div class="project-nav-actions">
+            <button type="button" class="btn-nav-action btn-nav-edit" title="Editar proyecto">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </button>
+            <button type="button" class="btn-nav-action btn-nav-delete" title="Eliminar proyecto">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
           </div>
         </div>
-        <span class="project-nav-badge">${totalTasks}</span>
+        <div class="project-nav-progress-wrap" title="${progressPct}% completado (${completedTasks}/${totalTasks} tareas)">
+          <div class="project-nav-progress-bar" style="width: ${progressPct}%; background-color: ${projColor};"></div>
+        </div>
       `;
 
+      const btnEdit = item.querySelector('.btn-nav-edit');
+      if (btnEdit) {
+        btnEdit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openProjectModal(proj.id);
+        });
+      }
+
+      const btnDelete = item.querySelector('.btn-nav-delete');
+      if (btnDelete) {
+        btnDelete.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeleteProjectModal(proj.id);
+        });
+      }
+
       item.addEventListener('click', () => {
-        AppState.activeProjectId = proj.id;
-        renderProjectsSidebar();
-        renderMainView();
+        if (AppState.activeProjectId !== proj.id) {
+          AppState.activeProjectId = proj.id;
+          renderProjectsSidebar();
+          renderMainView();
+        }
       });
 
       listEl.appendChild(item);
@@ -639,11 +646,14 @@
   function renderGlobalStats() {
     let allTasks = 0;
     let allCompleted = 0;
+    const isUserFiltered = AppState.filters.assignee !== 'all';
 
     AppState.projects.forEach(p => {
       (p.tasks || []).forEach(t => {
-        allTasks++;
-        if (t.completed) allCompleted++;
+        if (!isUserFiltered || t.assignee === AppState.filters.assignee) {
+          allTasks++;
+          if (t.completed) allCompleted++;
+        }
       });
     });
 
@@ -658,24 +668,74 @@
 
   function renderMainView() {
     const proj = getActiveProject();
-    if (!proj) return;
+    const toolbar = document.querySelector('.project-toolbar');
+    const btnNewTask = document.getElementById('btn-open-new-task-modal');
+    const viewToggle = document.getElementById('view-mode-toggle');
+    const searchBox = document.querySelector('.search-box');
+    const listContainer = document.getElementById('checklist-hierarchical-container');
+    const calContainer = document.getElementById('calendar-view-container');
+    const emptyEl = document.getElementById('empty-state');
+    const titleEl = document.getElementById('project-view-title');
+    const descEl = document.getElementById('project-view-desc');
+    const breadcrumbEl = document.getElementById('header-breadcrumb-project');
+
+    if (!proj) {
+      if (toolbar) toolbar.style.display = 'none';
+      if (btnNewTask) btnNewTask.style.display = 'none';
+      if (viewToggle) viewToggle.style.display = 'none';
+      if (searchBox) searchBox.style.display = 'none';
+      if (listContainer) listContainer.style.display = 'none';
+      if (calContainer) calContainer.style.display = 'none';
+      if (emptyEl) {
+        emptyEl.style.display = 'flex';
+        const emptyTitle = emptyEl.querySelector('.empty-state-title');
+        const emptyDesc = emptyEl.querySelector('.empty-state-desc');
+        const emptyBtn = emptyEl.querySelector('#btn-empty-state-add-task');
+        if (emptyTitle) emptyTitle.textContent = 'No hay proyectos activos';
+        if (emptyDesc) emptyDesc.textContent = 'Comienza creando tu primer proyecto con el botón "Nuevo Proyecto" para gestionar tareas.';
+        if (emptyBtn) {
+          emptyBtn.style.display = 'inline-flex';
+          const btnSpan = emptyBtn.querySelector('span');
+          if (btnSpan) btnSpan.textContent = 'Crear Primer Proyecto';
+          emptyBtn.onclick = () => openProjectModal();
+        }
+      }
+      if (titleEl) titleEl.textContent = 'Sin proyectos activos';
+      if (descEl) descEl.textContent = 'Crea un nuevo proyecto en el menú lateral para comenzar a gestionar tareas.';
+      if (breadcrumbEl) breadcrumbEl.textContent = 'Proyectos';
+      return;
+    }
+
+    if (toolbar) toolbar.style.display = '';
+    if (btnNewTask) btnNewTask.style.display = 'inline-flex';
+    if (viewToggle) viewToggle.style.display = 'flex';
+    if (searchBox) searchBox.style.display = 'flex';
+    if (emptyEl) {
+      const emptyBtn = emptyEl.querySelector('#btn-empty-state-add-task');
+      if (emptyBtn) {
+        emptyBtn.style.display = '';
+        const btnSpan = emptyBtn.querySelector('span');
+        if (btnSpan) btnSpan.textContent = 'Crear Nueva Tarea';
+        emptyBtn.onclick = () => openTaskModal();
+      }
+    }
 
     // Verificar políticas de 24h para predecesoras
     checkConditionalPolicies(proj);
 
     // Header
-    const titleEl = document.getElementById('project-view-title');
-    const descEl = document.getElementById('project-view-desc');
-    const breadcrumbEl = document.getElementById('header-breadcrumb-project');
-
     if (titleEl) titleEl.textContent = proj.name;
     if (descEl) descEl.textContent = proj.desc || 'Gestión directa de tareas y checklist';
     if (breadcrumbEl) breadcrumbEl.textContent = proj.name;
 
-    // Métricas del Proyecto
-    const tasks = proj.tasks || [];
-    const projTotal = tasks.length;
-    const projDone = tasks.filter(t => t.completed).length;
+    // Métricas del Proyecto (adaptadas al usuario seleccionado si aplica)
+    const allProjTasks = proj.tasks || [];
+    const isUserFiltered = AppState.filters.assignee !== 'all';
+    const selectedUser = isUserFiltered ? getTeamUserByEmail(AppState.filters.assignee) : null;
+    const scopedTasks = isUserFiltered ? allProjTasks.filter(t => t.assignee === AppState.filters.assignee) : allProjTasks;
+
+    const projTotal = scopedTasks.length;
+    const projDone = scopedTasks.filter(t => t.completed).length;
     const pct = projTotal > 0 ? Math.round((projDone / projTotal) * 100) : 0;
 
     const progressFill = document.getElementById('project-progress-fill');
@@ -684,15 +744,63 @@
 
     if (progressFill) progressFill.style.width = `${pct}%`;
     if (progressPercent) progressPercent.textContent = `${pct}%`;
-    if (progressSubtext) progressSubtext.textContent = `${projDone} de ${projTotal} tareas completadas (${pct}%)`;
+    if (progressSubtext) {
+      if (isUserFiltered && selectedUser) {
+        progressSubtext.textContent = `${projDone} de ${projTotal} tareas de ${selectedUser.shortName || selectedUser.name} completadas (${pct}%)`;
+      } else {
+        progressSubtext.textContent = `${projDone} de ${projTotal} tareas completadas (${pct}%)`;
+      }
+    }
+
+    // Conteo de tareas activas (no completadas) por cuadrante Eisenhower para los 4 KPIs (adaptadas a usuario)
+    const activeTasks = scopedTasks.filter(t => !t.completed);
+    let q1Active = 0, q2Active = 0, q3Active = 0, q4Active = 0;
+    activeTasks.forEach(t => {
+      const p = normalizePriority(t.priority);
+      if (p === 'urgente-importante') q1Active++;
+      else if (p === 'importante-no-urgente') q2Active++;
+      else if (p === 'urgente-no-importante') q3Active++;
+      else if (p === 'no-urgente-no-importante') q4Active++;
+    });
+
+    const elQ1 = document.getElementById('kpi-val-q1');
+    const elQ2 = document.getElementById('kpi-val-q2');
+    const elQ3 = document.getElementById('kpi-val-q3');
+    const elQ4 = document.getElementById('kpi-val-q4');
+    if (elQ1) elQ1.textContent = q1Active;
+    if (elQ2) elQ2.textContent = q2Active;
+    if (elQ3) elQ3.textContent = q3Active;
+    if (elQ4) elQ4.textContent = q4Active;
+
+    // Sincronizar indicador de usuario y dock vertical
+    updateActiveUserChip();
+    renderUserDock();
+
+    // Resaltar KPI activo si coincide con el filtro activo
+    const kpiMap = [
+      { id: 'kpi-card-q1', pri: 'urgente-importante' },
+      { id: 'kpi-card-q2', pri: 'importante-no-urgente' },
+      { id: 'kpi-card-q3', pri: 'urgente-no-importante' },
+      { id: 'kpi-card-q4', pri: 'no-urgente-no-importante' }
+    ];
+    kpiMap.forEach(({ id, pri }) => {
+      const card = document.getElementById(id);
+      if (card) {
+        if (AppState.filters.priority === pri) {
+          card.classList.add('active-filter');
+        } else {
+          card.classList.remove('active-filter');
+        }
+      }
+    });
 
     // Conmutación de Vistas
-    const listContainer = document.getElementById('checklist-hierarchical-container');
-    const calContainer = document.getElementById('calendar-view-container');
-    const emptyEl = document.getElementById('empty-state');
-
     if (projTotal === 0) {
       emptyEl.style.display = 'flex';
+      const emptyTitle = emptyEl.querySelector('.empty-state-title');
+      const emptyDesc = emptyEl.querySelector('.empty-state-desc');
+      if (emptyTitle) emptyTitle.textContent = 'No hay tareas en este proyecto';
+      if (emptyDesc) emptyDesc.textContent = 'Comienza agregando tu primera tarea y sus pasos de checklist.';
       listContainer.style.display = 'none';
       calContainer.style.display = 'none';
       return;
@@ -745,7 +853,7 @@
     return true;
   }
 
-  // ─── 1. VISTA DE LISTA (DIRECTA SIN FASES) ────────────────────
+  // ─── 1. VISTA DE LISTA (MATRIZ ARQUITECTÓNICA CON RETÍCULA PUNTEADA) ────────
   function renderListView(proj) {
     const container = document.getElementById('checklist-hierarchical-container');
     if (!container) return;
@@ -754,31 +862,59 @@
     const filteredTasks = (proj.tasks || []).filter(filterTask);
 
     if (filteredTasks.length === 0) {
+      const isUserFiltered = AppState.filters.assignee !== 'all';
+      const user = isUserFiltered ? getTeamUserByEmail(AppState.filters.assignee) : null;
+      const userName = user ? (user.shortName || user.name) : AppState.filters.assignee;
+
       container.innerHTML = `
-        <div style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px;">
-          No se encontraron tareas con los filtros activos.
+        <div class="matrix-empty-notice" style="text-align: center; padding: 48px 20px;">
+          <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 14px;">
+            ${isUserFiltered ? `No hay tareas asignadas a <strong>${userName}</strong> en este proyecto.` : 'No se encontraron tareas con los filtros activos.'}
+          </p>
+          ${isUserFiltered ? `<button type="button" class="btn-secondary" id="btn-empty-clear-user" style="padding: 7px 16px; font-size: 11px; border-radius: var(--radius-full);">Ver tareas de todo el equipo</button>` : ''}
         </div>
       `;
+      const btnClear = container.querySelector('#btn-empty-clear-user');
+      if (btnClear) {
+        btnClear.addEventListener('click', () => selectUserFilter('all'));
+      }
       return;
     }
 
+    const matrixBoard = document.createElement('div');
+    matrixBoard.className = 'cntxt-matrix-board';
+
+    // Encabezado con Retícula y Títulos de Columna
+    const matrixHeader = document.createElement('div');
+    matrixHeader.className = 'matrix-grid-header';
+    matrixHeader.innerHTML = `
+      <div class="matrix-col-head col-status" title="Estado de la tarea">ESTADO</div>
+      <div class="matrix-col-head col-task">TAREA & ALINEACIÓN ESTRATÉGICA</div>
+      <div class="matrix-col-head col-priority">PRIORIDAD EISENHOWER</div>
+      <div class="matrix-col-head col-duration" title="Duración Estimada en Horas">TIEMPO</div>
+      <div class="matrix-col-head col-due">ENTREGA</div>
+      <div class="matrix-col-head col-assignee">RESPONSABLE</div>
+      <div class="matrix-col-head col-subtasks">CHECKLIST</div>
+      <div class="matrix-col-head col-actions">ACCIONES</div>
+    `;
+    matrixBoard.appendChild(matrixHeader);
+
+    // Contenedor de Filas Alineadas
     const taskListWrap = document.createElement('div');
-    taskListWrap.className = 'phase-task-list';
-    taskListWrap.style.borderRadius = 'var(--radius-lg)';
-    taskListWrap.style.overflow = 'hidden';
-    taskListWrap.style.border = '1px solid var(--border-card)';
+    taskListWrap.className = 'matrix-rows-container';
 
     filteredTasks.forEach(task => {
       const taskEl = createTaskElement(task, proj);
       taskListWrap.appendChild(taskEl);
     });
 
-    container.appendChild(taskListWrap);
+    matrixBoard.appendChild(taskListWrap);
+    container.appendChild(matrixBoard);
   }
 
   function createTaskElement(task, proj) {
     const taskItem = document.createElement('div');
-    taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+    taskItem.className = `task-item-matrix-node ${task.completed ? 'completed' : ''}`;
     taskItem.id = `task-node-${task.id}`;
 
     const totalSubtasks = (task.subtasks || []).length;
@@ -846,30 +982,36 @@
     `;
 
     taskItem.innerHTML = `
-      <div class="task-item-main-row">
-        <!-- Checkbox de estado con regla de 24h -->
-        <div class="task-checkbox-wrap">
+      <div class="matrix-task-row">
+        <!-- 1. Checkbox de estado con regla de 24h -->
+        <div class="matrix-cell cell-status">
           <input type="checkbox" class="task-checkbox" id="chk-${task.id}" ${task.completed ? 'checked' : ''}>
         </div>
 
-        <!-- Título, descripción, objetivo y chip de predecesora -->
-        <div class="task-details" id="details-${task.id}">
-          <div class="task-title">
-            <span>${task.title}</span>
+        <!-- 2. Título, descripción, objetivo y chip de predecesora -->
+        <div class="matrix-cell cell-details" id="details-${task.id}">
+          <div class="matrix-task-title-line">
+            <span class="matrix-task-title">${task.title}</span>
             ${predecessorHtml}
             ${objectiveHtml}
           </div>
-          ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
+          ${task.desc ? `<div class="matrix-task-desc">${task.desc}</div>` : ''}
         </div>
 
-        <!-- Metadatos de la Tarea -->
-        <div class="task-meta-group">
+        <!-- 3. Prioridad Eisenhower -->
+        <div class="matrix-cell cell-priority">
           <span class="priority-pill priority-${normPriority}" title="Prioridad Eisenhower: ${priorityLabel}">
             ${priorityLabel}
           </span>
+        </div>
 
+        <!-- 4. Duración Estimada -->
+        <div class="matrix-cell cell-duration">
           ${durationHtml}
+        </div>
 
+        <!-- 5. Fecha Límite / Hora -->
+        <div class="matrix-cell cell-due">
           ${dueInfo ? `
             <span class="due-date-badge ${dueInfo.statusClass}">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -880,35 +1022,42 @@
               </svg>
               ${dueInfo.label}
             </span>
-          ` : ''}
+          ` : '<span class="cell-empty-dash">—</span>'}
+        </div>
 
+        <!-- 6. Responsable -->
+        <div class="matrix-cell cell-assignee">
           ${task.assignee ? `
             <div class="assignee-chip" title="${task.assignee}">
               <span class="assignee-mini-avatar">${getInitials(task.assignee)}</span>
-              <span>${task.assignee.split('@')[0]}</span>
+              <span class="assignee-name-label">${task.assignee.split('@')[0]}</span>
             </div>
-          ` : ''}
+          ` : '<span class="cell-empty-dash">—</span>'}
+        </div>
 
+        <!-- 7. Checklist / Subtareas -->
+        <div class="matrix-cell cell-subtasks">
           ${totalSubtasks > 0 ? `
             <button type="button" class="subtasks-pill ${doneSubtasks === totalSubtasks ? 'completed' : ''}" id="btn-toggle-subtasks-${task.id}" title="Ver checklist">
               <span>☑️ ${doneSubtasks}/${totalSubtasks}</span>
             </button>
-          ` : ''}
+          ` : '<span class="cell-empty-dash">—</span>'}
+        </div>
 
-          <div class="task-actions">
-            <button type="button" class="btn-icon btn-edit-task" title="Editar tarea">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-              </svg>
-            </button>
-            <button type="button" class="btn-icon btn-delete-task" title="Eliminar tarea">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-              </svg>
-            </button>
-          </div>
+        <!-- 8. Acciones Rápidas -->
+        <div class="matrix-cell cell-actions">
+          <button type="button" class="btn-icon btn-edit-task" title="Editar tarea">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button type="button" class="btn-icon btn-delete-task" title="Eliminar tarea">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -1538,11 +1687,33 @@
     renderProjectsSidebar();
   }
 
-  // ─── Modal de Nuevo Proyecto ──────────────────────────────────
-  function openProjectModal() {
+  // ─── Modal de Proyecto (Crear / Editar) ────────────────────────
+  function openProjectModal(projectId = null) {
     const modal = document.getElementById('modal-project');
     const form = document.getElementById('form-project');
+    const titleEl = document.getElementById('modal-project-title');
+    const submitBtn = document.getElementById('btn-save-project');
+    const idField = document.getElementById('project-id-field');
+
     form.reset();
+
+    if (projectId) {
+      const proj = AppState.projects.find(p => p.id === projectId);
+      if (proj) {
+        if (idField) idField.value = proj.id;
+        document.getElementById('project-name-input').value = proj.name || '';
+        document.getElementById('project-desc-input').value = proj.desc || '';
+        document.getElementById('project-category-select').value = proj.category || 'OPERACIONES';
+        document.getElementById('project-color-input').value = proj.color || '#C8A87A';
+        if (titleEl) titleEl.textContent = 'Editar Proyecto';
+        if (submitBtn) submitBtn.textContent = 'Guardar Cambios';
+      }
+    } else {
+      if (idField) idField.value = '';
+      if (titleEl) titleEl.textContent = 'Crear Nuevo Proyecto';
+      if (submitBtn) submitBtn.textContent = 'Crear Proyecto';
+    }
+
     modal.classList.add('open');
     document.getElementById('project-name-input').focus();
   }
@@ -1553,6 +1724,9 @@
 
   function saveProjectFromModal(e) {
     e.preventDefault();
+    const idField = document.getElementById('project-id-field');
+    const editingId = idField ? idField.value.trim() : '';
+
     const name = document.getElementById('project-name-input').value.trim();
     const desc = document.getElementById('project-desc-input').value.trim();
     const category = document.getElementById('project-category-select').value;
@@ -1563,23 +1737,92 @@
       return;
     }
 
-    const newProj = {
-      id: 'proj-' + Date.now(),
-      name,
-      desc,
-      category,
-      color,
-      tasks: []
-    };
+    if (editingId) {
+      // Modo Edición
+      const proj = AppState.projects.find(p => p.id === editingId);
+      if (!proj) {
+        showToast('Proyecto no encontrado', 'error');
+        return;
+      }
+      proj.name = name;
+      proj.desc = desc;
+      proj.category = category;
+      proj.color = color;
 
-    AppState.projects.push(newProj);
-    AppState.activeProjectId = newProj.id;
+      Storage.saveProjects(AppState.projects);
+      closeProjectModal();
+      renderProjectsSidebar();
+      renderMainView();
+      showToast(`Proyecto "${name}" actualizado con éxito`, 'success');
+    } else {
+      // Modo Creación
+      const newProj = {
+        id: 'proj-' + Date.now(),
+        name,
+        desc,
+        category,
+        color,
+        tasks: []
+      };
+
+      AppState.projects.push(newProj);
+      AppState.activeProjectId = newProj.id;
+      Storage.saveProjects(AppState.projects);
+
+      closeProjectModal();
+      renderProjectsSidebar();
+      renderMainView();
+      showToast(`Proyecto "${name}" creado exitosamente`, 'success');
+    }
+  }
+
+  // ─── Modal de Eliminación de Proyecto ─────────────────────────
+  let projectToDeleteId = null;
+
+  function openDeleteProjectModal(projectId) {
+    const proj = AppState.projects.find(p => p.id === projectId);
+    if (!proj) return;
+
+    projectToDeleteId = projectId;
+    const nameEl = document.getElementById('delete-project-name');
+    const warnEl = document.getElementById('delete-project-warning');
+    if (nameEl) nameEl.textContent = `"${proj.name}"`;
+    if (warnEl) {
+      const taskCount = (proj.tasks || []).length;
+      warnEl.innerHTML = `Se eliminarán permanentemente el proyecto y sus <strong>${taskCount} tarea(s)</strong> asociadas. Esta acción no se puede deshacer.`;
+    }
+
+    const modal = document.getElementById('modal-delete-project');
+    if (modal) modal.classList.add('open');
+  }
+
+  function closeDeleteProjectModal() {
+    const modal = document.getElementById('modal-delete-project');
+    if (modal) modal.classList.remove('open');
+    projectToDeleteId = null;
+  }
+
+  function confirmDeleteProject() {
+    if (!projectToDeleteId) return;
+
+    const projIndex = AppState.projects.findIndex(p => p.id === projectToDeleteId);
+    if (projIndex === -1) {
+      closeDeleteProjectModal();
+      return;
+    }
+
+    const deletedName = AppState.projects[projIndex].name;
+    AppState.projects.splice(projIndex, 1);
+
+    if (AppState.activeProjectId === projectToDeleteId) {
+      AppState.activeProjectId = AppState.projects.length > 0 ? AppState.projects[0].id : null;
+    }
+
     Storage.saveProjects(AppState.projects);
-
-    closeProjectModal();
+    closeDeleteProjectModal();
     renderProjectsSidebar();
     renderMainView();
-    showToast(`Proyecto "${name}" creado exitosamente`, 'success');
+    showToast(`Proyecto "${deletedName}" eliminado`, 'info');
   }
 
   // ─── Eventos e Inicialización ─────────────────────────────────
@@ -1602,6 +1845,59 @@
         AppState.currentView = 'calendar';
         renderMainView();
       });
+    }
+
+    // Botón de Pantalla Completa (Toggle Fullscreen)
+    const btnFullscreen = document.getElementById('btn-toggle-fullscreen');
+    if (btnFullscreen) {
+      const iconEnter = btnFullscreen.querySelector('.icon-fullscreen-enter');
+      const iconExit = btnFullscreen.querySelector('.icon-fullscreen-exit');
+
+      function updateFullscreenUI() {
+        const isFull = Boolean(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+        if (isFull) {
+          btnFullscreen.classList.add('is-fullscreen');
+          btnFullscreen.title = 'Salir de pantalla completa';
+          if (iconEnter) iconEnter.style.display = 'none';
+          if (iconExit) iconExit.style.display = 'block';
+        } else {
+          btnFullscreen.classList.remove('is-fullscreen');
+          btnFullscreen.title = 'Pantalla completa';
+          if (iconEnter) iconEnter.style.display = 'block';
+          if (iconExit) iconExit.style.display = 'none';
+        }
+      }
+
+      btnFullscreen.addEventListener('click', () => {
+        const isFull = Boolean(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+        if (!isFull) {
+          const docEl = document.documentElement;
+          if (docEl.requestFullscreen) {
+            docEl.requestFullscreen().catch(() => {});
+          } else if (docEl.webkitRequestFullscreen) {
+            docEl.webkitRequestFullscreen();
+          } else if (docEl.mozRequestFullScreen) {
+            docEl.mozRequestFullScreen();
+          } else if (docEl.msRequestFullscreen) {
+            docEl.msRequestFullscreen();
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        }
+      });
+
+      document.addEventListener('fullscreenchange', updateFullscreenUI);
+      document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
+      document.addEventListener('mozfullscreenchange', updateFullscreenUI);
+      document.addEventListener('MSFullscreenChange', updateFullscreenUI);
     }
 
     // Navegación del Calendario
@@ -1697,8 +1993,7 @@
     const filterUser = document.getElementById('filter-user-select');
     if (filterUser) {
       filterUser.addEventListener('change', (e) => {
-        AppState.filters.assignee = e.target.value;
-        renderMainView();
+        selectUserFilter(e.target.value);
       });
     }
 
@@ -1780,13 +2075,57 @@
     });
 
     // Modal Proyectos
-    document.getElementById('btn-open-new-project-modal').addEventListener('click', openProjectModal);
+    document.getElementById('btn-open-new-project-modal').addEventListener('click', () => openProjectModal());
     document.getElementById('btn-close-project-modal').addEventListener('click', closeProjectModal);
     document.getElementById('btn-cancel-project-modal').addEventListener('click', closeProjectModal);
     document.getElementById('form-project').addEventListener('submit', saveProjectFromModal);
 
+    // Acciones de Proyecto en Header
+    const btnEditActiveProj = document.getElementById('btn-edit-active-project');
+    if (btnEditActiveProj) {
+      btnEditActiveProj.addEventListener('click', () => {
+        if (AppState.activeProjectId) openProjectModal(AppState.activeProjectId);
+      });
+    }
+
+    const btnDeleteActiveProj = document.getElementById('btn-delete-active-project');
+    if (btnDeleteActiveProj) {
+      btnDeleteActiveProj.addEventListener('click', () => {
+        if (AppState.activeProjectId) openDeleteProjectModal(AppState.activeProjectId);
+      });
+    }
+
+    // Modal Eliminar Proyecto
+    const btnCloseDeleteProj = document.getElementById('btn-close-delete-project-modal');
+    if (btnCloseDeleteProj) btnCloseDeleteProj.addEventListener('click', closeDeleteProjectModal);
+
+    const btnCancelDeleteProj = document.getElementById('btn-cancel-delete-project');
+    if (btnCancelDeleteProj) btnCancelDeleteProj.addEventListener('click', closeDeleteProjectModal);
+
+    const btnConfirmDeleteProj = document.getElementById('btn-confirm-delete-project');
+    if (btnConfirmDeleteProj) btnConfirmDeleteProj.addEventListener('click', confirmDeleteProject);
+
     // Botón Empty State
     document.getElementById('btn-empty-state-add-task').addEventListener('click', () => openTaskModal());
+
+    // Filtros interactivos al hacer click en los KPIs Eisenhower
+    const kpiCards = document.querySelectorAll('.kpi-eisenhower-card');
+    kpiCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const priorityTarget = card.dataset.priority;
+        const prioritySelect = document.getElementById('filter-priority-select');
+
+        if (AppState.filters.priority === priorityTarget) {
+          AppState.filters.priority = 'all';
+          if (prioritySelect) prioritySelect.value = 'all';
+        } else {
+          AppState.filters.priority = priorityTarget;
+          if (prioritySelect) prioritySelect.value = priorityTarget;
+        }
+
+        renderMainView();
+      });
+    });
 
     // Sidebar Collapse
     const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
@@ -1838,16 +2177,704 @@
     }, 30000); // Cada 30 segundos
   }
 
+  // ─── Barra Vertical de Usuarios (Auto-collapsible on Hover / Dock) ───
+  function updateActiveUserChip() {
+    const chip = document.getElementById('active-user-filter-chip');
+    const avatarEl = document.getElementById('active-user-chip-avatar');
+    const textEl = document.getElementById('active-user-chip-text');
+    if (!chip) return;
+
+    if (AppState.filters.assignee === 'all') {
+      chip.style.display = 'none';
+    } else {
+      const user = getTeamUserByEmail(AppState.filters.assignee);
+      chip.style.display = 'inline-flex';
+      if (user) {
+        textEl.textContent = user.shortName || user.name;
+        if (user.avatar) {
+          avatarEl.innerHTML = `<img src="${user.avatar}" alt="${user.name}" onerror="this.parentElement.textContent='${user.initials}';">`;
+        } else {
+          avatarEl.textContent = user.initials;
+        }
+      } else {
+        const initials = getInitials(AppState.filters.assignee);
+        avatarEl.textContent = initials;
+        textEl.textContent = AppState.filters.assignee.split('@')[0];
+      }
+    }
+  }
+
+  function renderUserDock() {
+    const listEl = document.getElementById('user-dock-list');
+    if (!listEl) return;
+
+    const teamUsers = getAllTeamUsers();
+    listEl.innerHTML = '';
+
+    const activeProj = getActiveProject();
+    const projTasks = activeProj ? (activeProj.tasks || []) : [];
+
+    teamUsers.forEach(user => {
+      const isAll = user.isAll;
+      const isActive = isAll ? AppState.filters.assignee === 'all' : AppState.filters.assignee === user.email;
+
+      let pendingCount = 0;
+      if (isAll) {
+        pendingCount = projTasks.filter(t => !t.completed).length;
+      } else {
+        pendingCount = projTasks.filter(t => !t.completed && t.assignee === user.email).length;
+      }
+
+      const item = document.createElement('div');
+      item.className = `user-dock-item ${isActive ? 'active' : ''}`;
+      item.dataset.userEmail = user.email;
+
+      if (isAll) {
+        item.innerHTML = `
+          <div class="user-dock-avatar-ring">
+            <div class="user-dock-avatar-all" title="Ver todo el equipo">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            ${pendingCount > 0 ? `<span class="user-dock-badge">${pendingCount}</span>` : ''}
+          </div>
+          <div class="user-dock-tooltip">
+            <div class="user-tooltip-name">Todo el Equipo</div>
+            <div class="user-tooltip-role">Vista Global</div>
+            <div class="user-tooltip-stats">${pendingCount} tareas activas totales</div>
+          </div>
+        `;
+      } else {
+        const bgCol = user.color || '#2c251c';
+        item.innerHTML = `
+          <div class="user-dock-avatar-ring">
+            <div class="user-dock-avatar-circle" style="background: ${bgCol};">
+              ${user.avatar ? `
+                <img src="${user.avatar}" alt="${user.name}" class="user-dock-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span class="user-dock-initials" style="display:none;">${user.initials}</span>
+              ` : `
+                <span class="user-dock-initials">${user.initials}</span>
+              `}
+            </div>
+            <span class="user-dock-online-dot"></span>
+            ${pendingCount > 0 ? `<span class="user-dock-badge">${pendingCount}</span>` : ''}
+          </div>
+          <div class="user-dock-tooltip">
+            <div class="user-tooltip-name">${user.name}</div>
+            <div class="user-tooltip-role">${user.role || 'Miembro del Equipo'}</div>
+            <div class="user-tooltip-stats">${pendingCount} tareas activas</div>
+          </div>
+        `;
+      }
+
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectUserFilter(user.email);
+      });
+
+      listEl.appendChild(item);
+    });
+  }
+
+  function selectUserFilter(email) {
+    AppState.filters.assignee = email;
+
+    // Sincronizar el dropdown de responsable
+    const selectEl = document.getElementById('filter-user-select');
+    if (selectEl) selectEl.value = email;
+
+    // Actualizar chip indicador
+    updateActiveUserChip();
+
+    // Actualizar dock
+    renderUserDock();
+
+    // Actualizar sidebar (proyectos reflejan las métricas de este usuario)
+    renderProjectsSidebar();
+
+    // Actualizar vista principal (matriz, KPIs, barra de avance adaptadas al usuario)
+    renderMainView();
+  }
+
+  function setupUserDockInteractions() {
+    const dockContainer = document.getElementById('user-dock-container');
+    if (!dockContainer) return;
+
+    let hideTimeout = null;
+
+    // Detectar movimiento del mouse cerca del borde izquierdo de la pantalla (menos de 32px)
+    document.addEventListener('mousemove', (e) => {
+      if (e.clientX <= 32) {
+        if (hideTimeout) clearTimeout(hideTimeout);
+        dockContainer.classList.add('is-hovered');
+      } else if (e.clientX > 82 && !dockContainer.contains(e.target)) {
+        if (!hideTimeout) {
+          hideTimeout = setTimeout(() => {
+            dockContainer.classList.remove('is-hovered');
+            hideTimeout = null;
+          }, 180);
+        }
+      }
+    });
+
+    // Mantener abierto mientras el cursor esté sobre el dock container
+    dockContainer.addEventListener('mouseenter', () => {
+      if (hideTimeout) clearTimeout(hideTimeout);
+      dockContainer.classList.add('is-hovered');
+    });
+
+    dockContainer.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        dockContainer.classList.remove('is-hovered');
+        hideTimeout = null;
+      }, 250);
+    });
+
+    // Botón de limpiar filtro de usuario en toolbar
+    const btnClearUser = document.getElementById('btn-clear-user-chip');
+    if (btnClearUser) {
+      btnClearUser.addEventListener('click', () => {
+        selectUserFilter('all');
+      });
+    }
+  }
+
   function updateUserBadge() {
-    const user = Auth.getUser();
-    const avatarEl = document.getElementById('sidebar-user-avatar');
+    const user = Auth.getUser() || { name: 'Admin CNTXT®', email: 'admin@cntxt.co', role: 'Superadmin / Dirección Técnica' };
+    const initialsEl = document.getElementById('sidebar-avatar-initials');
+    const imgEl = document.getElementById('sidebar-avatar-img');
     const nameEl = document.getElementById('sidebar-user-name');
     const roleEl = document.getElementById('sidebar-user-role');
 
-    if (user) {
-      if (nameEl) nameEl.textContent = user.name || user.email;
-      if (roleEl) roleEl.textContent = user.role || 'Miembro';
-      if (avatarEl) avatarEl.textContent = getInitials(user.name || user.email);
+    if (nameEl) nameEl.textContent = user.name || user.email;
+    if (roleEl) roleEl.textContent = user.role || 'Superadmin';
+
+    const initials = getInitials(user.name || user.email || 'Admin');
+    if (initialsEl) initialsEl.textContent = initials;
+
+    // Buscar foto en la sesión o en la lista de miembros
+    let avatar = user.avatar;
+    if (!avatar && user.email) {
+      const match = TEAM_USERS.find(u => u.email && u.email.toLowerCase() === user.email.toLowerCase());
+      if (match && match.avatar) avatar = match.avatar;
+    }
+
+    if (imgEl && initialsEl) {
+      if (avatar) {
+        imgEl.src = avatar;
+        imgEl.style.display = 'block';
+        initialsEl.style.display = 'none';
+      } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        initialsEl.style.display = 'flex';
+      }
+    }
+  }
+
+  function syncUserSelectOptions() {
+    // 1. Dropdown de filtrado en toolbar: #filter-user-select
+    const filterSelect = document.getElementById('filter-user-select');
+    if (filterSelect) {
+      const currentVal = AppState.filters.assignee || 'all';
+      filterSelect.innerHTML = '<option value="all">Todos los miembros</option>';
+      TEAM_USERS.forEach(u => {
+        if (!u.isAll) {
+          const opt = document.createElement('option');
+          opt.value = u.email;
+          opt.textContent = `${u.name} (${u.shortName || u.role || 'Miembro'})`;
+          filterSelect.appendChild(opt);
+        }
+      });
+      filterSelect.value = currentVal;
+    }
+
+    // 2. Dropdown de asignación en modal de tareas: #task-assignee-select
+    const taskAssigneeSelect = document.getElementById('task-assignee-select');
+    if (taskAssigneeSelect) {
+      const currentTaskAssignee = taskAssigneeSelect.value;
+      taskAssigneeSelect.innerHTML = '';
+      TEAM_USERS.forEach(u => {
+        if (!u.isAll) {
+          const opt = document.createElement('option');
+          opt.value = u.email;
+          opt.textContent = `${u.name} (${u.role || 'Operativo'})`;
+          taskAssigneeSelect.appendChild(opt);
+        }
+      });
+      if (currentTaskAssignee) {
+        taskAssigneeSelect.value = currentTaskAssignee;
+      }
+    }
+  }
+
+  // ─── Modal: Mi Perfil (Foto, Datos, Contraseña) ───────────────
+  let tempProfileAvatar = null;
+
+  function initMyProfileModal() {
+    const modal = document.getElementById('modal-my-profile');
+    const btnOpen = document.getElementById('btn-open-my-profile');
+    const btnClose = document.getElementById('btn-close-my-profile-modal');
+    const btnCancel = document.getElementById('btn-cancel-my-profile');
+    const form = document.getElementById('form-my-profile');
+    const fileInput = document.getElementById('input-profile-file');
+    const btnTriggerUpload = document.getElementById('btn-trigger-upload-photo');
+    const btnSelectPhoto = document.getElementById('btn-select-photo');
+    const btnRemovePhoto = document.getElementById('btn-remove-photo');
+    const imgPreview = document.getElementById('profile-avatar-img');
+    const initialsPreview = document.getElementById('profile-avatar-initials');
+
+    if (!modal) return;
+
+    function openModal() {
+      const user = Auth.getUser() || { name: 'Admin CNTXT®', email: 'admin@cntxt.co', role: 'Superadmin / Dirección Técnica' };
+      const match = TEAM_USERS.find(u => u.email && u.email.toLowerCase() === (user.email || '').toLowerCase());
+
+      document.getElementById('profile-name-input').value = user.name || (match ? match.name : 'Admin CNTXT®');
+      document.getElementById('profile-email-input').value = user.email || (match ? match.email : 'admin@cntxt.co');
+      document.getElementById('profile-phone-input').value = user.phone || (match && match.phone) || '';
+      document.getElementById('profile-role-input').value = user.role || (match ? match.role : 'Superadmin');
+
+      document.getElementById('profile-new-pass').value = '';
+      document.getElementById('profile-confirm-pass').value = '';
+
+      tempProfileAvatar = user.avatar || (match ? match.avatar : null) || '';
+
+      if (tempProfileAvatar) {
+        imgPreview.src = tempProfileAvatar;
+        imgPreview.style.display = 'block';
+        initialsPreview.style.display = 'none';
+        btnRemovePhoto.style.display = 'inline-block';
+      } else {
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        initialsPreview.textContent = getInitials(user.name || user.email || 'Admin');
+        initialsPreview.style.display = 'flex';
+        btnRemovePhoto.style.display = 'none';
+      }
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (fileInput) fileInput.value = '';
+    }
+
+    if (btnOpen) btnOpen.addEventListener('click', openModal);
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+    if (btnCancel) btnCancel.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    const triggerUpload = () => { if (fileInput) fileInput.click(); };
+    if (btnTriggerUpload) btnTriggerUpload.addEventListener('click', triggerUpload);
+    if (btnSelectPhoto) btnSelectPhoto.addEventListener('click', triggerUpload);
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 4 * 1024 * 1024) {
+          showToast('La foto debe pesar menos de 4MB', 'error');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          tempProfileAvatar = evt.target.result;
+          imgPreview.src = tempProfileAvatar;
+          imgPreview.style.display = 'block';
+          initialsPreview.style.display = 'none';
+          btnRemovePhoto.style.display = 'inline-block';
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    if (btnRemovePhoto) {
+      btnRemovePhoto.addEventListener('click', () => {
+        tempProfileAvatar = '';
+        imgPreview.src = '';
+        imgPreview.style.display = 'none';
+        const nameVal = document.getElementById('profile-name-input').value;
+        initialsPreview.textContent = getInitials(nameVal || 'Admin');
+        initialsPreview.style.display = 'flex';
+        btnRemovePhoto.style.display = 'none';
+        if (fileInput) fileInput.value = '';
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('profile-name-input').value.trim();
+        const phone = document.getElementById('profile-phone-input').value.trim();
+        const newPass = document.getElementById('profile-new-pass').value;
+        const confirmPass = document.getElementById('profile-confirm-pass').value;
+
+        if (!name) {
+          showToast('El nombre no puede estar vacío', 'error');
+          return;
+        }
+
+        if (newPass || confirmPass) {
+          if (newPass.length < 6) {
+            showToast('La nueva contraseña debe tener al menos 6 caracteres', 'error');
+            return;
+          }
+          if (newPass !== confirmPass) {
+            showToast('Las contraseñas no coinciden', 'error');
+            return;
+          }
+        }
+
+        const currentUser = Auth.getUser() || { email: 'admin@cntxt.co', role: 'Superadmin' };
+        currentUser.name = name;
+        currentUser.phone = phone;
+        currentUser.avatar = tempProfileAvatar;
+        if (newPass) currentUser.password = newPass;
+
+        Auth.setSession(Auth.getToken() || 'offline_token', currentUser);
+
+        // Actualizar en TEAM_USERS
+        const match = TEAM_USERS.find(u => u.email && u.email.toLowerCase() === (currentUser.email || '').toLowerCase());
+        if (match) {
+          match.name = name;
+          match.shortName = name.split(' ')[0];
+          match.avatar = tempProfileAvatar;
+          match.initials = getInitials(name);
+          match.phone = phone;
+          saveTeamUsers(TEAM_USERS);
+        }
+
+        // Intento silencioso de sincronizar con API Django si existe
+        try {
+          const config = window.CNTXT_CONFIG || {};
+          const baseUrl = (config.SYNC && config.SYNC.API_BASE_URL) || '/api';
+          const token = Auth.getToken();
+          if (token && !token.startsWith('offline_')) {
+            await fetch(`${baseUrl}/auth/me/`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({
+                first_name: name,
+                avatar: tempProfileAvatar
+              })
+            });
+          }
+        } catch (err) {
+          console.warn('API sync fallback to local storage:', err);
+        }
+
+        updateUserBadge();
+        renderUserDock();
+        syncUserSelectOptions();
+        closeModal();
+        showToast('Perfil actualizado exitosamente ✨', 'success');
+      });
+    }
+  }
+
+  // ─── Modal: Gestión de Equipo ─────────────────────────────────
+  function initTeamManagementModal() {
+    const modal = document.getElementById('modal-team-management');
+    const btnOpen = document.getElementById('btn-open-team-modal');
+    const btnClose = document.getElementById('btn-close-team-modal');
+    const tabBtnList = document.getElementById('tab-btn-team-list');
+    const tabBtnCreate = document.getElementById('tab-btn-team-create');
+    const tabContentList = document.getElementById('team-tab-list');
+    const tabContentCreate = document.getElementById('team-tab-create');
+    const formMember = document.getElementById('form-team-member');
+    const btnCancelForm = document.getElementById('btn-cancel-team-form');
+    const colorInput = document.getElementById('member-color-input');
+    const colorLabel = document.getElementById('member-color-val');
+    const btnSaveMember = document.getElementById('btn-save-team-member');
+
+    if (!modal) return;
+
+    function switchTab(tab) {
+      if (tab === 'list') {
+        tabBtnList.classList.add('active');
+        tabBtnCreate.classList.remove('active');
+        tabContentList.classList.add('active');
+        tabContentCreate.classList.remove('active');
+        renderTeamManagementList();
+      } else {
+        tabBtnList.classList.remove('active');
+        tabBtnCreate.classList.add('active');
+        tabContentList.classList.remove('active');
+        tabContentCreate.classList.add('active');
+      }
+    }
+
+    if (tabBtnList) tabBtnList.addEventListener('click', () => switchTab('list'));
+    if (tabBtnCreate) {
+      tabBtnCreate.addEventListener('click', () => {
+        resetMemberForm();
+        switchTab('create');
+      });
+    }
+
+    if (btnCancelForm) {
+      btnCancelForm.addEventListener('click', () => {
+        resetMemberForm();
+        switchTab('list');
+      });
+    }
+
+    if (colorInput && colorLabel) {
+      colorInput.addEventListener('input', (e) => {
+        colorLabel.textContent = e.target.value.toUpperCase();
+      });
+    }
+
+    function openModal() {
+      resetMemberForm();
+      switchTab('list');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      resetMemberForm();
+    }
+
+    if (btnOpen) btnOpen.addEventListener('click', openModal);
+    if (btnClose) btnClose.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    function resetMemberForm() {
+      if (!formMember) return;
+      formMember.reset();
+      document.getElementById('team-member-edit-id').value = '';
+      if (colorInput) colorInput.value = '#C8A87A';
+      if (colorLabel) colorLabel.textContent = '#C8A87A';
+      if (btnSaveMember) btnSaveMember.textContent = 'Guardar Miembro';
+      if (tabBtnCreate && tabBtnCreate.querySelector('span')) {
+        tabBtnCreate.querySelector('span').textContent = '+ Agregar Miembro';
+      }
+    }
+
+    function renderTeamManagementList() {
+      const container = document.getElementById('team-members-list');
+      const countBadge = document.getElementById('team-modal-count');
+      if (!container) return;
+
+      const members = TEAM_USERS.filter(u => !u.isAll);
+      if (countBadge) countBadge.textContent = members.length;
+
+      container.innerHTML = '';
+
+      if (members.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 30px; text-align: center; color: var(--text-muted); font-size: 13px;">
+            No hay miembros registrados en el equipo.
+          </div>
+        `;
+        return;
+      }
+
+      members.forEach(member => {
+        let activeTasks = 0;
+        AppState.projects.forEach(p => {
+          (p.tasks || []).forEach(t => {
+            if (!t.completed && t.assignee && t.assignee.toLowerCase() === member.email.toLowerCase()) {
+              activeTasks++;
+            }
+          });
+        });
+
+        const row = document.createElement('div');
+        row.className = 'team-member-row';
+
+        const bgCol = member.color || '#C8A87A';
+        const hasAvatar = Boolean(member.avatar);
+
+        row.innerHTML = `
+          <div class="team-member-cell-info">
+            <div class="team-member-avatar-badge" style="border-color: ${bgCol};">
+              ${hasAvatar ? `
+                <img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span style="display: none; color: ${bgCol};">${member.initials}</span>
+              ` : `
+                <span style="color: ${bgCol};">${member.initials}</span>
+              `}
+            </div>
+            <div class="team-member-name-block">
+              <span class="team-member-name">${member.name}</span>
+              <span class="team-member-email">${member.email}</span>
+            </div>
+          </div>
+          <div>
+            <span class="team-member-role-tag" title="${member.role || 'Miembro'}">${member.role || 'Miembro'}</span>
+          </div>
+          <div>
+            <span class="team-member-tasks-badge">${activeTasks} ${activeTasks === 1 ? 'tarea' : 'tareas'}</span>
+          </div>
+          <div class="team-member-actions">
+            <button type="button" class="btn-team-row-action btn-edit-member" title="Editar miembro">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </button>
+            <button type="button" class="btn-team-row-action delete btn-delete-member" title="Eliminar miembro">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        `;
+
+        const btnEdit = row.querySelector('.btn-edit-member');
+        btnEdit.addEventListener('click', () => {
+          editMember(member);
+        });
+
+        const btnDelete = row.querySelector('.btn-delete-member');
+        btnDelete.addEventListener('click', () => {
+          deleteMember(member);
+        });
+
+        container.appendChild(row);
+      });
+    }
+
+    function editMember(member) {
+      document.getElementById('team-member-edit-id').value = member.email;
+      document.getElementById('member-name-input').value = member.name;
+      document.getElementById('member-email-input').value = member.email;
+      document.getElementById('member-role-select').value = member.role || 'Superadmin / Dirección Técnica';
+      document.getElementById('member-avatar-input').value = member.avatar || '';
+      document.getElementById('member-password-input').value = '';
+
+      const col = member.color || '#C8A87A';
+      if (colorInput) colorInput.value = col;
+      if (colorLabel) colorLabel.textContent = col.toUpperCase();
+
+      if (btnSaveMember) btnSaveMember.textContent = 'Actualizar Miembro';
+      if (tabBtnCreate && tabBtnCreate.querySelector('span')) {
+        tabBtnCreate.querySelector('span').textContent = 'Editar Miembro';
+      }
+
+      switchTab('create');
+    }
+
+    function deleteMember(member) {
+      const currentAuth = Auth.getUser();
+      const isCurrent = currentAuth && currentAuth.email && currentAuth.email.toLowerCase() === member.email.toLowerCase();
+      if (isCurrent) {
+        showToast('No puedes eliminar al usuario con el que tienes la sesión activa', 'error');
+        return;
+      }
+
+      if (confirm(`¿Estás seguro de eliminar a "${member.name}" (${member.email}) del equipo?`)) {
+        TEAM_USERS = TEAM_USERS.filter(u => u.email.toLowerCase() !== member.email.toLowerCase());
+        saveTeamUsers(TEAM_USERS);
+
+        renderTeamManagementList();
+        renderUserDock();
+        syncUserSelectOptions();
+        showToast(`Miembro ${member.name} eliminado`, 'info');
+      }
+    }
+
+    if (formMember) {
+      formMember.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const editEmail = document.getElementById('team-member-edit-id').value.trim();
+        const name = document.getElementById('member-name-input').value.trim();
+        const email = document.getElementById('member-email-input').value.trim().toLowerCase();
+        const role = document.getElementById('member-role-select').value;
+        const color = colorInput ? colorInput.value : '#C8A87A';
+        const avatar = document.getElementById('member-avatar-input').value.trim();
+        const pass = document.getElementById('member-password-input').value;
+
+        if (!name || !email) {
+          showToast('Nombre y correo electrónico son requeridos', 'error');
+          return;
+        }
+
+        if (!email.includes('@')) {
+          showToast('Ingresa un correo electrónico válido', 'error');
+          return;
+        }
+
+        if (editEmail) {
+          const target = TEAM_USERS.find(u => u.email.toLowerCase() === editEmail.toLowerCase());
+          if (target) {
+            target.name = name;
+            target.shortName = name.split(' ')[0];
+            target.email = email;
+            target.id = email;
+            target.role = role;
+            target.color = color;
+            target.avatar = avatar;
+            target.initials = getInitials(name);
+            if (pass) target.password = pass;
+
+            const currentAuth = Auth.getUser();
+            if (currentAuth && currentAuth.email && currentAuth.email.toLowerCase() === editEmail.toLowerCase()) {
+              currentAuth.name = name;
+              currentAuth.email = email;
+              currentAuth.role = role;
+              if (avatar) currentAuth.avatar = avatar;
+              Auth.setSession(Auth.getToken(), currentAuth);
+              updateUserBadge();
+            }
+
+            saveTeamUsers(TEAM_USERS);
+            showToast('Miembro actualizado exitosamente ✨', 'success');
+          }
+        } else {
+          if (TEAM_USERS.some(u => u.email.toLowerCase() === email)) {
+            showToast('Ya existe un miembro con este correo electrónico', 'error');
+            return;
+          }
+
+          const newMember = {
+            id: email,
+            email: email,
+            name: name,
+            shortName: name.split(' ')[0],
+            role: role,
+            color: color,
+            avatar: avatar,
+            initials: getInitials(name),
+            password: pass || undefined
+          };
+
+          TEAM_USERS.push(newMember);
+          saveTeamUsers(TEAM_USERS);
+          showToast('Nuevo miembro registrado en el equipo ✨', 'success');
+        }
+
+        resetMemberForm();
+        renderUserDock();
+        syncUserSelectOptions();
+        switchTab('list');
+      });
     }
   }
 
@@ -1857,6 +2884,10 @@
     AppState.activeProjectId = AppState.projects[0] ? AppState.projects[0].id : null;
 
     initEvents();
+    setupUserDockInteractions();
+    initMyProfileModal();
+    initTeamManagementModal();
+    syncUserSelectOptions();
 
     const token = Auth.getToken();
     const authOverlay = document.getElementById('auth-login-overlay');
@@ -1867,6 +2898,8 @@
       updateUserBadge();
     }
 
+    renderUserDock();
+    updateActiveUserChip();
     renderProjectsSidebar();
     renderMainView();
   }

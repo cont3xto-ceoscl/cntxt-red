@@ -16,5 +16,5 @@ urlpatterns = [
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += [
-    re_path(r'^(?P<path>.*\.(?:css|js|png|jpg|jpeg|jfif|svg|ico|gif|woff2?|ttf|eot|csv|json))$', serve, {'document_root': settings.BASE_DIR}),
+    re_path(r'^(?P<path>.*\.(?:css|js|png|jpg|jpeg|jfif|svg|ico|gif|woff2?|ttf|eot|otf|csv|json))$', serve, {'document_root': settings.BASE_DIR}),
 ]
