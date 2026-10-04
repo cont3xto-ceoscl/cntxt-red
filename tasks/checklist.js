@@ -2878,6 +2878,134 @@
     }
   }
 
+  // ─── PWA & Experiencia Táctil Móvil ───────────────────────────
+  let deferredInstallPrompt = null;
+
+  function setupMobileAndPWA() {
+    // 1. Registro del Service Worker para PWA con scope explícito
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/tasks/sw.js', { scope: '/tasks/' })
+          .then((reg) => console.log('[PWA Tasks] Service Worker activo en:', reg.scope))
+          .catch((err) => console.warn('[PWA Tasks] Error en SW:', err));
+      });
+    }
+
+    // Capturar evento de instalación nativo del navegador
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      console.log('[PWA Tasks] Instalación nativa disponible para el usuario');
+    });
+
+    // 2. Elementos del DOM móvil
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const btnMobileMenu = document.getElementById('btn-mobile-menu');
+    const mobNavTasks = document.getElementById('mob-nav-tasks');
+    const mobNavProjects = document.getElementById('mob-nav-projects');
+    const mobNavAddTask = document.getElementById('mob-nav-add-task');
+    const mobNavCalendar = document.getElementById('mob-nav-calendar');
+    const mobNavProfile = document.getElementById('mob-nav-profile');
+
+    function openMobileSidebar() {
+      if (sidebar) sidebar.classList.add('mobile-open');
+      if (backdrop) backdrop.classList.add('active');
+    }
+
+    function closeMobileSidebar() {
+      if (sidebar) sidebar.classList.remove('mobile-open');
+      if (backdrop) backdrop.classList.remove('active');
+    }
+
+    // Menú Hamburguesa en cabecera
+    if (btnMobileMenu) {
+      btnMobileMenu.addEventListener('click', () => {
+        if (sidebar && sidebar.classList.contains('mobile-open')) {
+          closeMobileSidebar();
+        } else {
+          openMobileSidebar();
+        }
+      });
+    }
+
+    // Backdrop cierra el drawer
+    if (backdrop) {
+      backdrop.addEventListener('click', closeMobileSidebar);
+    }
+
+    // Cerrar sidebar móvil al seleccionar un proyecto
+    const projectsList = document.getElementById('projects-nav-list');
+    if (projectsList) {
+      projectsList.addEventListener('click', (e) => {
+        if (e.target.closest('.project-nav-item') || e.target.closest('.btn-new-project')) {
+          if (window.innerWidth <= 768) {
+            closeMobileSidebar();
+          }
+        }
+      });
+    }
+
+    // Barra de Navegación Inferior (Bottom Nav)
+    function setActiveMobNavItem(activeBtn) {
+      document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    if (mobNavTasks) {
+      mobNavTasks.addEventListener('click', () => {
+        closeMobileSidebar();
+        setActiveMobNavItem(mobNavTasks);
+        const btnViewList = document.getElementById('btn-view-list');
+        if (btnViewList && !btnViewList.classList.contains('active')) {
+          btnViewList.click();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    if (mobNavProjects) {
+      mobNavProjects.addEventListener('click', () => {
+        if (sidebar && sidebar.classList.contains('mobile-open')) {
+          closeMobileSidebar();
+        } else {
+          openMobileSidebar();
+        }
+      });
+    }
+
+    if (mobNavAddTask) {
+      mobNavAddTask.addEventListener('click', () => {
+        closeMobileSidebar();
+        const btnNewTask = document.getElementById('btn-open-new-task-modal');
+        if (btnNewTask) btnNewTask.click();
+      });
+    }
+
+    if (mobNavCalendar) {
+      mobNavCalendar.addEventListener('click', () => {
+        closeMobileSidebar();
+        setActiveMobNavItem(mobNavCalendar);
+        const btnViewCal = document.getElementById('btn-view-calendar');
+        const btnViewList = document.getElementById('btn-view-list');
+        if (AppState.currentView === 'calendar') {
+          if (btnViewList) btnViewList.click();
+          setActiveMobNavItem(mobNavTasks);
+        } else {
+          if (btnViewCal) btnViewCal.click();
+        }
+      });
+    }
+
+    if (mobNavProfile) {
+      mobNavProfile.addEventListener('click', () => {
+        closeMobileSidebar();
+        const btnProfile = document.getElementById('btn-open-my-profile');
+        if (btnProfile) btnProfile.click();
+      });
+    }
+  }
+
   // ─── Arranque de la App ───────────────────────────────────────
   function initApp() {
     AppState.projects = Storage.loadProjects();
@@ -2888,6 +3016,7 @@
     initMyProfileModal();
     initTeamManagementModal();
     syncUserSelectOptions();
+    setupMobileAndPWA();
 
     const token = Auth.getToken();
     const authOverlay = document.getElementById('auth-login-overlay');

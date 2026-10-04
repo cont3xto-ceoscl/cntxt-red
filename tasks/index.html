@@ -3,9 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>CNTXT® | Casa de Diseño — Checklist & Tareas</title>
   <meta name="description" content="Gestor inteligente y jerárquico de proyectos, tareas y checklists para el ecosistema CNTXT Casa de Diseño">
+
+  <!-- PWA & Mobile Web App Meta -->
+  <meta name="theme-color" content="#080808">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CNTXT Tasks">
+  <link rel="manifest" href="/tasks/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/tasks/icon-192.png">
+  <link rel="apple-touch-icon" href="/tasks/apple-touch-icon.png">
 
   <!-- Tipografía Oficial: Rota Complete Family (Fuentes locales de alto rendimiento) -->
   <link rel="preload" href="Rota%20Complete%20Family/Rota-Regular.otf" as="font" type="font/otf" crossorigin>
@@ -13,7 +23,7 @@
   <link rel="preload" href="Rota%20Complete%20Family/Rota-SemiBold.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="Rota%20Complete%20Family/Rota-Bold.otf" as="font" type="font/otf" crossorigin>
 
-  <link rel="stylesheet" href="checklist.css?v=2.0">
+  <link rel="stylesheet" href="checklist.css?v=2.1">
 </head>
 
 <body>
@@ -169,16 +179,28 @@
       </div>
     </aside>
 
+    <!-- Backdrop oscuro para móvil al abrir el sidebar -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
     <!-- ÁREA PRINCIPAL -->
     <main class="main-content">
       
       <!-- Top Navbar -->
       <header class="main-header">
         <div class="header-left">
-          <div class="breadcrumbs">
-            <a href="https://centralcntxt.tech/" class="breadcrumb-root">Central CNTXT®</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-current" id="header-breadcrumb-project">Proyecto</span>
+          <div class="mobile-header-top-row">
+            <button class="btn-icon mobile-menu-btn" id="btn-mobile-menu" title="Ver Proyectos">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="breadcrumbs">
+              <a href="https://centralcntxt.tech/" class="breadcrumb-root">Central CNTXT®</a>
+              <span class="breadcrumb-separator">/</span>
+              <span class="breadcrumb-current" id="header-breadcrumb-project">Proyecto</span>
+            </div>
           </div>
           <div class="project-title-row">
             <h1 class="project-view-title" id="project-view-title">Cargando proyecto...</h1>
@@ -888,12 +910,66 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       MOBILE BOTTOM NAVIGATION BAR (iOS / Android Touch)
+       ═══════════════════════════════════════════════════════════ -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegación móvil">
+    <button class="mobile-nav-item active" id="mob-nav-tasks" title="Tareas">
+      <div class="mobile-nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"></path>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      </div>
+      <span class="mobile-nav-label">Tareas</span>
+    </button>
+
+    <button class="mobile-nav-item" id="mob-nav-projects" title="Proyectos">
+      <div class="mobile-nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <span class="mobile-nav-label">Proyectos</span>
+    </button>
+
+    <!-- Center Floating Action Button: Nueva Tarea -->
+    <button class="mobile-nav-fab" id="mob-nav-add-task" title="Crear Tarea">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <button class="mobile-nav-item" id="mob-nav-calendar" title="Calendario">
+      <div class="mobile-nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <span class="mobile-nav-label">Calendario</span>
+    </button>
+
+    <button class="mobile-nav-item" id="mob-nav-profile" title="Mi Perfil">
+      <div class="mobile-nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <span class="mobile-nav-label">Perfil</span>
+    </button>
+  </nav>
+
   <!-- Toast de Notificaciones -->
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Scripts -->
   <script src="config.js"></script>
-  <script src="checklist.js?v=2.0"></script>
+  <script src="checklist.js?v=2.1"></script>
 </body>
 
 </html>

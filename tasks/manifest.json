@@ -1,0 +1,40 @@
+{
+  "id": "/tasks/",
+  "name": "CNTXT® Tasks & Checklists",
+  "short_name": "CNTXT Tasks",
+  "description": "Gestor inteligente y jerárquico de proyectos, tareas y checklists de CNTXT Casa de Diseño",
+  "start_url": "/tasks/",
+  "scope": "/tasks/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "orientation": "any",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "icons": [
+    {
+      "src": "/tasks/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/tasks/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/tasks/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/tasks/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["productivity", "business"]
+}
