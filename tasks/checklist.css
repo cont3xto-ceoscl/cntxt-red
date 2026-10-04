@@ -2136,7 +2136,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 2000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -4050,17 +4050,39 @@ html, body {
    BREAKPOINTS RESPONSIVOS PARA MÓVILES Y PANTALLAS PEQUEÑAS (<= 768px)
    ═════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* Activar barra inferior táctil */
+  /* Prevenir bugs de renderizado GPU en Android (franjas negras por filtros) */
+  .grain-overlay {
+    display: none !important;
+  }
+  .ambient-glow-top,
+  .ambient-glow-bottom {
+    display: none !important;
+  }
+
+  /* Barra inferior táctil sólida y fluida */
   .mobile-bottom-nav {
     display: flex;
+    background: #0d0d0d !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    z-index: 1050;
   }
 
   .mobile-menu-btn {
     display: inline-flex;
   }
 
+  /* El backdrop solo se muestra cuando está activo */
   .sidebar-backdrop {
-    display: block;
+    display: none;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+
+  .sidebar-backdrop.active {
+    display: block !important;
   }
 
   /* Ocultar User Dock lateral izquierdo para ganar 100% de pantalla */
@@ -4068,9 +4090,10 @@ html, body {
     display: none !important;
   }
 
-  /* Contenedor principal sin desbordes laterales y con espacio para barra inferior */
+  /* Contenedor principal sin desbordes laterales */
   body {
     overflow-x: hidden;
+    background-color: #080808 !important;
   }
 
   .app-layout {
@@ -4094,8 +4117,10 @@ html, body {
     z-index: 1100 !important;
     transform: translateX(-105%) !important;
     transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    box-shadow: 12px 0 50px rgba(0, 0, 0, 0.9) !important;
-    background: #0d0d0d !important;
+    box-shadow: 12px 0 50px rgba(0, 0, 0, 0.95) !important;
+    background: #0e0e0e !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
   }
@@ -4145,7 +4170,7 @@ html, body {
   }
 
   #btn-open-new-task-modal {
-    display: none !important; /* Reemplazado elegantemente por el botón central FAB */
+    display: none !important; /* Reemplazado por el botón FAB */
   }
 
   .project-title-row {
@@ -4162,7 +4187,7 @@ html, body {
     font-size: 12px !important;
   }
 
-  /* Tarjetas de Tareas: Ergonomía táctil para dedos (Touch targets) */
+  /* Tarjetas de Tareas */
   .task-item {
     padding: 14px 12px !important;
     gap: 10px !important;
@@ -4174,7 +4199,6 @@ html, body {
     min-width: 24px !important;
   }
 
-  /* Botones de acción siempre visibles en móvil */
   .task-item-actions {
     opacity: 1 !important;
     transform: none !important;
@@ -4187,50 +4211,53 @@ html, body {
   }
 
   /* ─── MODALES EN MÓVIL: TRANSFORMADOS EN NATIVE BOTTOM SHEETS ─── */
-  .modal-dialog {
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    align-items: flex-end !important; /* Anclado al fondo */
+  .modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2000 !important;
     padding: 0 !important;
+    align-items: flex-end !important; /* Anclado al fondo de la pantalla */
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
-  .modal-content {
+  .modal-card {
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: 24px 24px 0 0 !important; /* Borde superior curvado como app nativa */
-    max-height: 90vh !important;
-    max-height: 90dvh !important;
+    margin: 0 !important;
+    border-radius: 24px 24px 0 0 !important; /* Borde superior redondeado */
+    max-height: 88vh !important;
+    max-height: 88dvh !important;
     overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch !important;
+    background: #141414 !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
     border-bottom: none !important;
-    border-left: none !important;
-    border-right: none !important;
-    box-shadow: 0 -12px 45px rgba(0, 0, 0, 0.9) !important;
-    animation: sheetSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    padding: 16px 18px calc(24px + env(safe-area-inset-bottom, 0px)) 18px !important;
-    position: relative;
-    box-sizing: border-box;
+    box-shadow: 0 -12px 50px rgba(0, 0, 0, 0.95) !important;
+    animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 14px 18px calc(24px + env(safe-area-inset-bottom, 0px)) 18px !important;
+    box-sizing: border-box !important;
   }
 
-  /* Tirador táctil visual para deslizar (Drag Handle) */
-  .modal-content::before {
+  /* Tirador táctil visual (Drag Handle) */
+  .modal-card::before {
     content: '';
     display: block;
-    width: 42px;
+    width: 44px;
     height: 5px;
-    background: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 3px;
     margin: 0 auto 16px auto;
   }
 
   .modal-header {
-    padding-top: 0 !important;
+    padding: 0 0 14px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   }
 
-  /* Formularios en una sola columna limpia en móvil */
+  /* Formularios e inputs sólidos para evitar parpadeos negros */
   .form-row {
     flex-direction: column !important;
     gap: 12px !important;
@@ -4242,15 +4269,19 @@ html, body {
     flex: 1 1 100% !important;
   }
 
-  /* Prevenir zoom involuntario en iPhone al enfocar inputs */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="url"],
-  input[type="date"],
-  select,
-  textarea {
-    font-size: 16px !important;
+  .form-input,
+  .textarea-field,
+  select.form-input {
+    background: #1f1f1f !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    font-size: 16px !important; /* Prevenir auto-zoom en iOS */
+  }
+
+  .form-input:focus,
+  .textarea-field:focus {
+    border-color: var(--color-primary) !important;
+    background: #252525 !important;
   }
 }
 
