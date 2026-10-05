@@ -6,16 +6,16 @@ from django.http import JsonResponse, HttpResponse
 from django.views import View
 from django.contrib.auth import authenticate
 from django.db.models import Sum, Count, Q
-from rest_framework import viewsets, filters, status
+from rest_framework import viewsets, filters, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
-from .models import Empresa, Contacto, Proyecto, PulsoRelacional, Actividad
+from .models import Empresa, Contacto, Proyecto, PulsoRelacional, Actividad, ChecklistProject
 from .serializers import (
     EmpresaSerializer, ContactoSerializer, ProyectoSerializer,
-    PulsoRelacionalSerializer, ActividadSerializer, UserSerializer, UserUpdateSerializer
+    PulsoRelacionalSerializer, ActividadSerializer, UserSerializer, UserUpdateSerializer, ChecklistProjectSerializer
 )
 from .permissions import (
     CanManageEmpresas, CanManageContactos, CanManageProyectos,
@@ -574,3 +574,112 @@ class TasksAppView(View):
             with open(index_file, 'r', encoding='utf-8') as f:
                 return HttpResponse(f.read(), content_type='text/html')
         return JsonResponse({'error': 'Tasks app not found'}, status=404)
+
+
+# ─────────────────────────────────────────────────────────────
+# Checklist & Tasks Engine Views
+# ─────────────────────────────────────────────────────────────
+
+class ChecklistProjectViewSet(viewsets.ModelViewSet):
+    """
+    CRUD completo para proyectos de Checklist con soporte de JSONField para
+    tareas jerárquicas, subtareas, prioridades de Eisenhower y fechas límite.
+    """
+    queryset = ChecklistProject.objects.filter(is_archived=False).order_by('-updated_at')
+    serializer_class = ChecklistProjectSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def perform_create(self, serializer):
+        user = self.request.user if self.request.user.is_authenticated else None
+        serializer.save(created_by=user)
+
+    def perform_destroy(self, instance):
+        # Soft delete / archivado en vez de destrucción física
+        instance.is_archived = True
+        instance.save(update_fields=['is_archived', 'updated_at'])
+
+
+class TasksSyncView(APIView):
+    """
+    Endpoint de sincronización bidireccional inteligente entre dispositivos móviles y de escritorio.
+    Recibe el array de proyectos del cliente y consolida con la base de datos central.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        projects = ChecklistProject.objects.filter(is_archived=False).order_by('-updated_at')
+        data = []
+        for p in projects:
+            data.append({
+                'id': p.id,
+                'name': p.name,
+                'desc': p.desc,
+                'category': p.category,
+                'color': p.color,
+                'tasks': p.tasks if isinstance(p.tasks, list) else [],
+                'updated_at': p.updated_at.isoformat() if p.updated_at else None
+            })
+        return Response({
+            'status': 'success',
+            'count': len(data),
+            'projects': data
+        }, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        incoming_projects = request.data.get('projects', [])
+        user = request.user if request.user.is_authenticated else None
+
+        if not isinstance(incoming_projects, list):
+            return Response(
+                {'error': 'El campo projects debe ser un listado válido.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        saved_ids = []
+        for p_data in incoming_projects:
+            if not isinstance(p_data, dict):
+                continue
+            p_id = p_data.get('id')
+            if not p_id:
+                continue
+
+            name = p_data.get('name') or 'Proyecto Sin Título'
+            desc = p_data.get('desc', '')
+            category = p_data.get('category', 'general')
+            color = p_data.get('color', '#7928ca')
+            tasks = p_data.get('tasks', [])
+
+            obj, created = ChecklistProject.objects.update_or_create(
+                id=p_id,
+                defaults={
+                    'name': name,
+                    'desc': desc,
+                    'category': category,
+                    'color': color,
+                    'tasks': tasks,
+                    'is_archived': False,
+                    **({'created_by': user} if user and not created else {})
+                }
+            )
+            saved_ids.append(obj.id)
+
+        # Retornar todos los proyectos activos consolidados
+        all_projects = ChecklistProject.objects.filter(is_archived=False).order_by('-updated_at')
+        consolidated = []
+        for p in all_projects:
+            consolidated.append({
+                'id': p.id,
+                'name': p.name,
+                'desc': p.desc,
+                'category': p.category,
+                'color': p.color,
+                'tasks': p.tasks if isinstance(p.tasks, list) else [],
+                'updated_at': p.updated_at.isoformat() if p.updated_at else None
+            })
+
+        return Response({
+            'status': 'success',
+            'synced_count': len(saved_ids),
+            'total_count': len(consolidated),
+            'projects': consolidated
+        }, status=status.HTTP_200_OK)

@@ -418,9 +418,20 @@
     }
   };
 
-  // ─── Módulo de Persistencia y Migración ───────────────────────
+  // ─── Módulo de Persistencia y Sincronización Cloud ────────────
   const Storage = {
     STORAGE_KEY: 'cntxt_tasks_ecosystem_data_v4',
+    syncTimer: null,
+    isSyncing: false,
+
+    getApiBaseUrl() {
+      const config = window.CNTXT_CONFIG || {};
+      const syncCfg = config.SYNC || {};
+      if (typeof window !== 'undefined' && (window.location.origin.includes('127.0.0.1') || window.location.origin.includes('localhost'))) {
+        return syncCfg.API_BASE_URL || 'http://127.0.0.1:8000/api';
+      }
+      return syncCfg.API_BASE_URL || '/api';
+    },
 
     loadProjects() {
       try {
@@ -448,6 +459,133 @@
       } catch (e) {
         console.error('Error al guardar proyectos en localStorage', e);
       }
+      this.scheduleSync();
+    },
+
+    scheduleSync() {
+      if (this.syncTimer) clearTimeout(this.syncTimer);
+      const config = window.CNTXT_CONFIG || {};
+      const debounceMs = (config.SYNC && config.SYNC.DEBOUNCE_SAVE_MS) || 800;
+      this.syncTimer = setTimeout(() => {
+        this.pushProjectsToCloud();
+      }, debounceMs);
+    },
+
+    async pushProjectsToCloud() {
+      if (this.isSyncing) return;
+      this.isSyncing = true;
+      try {
+        const baseUrl = this.getApiBaseUrl();
+        const token = Auth.getToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token && !token.startsWith('offline_')) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(`${baseUrl}/tasks/sync/`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ projects: AppState.projects })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.status === 'success' && Array.isArray(data.projects)) {
+            this.mergeRemoteProjects(data.projects, false);
+          }
+        }
+      } catch (err) {
+        console.warn('Sync cloud diferido a local storage:', err);
+      } finally {
+        this.isSyncing = false;
+      }
+    },
+
+    async syncWithCloud(forceRender = false) {
+      try {
+        const baseUrl = this.getApiBaseUrl();
+        const token = Auth.getToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token && !token.startsWith('offline_')) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(`${baseUrl}/tasks/sync/`, {
+          method: 'GET',
+          headers
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.status === 'success') {
+            const remoteProjects = data.projects || [];
+            const localProjects = AppState.projects || [];
+
+            // Si la nube está vacía pero el dispositivo actual tiene proyectos locales (ej. celular)
+            if (remoteProjects.length === 0 && localProjects.length > 0) {
+              await this.pushProjectsToCloud();
+              showToast('Proyectos sincronizados con la nube ☁️', 'success');
+              return;
+            }
+
+            // Si hay datos remotos, consolidar
+            if (remoteProjects.length > 0) {
+              const hasChanged = this.mergeRemoteProjects(remoteProjects, forceRender);
+              if (hasChanged && forceRender) {
+                showToast('Tareas sincronizadas desde la nube ☁️', 'info');
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('No fue posible contactar el backend de sincronización:', err);
+      }
+    },
+
+    mergeRemoteProjects(remoteProjects, shouldRender = false) {
+      if (!Array.isArray(remoteProjects)) return false;
+
+      const currentJson = JSON.stringify(AppState.projects || []);
+      const remoteJson = JSON.stringify(remoteProjects);
+
+      if (currentJson !== remoteJson) {
+        AppState.projects = remoteProjects;
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(AppState.projects));
+
+        if (!AppState.activeProjectId || !AppState.projects.some(p => p.id === AppState.activeProjectId)) {
+          AppState.activeProjectId = AppState.projects[0] ? AppState.projects[0].id : null;
+        }
+
+        if (shouldRender) {
+          renderProjectsSidebar();
+          renderMainView();
+          renderUserDock();
+        }
+        return true;
+      }
+      return false;
+    },
+
+    initCloudSync() {
+      // 1. Sincronización inicial
+      this.syncWithCloud(true);
+
+      // 2. Intervalo periódico en segundo plano (cada 30s)
+      const config = window.CNTXT_CONFIG || {};
+      const intervalMs = (config.SYNC && config.SYNC.AUTO_SYNC_INTERVAL_MS) || 30000;
+      setInterval(() => {
+        this.syncWithCloud(true);
+      }, intervalMs);
+
+      // 3. Sincronizar al enfocar la app
+      window.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          this.syncWithCloud(true);
+        }
+      });
+      window.addEventListener('focus', () => {
+        this.syncWithCloud(true);
+      });
     }
   };
 
@@ -3031,6 +3169,9 @@
     updateActiveUserChip();
     renderProjectsSidebar();
     renderMainView();
+
+    // Iniciar sincronización continua en la nube
+    Storage.initCloudSync();
   }
 
   if (document.readyState === 'loading') {

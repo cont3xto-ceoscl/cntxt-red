@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad
+from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad, ChecklistProject
 
 
 # ─────────────────────────────────────────────────────────────
@@ -131,3 +131,18 @@ class ActividadAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False  # Solo lectura
 
+
+
+@admin.register(ChecklistProject)
+class ChecklistProjectAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'category', 'color', 'task_count_display', 'created_by', 'is_archived', 'updated_at']
+    list_filter = ['category', 'is_archived', 'created_at', 'updated_at']
+    search_fields = ['id', 'name', 'desc']
+    readonly_fields = ['created_at', 'updated_at']
+    ordering = ['-updated_at']
+
+    def task_count_display(self, obj):
+        tasks = obj.tasks if isinstance(obj.tasks, list) else []
+        completed = sum(1 for t in tasks if isinstance(t, dict) and t.get('completed'))
+        return f"{completed}/{len(tasks)} completadas"
+    task_count_display.short_description = "Tareas"

@@ -16,6 +16,8 @@ from .views import (
     SystemStatusView,
     LegacyFrontendView,
     TasksAppView,
+    ChecklistProjectViewSet,
+    TasksSyncView,
 )
 
 app_name = 'core'
@@ -27,6 +29,8 @@ router.register(r'contactos', ContactoViewSet, basename='contacto')
 router.register(r'proyectos', ProyectoViewSet, basename='proyecto')
 router.register(r'pulso-relacional', PulsoRelacionalViewSet, basename='pulso_relacional')
 router.register(r'actividades', ActividadViewSet, basename='actividad')
+# Checklist & Tasks Engine
+router.register(r'tasks/projects', ChecklistProjectViewSet, basename='tasks_project')
 
 urlpatterns = [
     # Frontend SPA entrypoint
@@ -49,5 +53,7 @@ urlpatterns = [
     path('api/dashboard/stats/', DashboardStatsView.as_view(), name='dashboard_stats'),
     path('api/initial-data/', InitialDataView.as_view(), name='initial_data'),
     path('api/status/', SystemStatusView.as_view(), name='system_status'),
+    # Sync multi-dispositivo Tasks
+    path('api/tasks/sync/', TasksSyncView.as_view(), name='tasks_sync'),
 ]
 

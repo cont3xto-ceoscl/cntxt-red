@@ -718,3 +718,75 @@ class Actividad(TimeStampedModel):
     def __str__(self):
         usuario_str = self.usuario.get_full_name() or self.usuario.username if self.usuario else 'Sistema'
         return f"[{self.get_tipo_display()}] {usuario_str} — {self.created_at.strftime('%d/%m/%Y %H:%M')}"
+
+
+# ─────────────────────────────────────────────────────────────
+# Módulo de Checklist y Tareas Jerárquicas (Tasks)
+# ─────────────────────────────────────────────────────────────
+
+class ChecklistProject(TimeStampedModel):
+    """
+    Modelo de Proyecto de Checklist y Tareas Jerárquicas para el ecosistema CNTXT.
+    Sincroniza proyectos, tareas, subtareas, matrices de Eisenhower, prioridades
+    y fechas límite entre dispositivos móviles y de escritorio en la nube.
+    """
+    id = models.CharField(
+        max_length=100,
+        primary_key=True,
+        help_text=_("Identificador único del proyecto (e.g. proj-1728157000000 o UUID)")
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Nombre del Proyecto")
+    )
+    desc = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("Descripción")
+    )
+    category = models.CharField(
+        max_length=100,
+        blank=True,
+        default="general",
+        verbose_name=_("Categoría")
+    )
+    color = models.CharField(
+        max_length=50,
+        blank=True,
+        default="#7928ca",
+        verbose_name=_("Color de Identificación")
+    )
+    tasks = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name=_("Listado de Tareas y Subtareas Jerárquicas")
+    )
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='checklist_projects',
+        verbose_name=_("Creado por")
+    )
+    is_archived = models.BooleanField(
+        default=False,
+        verbose_name=_("Archivado")
+    )
+    crm_proyecto = models.ForeignKey(
+        Proyecto,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='checklist_projects',
+        verbose_name=_("Proyecto CRM Vinculado")
+    )
+
+    class Meta:
+        verbose_name = _("Proyecto de Checklist")
+        verbose_name_plural = _("Proyectos de Checklist")
+        ordering = ['-updated_at']
+
+    def __str__(self):
+        task_count = len(self.tasks) if isinstance(self.tasks, list) else 0
+        return f"{self.name} ({task_count} tareas)"

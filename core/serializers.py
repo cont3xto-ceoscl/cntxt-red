@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad
+from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad, ChecklistProject
 
 
 # ─────────────────────────────────────────────────────────────
@@ -246,3 +246,37 @@ class ActividadSerializer(serializers.ModelSerializer):
             return obj.usuario.get_full_name() or obj.usuario.username
         return 'Sistema'
 
+
+
+# ─────────────────────────────────────────────────────────────
+# Checklist & Tasks Serializers
+# ─────────────────────────────────────────────────────────────
+
+class ChecklistProjectSerializer(serializers.ModelSerializer):
+    """
+    Serializer para proyectos de checklist con tareas jerárquicas y sincronización multi-dispositivo.
+    """
+    created_by_nombre = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChecklistProject
+        fields = [
+            'id',
+            'name',
+            'desc',
+            'category',
+            'color',
+            'tasks',
+            'created_by',
+            'created_by_nombre',
+            'is_archived',
+            'crm_proyecto',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['created_by', 'created_at', 'updated_at']
+
+    def get_created_by_nombre(self, obj):
+        if obj.created_by:
+            return obj.created_by.get_full_name() or obj.created_by.username
+        return 'CNTXT Team'
