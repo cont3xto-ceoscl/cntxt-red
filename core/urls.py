@@ -17,6 +17,8 @@ from .views import (
     LegacyFrontendView,
     TasksAppView,
     ChecklistProjectViewSet,
+    ChecklistSystemViewSet,
+    TasksTeamMemberViewSet,
     TasksSyncView,
 )
 
@@ -30,7 +32,9 @@ router.register(r'proyectos', ProyectoViewSet, basename='proyecto')
 router.register(r'pulso-relacional', PulsoRelacionalViewSet, basename='pulso_relacional')
 router.register(r'actividades', ActividadViewSet, basename='actividad')
 # Checklist & Tasks Engine
+router.register(r'tasks/systems', ChecklistSystemViewSet, basename='tasks_system')
 router.register(r'tasks/projects', ChecklistProjectViewSet, basename='tasks_project')
+router.register(r'tasks/team-members', TasksTeamMemberViewSet, basename='tasks_team_member')
 
 urlpatterns = [
     # Frontend SPA entrypoint

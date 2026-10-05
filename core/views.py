@@ -12,10 +12,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
-from .models import Empresa, Contacto, Proyecto, PulsoRelacional, Actividad, ChecklistProject
+from .models import Empresa, Contacto, Proyecto, PulsoRelacional, Actividad, ChecklistProject, ChecklistSystem, TasksTeamMember
 from .serializers import (
     EmpresaSerializer, ContactoSerializer, ProyectoSerializer,
-    PulsoRelacionalSerializer, ActividadSerializer, UserSerializer, UserUpdateSerializer, ChecklistProjectSerializer
+    PulsoRelacionalSerializer, ActividadSerializer, UserSerializer, UserUpdateSerializer, ChecklistProjectSerializer, ChecklistSystemSerializer, TasksTeamMemberSerializer
 )
 from .permissions import (
     CanManageEmpresas, CanManageContactos, CanManageProyectos,
@@ -577,8 +577,27 @@ class TasksAppView(View):
 
 
 # ─────────────────────────────────────────────────────────────
-# Checklist & Tasks Engine Views
+
 # ─────────────────────────────────────────────────────────────
+# Checklist & Tasks Engine Views (Sistemas -> Proyectos -> Tareas)
+# ─────────────────────────────────────────────────────────────
+
+class ChecklistSystemViewSet(viewsets.ModelViewSet):
+    """
+    CRUD completo para Sistemas del ecosistema CNTXT Tasks.
+    """
+    queryset = ChecklistSystem.objects.filter(is_archived=False).order_by('order', '-updated_at')
+    serializer_class = ChecklistSystemSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def perform_create(self, serializer):
+        user = self.request.user if self.request.user.is_authenticated else None
+        serializer.save(created_by=user)
+
+    def perform_destroy(self, instance):
+        instance.is_archived = True
+        instance.save(update_fields=['is_archived', 'updated_at'])
+
 
 class ChecklistProjectViewSet(viewsets.ModelViewSet):
     """
@@ -594,24 +613,52 @@ class ChecklistProjectViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=user)
 
     def perform_destroy(self, instance):
-        # Soft delete / archivado en vez de destrucción física
         instance.is_archived = True
         instance.save(update_fields=['is_archived', 'updated_at'])
 
 
+class TasksTeamMemberViewSet(viewsets.ModelViewSet):
+    """
+    CRUD para miembros del equipo en Tasks.
+    """
+    queryset = TasksTeamMember.objects.filter(is_active=True).order_by('name')
+    serializer_class = TasksTeamMemberSerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class TasksSyncView(APIView):
     """
-    Endpoint de sincronización bidireccional inteligente entre dispositivos móviles y de escritorio.
-    Recibe el array de proyectos del cliente y consolida con la base de datos central.
+    Endpoint de sincronización bidireccional inteligente:
+    Consolida Sistemas, Proyectos y Miembros de Equipo entre dispositivos.
     """
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
-        projects = ChecklistProject.objects.filter(is_archived=False).order_by('-updated_at')
-        data = []
-        for p in projects:
-            data.append({
+        # 1. Sistemas
+        systems_qs = ChecklistSystem.objects.filter(is_archived=False).order_by('order', '-updated_at')
+        systems_data = []
+        for s in systems_qs:
+            systems_data.append({
+                'id': s.id,
+                'name': s.name,
+                'desc': s.desc,
+                'code': s.code,
+                'color': s.color,
+                'icon': s.icon,
+                'order': s.order,
+                'updated_at': s.updated_at.isoformat() if s.updated_at else None
+            })
+
+        # 2. Proyectos
+        projects_qs = ChecklistProject.objects.filter(is_archived=False).order_by('-updated_at')
+        projects_data = []
+        for p in projects_qs:
+            sys_id = p.sistema_id if p.sistema_id else p.sistema_id_str
+            projects_data.append({
                 'id': p.id,
+                'systemId': sys_id or None,
+                'sistema_nombre': p.sistema.name if p.sistema else '',
+                'sistema_color': p.sistema.color if p.sistema else '#C8A87A',
                 'name': p.name,
                 'desc': p.desc,
                 'category': p.category,
@@ -619,67 +666,102 @@ class TasksSyncView(APIView):
                 'tasks': p.tasks if isinstance(p.tasks, list) else [],
                 'updated_at': p.updated_at.isoformat() if p.updated_at else None
             })
+
+        # 3. Miembros de Equipo
+        team_qs = TasksTeamMember.objects.filter(is_active=True).order_by('name')
+        team_data = []
+        for m in team_qs:
+            team_data.append({
+                'id': m.id,
+                'name': m.name,
+                'shortName': m.short_name or m.name.split(' ')[0],
+                'email': m.email,
+                'role': m.role,
+                'avatar': m.avatar,
+                'initials': m.initials,
+                'color': m.color
+            })
+
         return Response({
             'status': 'success',
-            'count': len(data),
-            'projects': data
+            'systems': systems_data,
+            'projects': projects_data,
+            'team_users': team_data
         }, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        incoming_projects = request.data.get('projects', [])
+        data = request.data
         user = request.user if request.user.is_authenticated else None
 
-        if not isinstance(incoming_projects, list):
-            return Response(
-                {'error': 'El campo projects debe ser un listado válido.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        incoming_systems = data.get('systems', [])
+        incoming_projects = data.get('projects', [])
+        incoming_team = data.get('team_users', [])
 
-        saved_ids = []
-        for p_data in incoming_projects:
-            if not isinstance(p_data, dict):
-                continue
-            p_id = p_data.get('id')
-            if not p_id:
-                continue
+        # 1. Sincronizar Sistemas
+        if isinstance(incoming_systems, list):
+            for s_data in incoming_systems:
+                if not isinstance(s_data, dict) or not s_data.get('id'):
+                    continue
+                s_id = s_data['id']
+                ChecklistSystem.objects.update_or_create(
+                    id=s_id,
+                    defaults={
+                        'name': s_data.get('name') or 'Sistema Sin Título',
+                        'desc': s_data.get('desc', ''),
+                        'code': s_data.get('code', ''),
+                        'color': s_data.get('color', '#C8A87A'),
+                        'icon': s_data.get('icon', 'layers'),
+                        'order': s_data.get('order', 0),
+                        'is_archived': False,
+                        **({'created_by': user} if user else {})
+                    }
+                )
 
-            name = p_data.get('name') or 'Proyecto Sin Título'
-            desc = p_data.get('desc', '')
-            category = p_data.get('category', 'general')
-            color = p_data.get('color', '#7928ca')
-            tasks = p_data.get('tasks', [])
+        # 2. Sincronizar Proyectos
+        if isinstance(incoming_projects, list):
+            for p_data in incoming_projects:
+                if not isinstance(p_data, dict) or not p_data.get('id'):
+                    continue
+                p_id = p_data['id']
+                sys_id = p_data.get('systemId') or p_data.get('sistema_id') or ''
+                sys_obj = ChecklistSystem.objects.filter(id=sys_id).first() if sys_id else None
 
-            obj, created = ChecklistProject.objects.update_or_create(
-                id=p_id,
-                defaults={
-                    'name': name,
-                    'desc': desc,
-                    'category': category,
-                    'color': color,
-                    'tasks': tasks,
-                    'is_archived': False,
-                    **({'created_by': user} if user and not created else {})
-                }
-            )
-            saved_ids.append(obj.id)
+                ChecklistProject.objects.update_or_create(
+                    id=p_id,
+                    defaults={
+                        'sistema': sys_obj,
+                        'sistema_id_str': sys_id or '',
+                        'name': p_data.get('name') or 'Proyecto Sin Título',
+                        'desc': p_data.get('desc', ''),
+                        'category': p_data.get('category', 'general'),
+                        'color': p_data.get('color', '#7928ca'),
+                        'tasks': p_data.get('tasks', []),
+                        'is_archived': False,
+                        **({'created_by': user} if user else {})
+                    }
+                )
 
-        # Retornar todos los proyectos activos consolidados
-        all_projects = ChecklistProject.objects.filter(is_archived=False).order_by('-updated_at')
-        consolidated = []
-        for p in all_projects:
-            consolidated.append({
-                'id': p.id,
-                'name': p.name,
-                'desc': p.desc,
-                'category': p.category,
-                'color': p.color,
-                'tasks': p.tasks if isinstance(p.tasks, list) else [],
-                'updated_at': p.updated_at.isoformat() if p.updated_at else None
-            })
+        # 3. Sincronizar Miembros de Equipo
+        if isinstance(incoming_team, list):
+            for m_data in incoming_team:
+                if not isinstance(m_data, dict):
+                    continue
+                m_email = (m_data.get('email') or m_data.get('id') or '').strip().lower()
+                if not m_email or m_email == 'all' or '@' not in m_email:
+                    continue
+                TasksTeamMember.objects.update_or_create(
+                    id=m_email,
+                    defaults={
+                        'name': m_data.get('name') or m_email.split('@')[0],
+                        'short_name': m_data.get('shortName') or '',
+                        'email': m_email,
+                        'role': m_data.get('role') or 'Miembro',
+                        'avatar': m_data.get('avatar') or '',
+                        'initials': m_data.get('initials') or '',
+                        'color': m_data.get('color') or '#C8A87A',
+                        'is_active': True
+                    }
+                )
 
-        return Response({
-            'status': 'success',
-            'synced_count': len(saved_ids),
-            'total_count': len(consolidated),
-            'projects': consolidated
-        }, status=status.HTTP_200_OK)
+        # Retornar estado consolidado completo
+        return self.get(request, *args, **kwargs)

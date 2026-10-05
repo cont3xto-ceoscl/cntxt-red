@@ -3,13 +3,13 @@
  * Version 2.0.0
  */
 
-const CACHE_NAME = 'cntxt-tasks-v3.0';
+const CACHE_NAME = 'cntxt-tasks-v3.5';
 const STATIC_ASSETS = [
   '/tasks/',
   '/tasks/index.html',
   '/tasks/checklist.html',
-  '/tasks/checklist.css?v=2.2',
-  '/tasks/checklist.js?v=3.0',
+  '/tasks/checklist.css?v=3.5',
+  '/tasks/checklist.js?v=3.5',
   '/tasks/config.js',
   '/tasks/01.%20CNTXT_BLANCO.png',
   '/tasks/icon-192.png',

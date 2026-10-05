@@ -23,7 +23,7 @@
   <link rel="preload" href="Rota%20Complete%20Family/Rota-SemiBold.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="Rota%20Complete%20Family/Rota-Bold.otf" as="font" type="font/otf" crossorigin>
 
-  <link rel="stylesheet" href="checklist.css?v=2.2">
+  <link rel="stylesheet" href="checklist.css?v=3.5">
 </head>
 
 <body>
@@ -115,24 +115,33 @@
         </button>
       </div>
 
-      <!-- Quick Action: Nuevo Proyecto -->
-      <div class="sidebar-action-wrap">
-        <button class="btn-new-project" id="btn-open-new-project-modal">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <!-- Quick Actions: Nuevo Sistema & Nuevo Proyecto -->
+      <div class="sidebar-action-wrap" style="display: flex; gap: 8px;">
+        <button class="btn-new-system" id="btn-open-new-system-modal" style="flex: 1;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>+ Sistema</span>
+        </button>
+        <button class="btn-new-project" id="btn-open-new-project-modal" style="flex: 1;" title="Crear proyecto">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M12 5v14M5 12h14" />
           </svg>
-          <span>Nuevo Proyecto</span>
+          <span>+ Proyecto</span>
         </button>
       </div>
 
-      <!-- Lista de Proyectos -->
+      <!-- Lista Jerárquica: Sistemas & Proyectos -->
       <div class="sidebar-section">
         <div class="sidebar-section-title">
-          <span>Proyectos Activos</span>
-          <span class="badge-count" id="projects-total-badge">0</span>
+          <span>Sistemas & Proyectos</span>
+          <span class="badge-count" id="systems-total-badge">0</span>
         </div>
-        <div class="projects-nav-list" id="projects-nav-list">
-          <!-- Renderizado dinámico vía checklist.js -->
+        <div class="systems-nav-list" id="systems-nav-list">
+          <!-- Renderizado dinámico jerárquico vía checklist.js -->
         </div>
       </div>
 
@@ -199,6 +208,8 @@
             <div class="breadcrumbs">
               <a href="https://centralcntxt.tech/" class="breadcrumb-root">Central CNTXT®</a>
               <span class="breadcrumb-separator">/</span>
+              <span class="breadcrumb-system" id="header-breadcrumb-system" style="color: var(--color-primary); font-weight: 500;">Sistema</span>
+              <span class="breadcrumb-separator">/</span>
               <span class="breadcrumb-current" id="header-breadcrumb-project">Proyecto</span>
             </div>
           </div>
@@ -263,6 +274,13 @@
               <path d="M12 5v14M5 12h14" />
             </svg>
             <span>Agregar Tarea</span>
+          </button>
+
+          <!-- Botón de Sincronización Manual en la Nube -->
+          <button type="button" class="btn-icon btn-header-sync" id="btn-header-sync" title="Sincronizar con la nube ahora">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+            </svg>
           </button>
 
           <!-- Botón de Pantalla Completa (Fullscreen) -->
@@ -608,7 +626,89 @@
     </div>
   </div>
 
-  <!-- Modal: Nuevo Proyecto / Editar Proyecto -->
+  
+  <!-- Modal: Crear / Editar Sistema -->
+  <div class="modal-backdrop" id="modal-system" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="modal-title-icon" style="color: var(--color-primary); font-size: 18px;">🏛️</div>
+          <h3 class="modal-title font-headline" id="modal-system-title">Crear Nuevo Sistema</h3>
+        </div>
+        <button type="button" class="btn-icon modal-close" id="btn-close-system-modal">✕</button>
+      </div>
+      <form id="form-system" class="modal-form" novalidate>
+        <input type="hidden" id="system-id-field">
+
+        <div class="form-group">
+          <label for="system-name-input" class="form-label">Nombre del Sistema *</label>
+          <input type="text" id="system-name-input" class="form-input" placeholder="Ej: 01. N.E.O. Núcleo Estratégico Organizacional" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="system-code-input" class="form-label">Sigla o Código Corto</label>
+            <input type="text" id="system-code-input" class="form-input" placeholder="Ej: N.E.O., OPS, ARQ">
+          </div>
+          <div class="form-group col-half">
+            <label for="system-color-input" class="form-label">Color Distintivo</label>
+            <select id="system-color-input" class="form-input">
+              <option value="#C8A87A">Arena Dorado CNTXT</option>
+              <option value="#3b82f6">Azul Eléctrico</option>
+              <option value="#10b981">Verde Esmeralda</option>
+              <option value="#8b5cf6">Violeta Real</option>
+              <option value="#f59e0b">Ámbar Intenso</option>
+              <option value="#ef4444">Rojo Carmesí</option>
+              <option value="#ec4899">Rosa Magenta</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="system-desc-input" class="form-label">Descripción / Misión del Sistema</label>
+          <textarea id="system-desc-input" class="form-input textarea-field" rows="2" placeholder="Propósito estratégico y alcance de este sistema..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btn-cancel-system-modal">Cancelar</button>
+          <button type="submit" class="btn-primary" id="btn-save-system">Guardar Sistema</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmar Eliminación de Sistema -->
+  <div class="modal-backdrop" id="modal-delete-system" aria-hidden="true">
+    <div class="modal-card modal-card-alert" style="border-color: rgba(217, 83, 79, 0.4);">
+      <div class="modal-alert-header">
+        <div class="modal-alert-icon" style="color: #d9534f;">🗑️</div>
+        <h3 class="modal-title font-headline" style="color: #ff8585;">Eliminar Sistema</h3>
+        <button type="button" class="btn-icon modal-close" id="btn-close-delete-system-modal">✕</button>
+      </div>
+      <div class="modal-alert-body">
+        <p class="modal-alert-text">
+          ¿Estás seguro de que deseas eliminar el sistema <strong id="delete-system-name" style="color: #fff;"></strong>?
+        </p>
+        <div class="modal-alert-policy-box" style="background: rgba(217, 83, 79, 0.08); border-color: rgba(217, 83, 79, 0.3);">
+          <div class="policy-header" style="color: #ff8585;">
+            <span class="policy-icon">⚠️</span>
+            <strong>Proyectos Asociados</strong>
+          </div>
+          <p class="policy-desc" id="delete-system-warning">
+            Los proyectos pertenecientes a este sistema se conservarán y pasarán al Sistema General.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-secondary" id="btn-cancel-delete-system">Cancelar</button>
+        <button type="button" class="btn-primary" id="btn-confirm-delete-system" style="background: #d9534f; color: #fff; border-color: #d9534f;">
+          Eliminar Sistema
+        </button>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal: Nuevo Proyecto / Editar Proyecto -->
   <div class="modal-backdrop" id="modal-project" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-header">
@@ -617,6 +717,16 @@
       </div>
       <form id="form-project" class="modal-form" novalidate>
         <input type="hidden" id="project-id-field">
+
+        <div class="form-group">
+          <label for="project-system-select" class="form-label">Sistema al que Pertenece *</label>
+          <div style="display: flex; gap: 8px;">
+            <select id="project-system-select" class="form-input" style="flex: 1;" required>
+              <!-- Inyectado dinámicamente -->
+            </select>
+            <button type="button" class="btn-secondary" id="btn-quick-new-system" style="padding: 0 12px; font-size: 11px; white-space: nowrap;">+ Sistema</button>
+          </div>
+        </div>
 
         <div class="form-group">
           <label for="project-name-input" class="form-label">Nombre del Proyecto *</label>
@@ -969,7 +1079,7 @@
 
   <!-- Scripts -->
   <script src="config.js"></script>
-  <script src="checklist.js?v=3.0"></script>
+  <script src="checklist.js?v=3.5"></script>
 </body>
 
 </html>

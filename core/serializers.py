@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad, ChecklistProject
+from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad, ChecklistProject, ChecklistSystem, TasksTeamMember
 
 
 # ─────────────────────────────────────────────────────────────
@@ -249,19 +249,45 @@ class ActividadSerializer(serializers.ModelSerializer):
 
 
 # ─────────────────────────────────────────────────────────────
-# Checklist & Tasks Serializers
+
 # ─────────────────────────────────────────────────────────────
+# Checklist, Systems & Tasks Serializers
+# ─────────────────────────────────────────────────────────────
+
+class TasksTeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TasksTeamMember
+        fields = [
+            'id',
+            'name',
+            'short_name',
+            'email',
+            'role',
+            'avatar',
+            'initials',
+            'color',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]
+
 
 class ChecklistProjectSerializer(serializers.ModelSerializer):
     """
-    Serializer para proyectos de checklist con tareas jerárquicas y sincronización multi-dispositivo.
+    Serializer para proyectos de checklist con pertenencia a Sistema y tareas jerárquicas.
     """
     created_by_nombre = serializers.SerializerMethodField()
+    sistema_nombre = serializers.CharField(source='sistema.name', read_only=True, default='')
+    sistema_color = serializers.CharField(source='sistema.color', read_only=True, default='#C8A87A')
 
     class Meta:
         model = ChecklistProject
         fields = [
             'id',
+            'sistema',
+            'sistema_id_str',
+            'sistema_nombre',
+            'sistema_color',
             'name',
             'desc',
             'category',
@@ -280,3 +306,32 @@ class ChecklistProjectSerializer(serializers.ModelSerializer):
         if obj.created_by:
             return obj.created_by.get_full_name() or obj.created_by.username
         return 'CNTXT Team'
+
+
+class ChecklistSystemSerializer(serializers.ModelSerializer):
+    """
+    Serializer para Sistemas del ecosistema CNTXT, agrupando sus proyectos.
+    """
+    proyectos = ChecklistProjectSerializer(many=True, read_only=True)
+    proyectos_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChecklistSystem
+        fields = [
+            'id',
+            'name',
+            'desc',
+            'code',
+            'color',
+            'icon',
+            'order',
+            'is_archived',
+            'proyectos',
+            'proyectos_count',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+
+    def get_proyectos_count(self, obj):
+        return obj.proyectos.filter(is_archived=False).count()

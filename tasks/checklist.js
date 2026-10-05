@@ -6,11 +6,15 @@
 (function () {
   'use strict';
 
-  // ─── Estado Global de la Aplicación ───────────────────────────
+  // ─── Estado Global de la Aplicación (Sistemas -> Proyectos -> Tareas) ──
   const AppState = {
     currentUser: null,
+    systems: [],
+    activeSystemId: null,
+    expandedSystemIds: new Set(),
     projects: [],
     activeProjectId: null,
+    pendingSystemToDelete: null,
     currentView: 'list', // 'list' | 'calendar'
     calYear: 2026,
     calMonth: 9, // Octubre 2026 (0-indexed: 9 = Octubre)
@@ -43,7 +47,7 @@
     return p;
   }
 
-  // ─── Perfiles y Miembros del Equipo CNTXT ──────────────────────
+  // ─── Perfiles y Miembros del Equipo CNTXT (Limpieza Total) ─────
   const DEFAULT_TEAM_USERS = [
     {
       id: 'all',
@@ -54,63 +58,16 @@
       avatar: '',
       isAll: true,
       initials: 'ALL'
-    },
-    {
-      id: 'admin@cntxt.co',
-      email: 'admin@cntxt.co',
-      name: 'Admin CNTXT®',
-      shortName: 'Admin',
-      role: 'Superadmin / Dirección Técnica',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&h=160&q=80',
-      initials: 'AC',
-      color: '#C8A87A'
-    },
-    {
-      id: 'ceo@cntxt.co',
-      email: 'ceo@cntxt.co',
-      name: 'Camilo · CEO',
-      shortName: 'Camilo',
-      role: 'Dirección General & Estrategia',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&h=160&q=80',
-      initials: 'CC',
-      color: '#D4AF37'
-    },
-    {
-      id: 'coordinadora@cntxt.co',
-      email: 'coordinadora@cntxt.co',
-      name: 'Coordinadora',
-      shortName: 'Coordinación',
-      role: 'Operaciones & Seguimiento',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=160&h=160&q=80',
-      initials: 'CO',
-      color: '#4CAF50'
-    },
-    {
-      id: 'director@cntxt.co',
-      email: 'director@cntxt.co',
-      name: 'Director Comercial',
-      shortName: 'Director',
-      role: 'Desarrollo de Negocio',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&h=160&q=80',
-      initials: 'DC',
-      color: '#2196F3'
-    },
-    {
-      id: 'growth@cntxt.co',
-      email: 'growth@cntxt.co',
-      name: 'Growth Partner',
-      shortName: 'Growth',
-      role: 'Crecimiento & B2B',
-      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=160&h=160&q=80',
-      initials: 'GP',
-      color: '#9C27B0'
     }
   ];
 
-  const TEAM_USERS_KEY = 'cntxt_team_users_v2';
+  const TEAM_USERS_KEY = 'cntxt_team_users_v4';
 
   function loadTeamUsers() {
     try {
+      // Purgar versiones anteriores con cuentas de prueba quemadas
+      ['cntxt_team_users_v3', 'cntxt_team_users_v2', 'cntxt_team_users'].forEach(k => localStorage.removeItem(k));
+
       const saved = localStorage.getItem(TEAM_USERS_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -132,6 +89,9 @@
       localStorage.setItem(TEAM_USERS_KEY, JSON.stringify(users));
     } catch (e) {
       console.error('Error saving team users to storage:', e);
+    }
+    if (typeof Storage !== 'undefined' && Storage.scheduleSync) {
+      Storage.scheduleSync();
     }
   }
 
@@ -421,8 +381,31 @@
   // ─── Módulo de Persistencia y Sincronización Cloud ────────────
   const Storage = {
     STORAGE_KEY: 'cntxt_tasks_ecosystem_data_v4',
+    SYSTEMS_KEY: 'cntxt_tasks_ecosystem_systems_v1',
     syncTimer: null,
     isSyncing: false,
+
+    loadSystems() {
+      try {
+        const raw = localStorage.getItem(this.SYSTEMS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {
+        console.error('Error al leer sistemas de localStorage', e);
+      }
+      return [];
+    },
+
+    saveSystems(systems) {
+      try {
+        localStorage.setItem(this.SYSTEMS_KEY, JSON.stringify(systems));
+      } catch (e) {
+        console.error('Error al guardar sistemas en localStorage', e);
+      }
+      this.scheduleSync();
+    },
 
     getApiBaseUrl() {
       const config = window.CNTXT_CONFIG || {};
@@ -485,7 +468,11 @@
         const res = await fetch(`${baseUrl}/tasks/sync/`, {
           method: 'POST',
           headers,
-          body: JSON.stringify({ projects: AppState.projects })
+          body: JSON.stringify({
+            systems: AppState.systems,
+            projects: AppState.projects,
+            team_users: TEAM_USERS
+          })
         });
 
         if (res.ok) {
@@ -518,28 +505,79 @@
         if (res.ok) {
           const data = await res.json();
           if (data && data.status === 'success') {
+            const remoteSystems = data.systems || [];
             const remoteProjects = data.projects || [];
+            const remoteTeam = data.team_users || [];
             const localProjects = AppState.projects || [];
+            const localSystems = AppState.systems || [];
 
-            // Si la nube está vacía pero el dispositivo actual tiene proyectos locales (ej. celular)
-            if (remoteProjects.length === 0 && localProjects.length > 0) {
+            // Si la nube está vacía y el cliente tiene datos locales, subir
+            if (remoteSystems.length === 0 && remoteProjects.length === 0 && (localProjects.length > 0 || localSystems.length > 0)) {
               await this.pushProjectsToCloud();
-              showToast('Proyectos sincronizados con la nube ☁️', 'success');
+              showToast('Sistemas y tareas sincronizados con la nube ☁️', 'success');
               return;
             }
 
-            // Si hay datos remotos, consolidar
+            let changed = false;
+            if (remoteSystems.length > 0) {
+              changed = this.mergeRemoteSystems(remoteSystems) || changed;
+            }
             if (remoteProjects.length > 0) {
-              const hasChanged = this.mergeRemoteProjects(remoteProjects, forceRender);
-              if (hasChanged && forceRender) {
-                showToast('Tareas sincronizadas desde la nube ☁️', 'info');
-              }
+              changed = this.mergeRemoteProjects(remoteProjects, forceRender) || changed;
+            }
+            if (remoteTeam.length > 0) {
+              changed = this.mergeRemoteTeam(remoteTeam) || changed;
+            }
+
+            if (changed && forceRender) {
+              renderSystemsSidebar();
+              renderMainView();
+              renderUserDock();
+              syncUserSelectOptions();
             }
           }
         }
       } catch (err) {
         console.warn('No fue posible contactar el backend de sincronización:', err);
       }
+    },
+
+    mergeRemoteSystems(remoteSystems) {
+      if (!Array.isArray(remoteSystems)) return false;
+      const currentJson = JSON.stringify(AppState.systems || []);
+      const remoteJson = JSON.stringify(remoteSystems);
+      if (currentJson !== remoteJson) {
+        AppState.systems = remoteSystems;
+        localStorage.setItem(this.SYSTEMS_KEY, JSON.stringify(AppState.systems));
+        return true;
+      }
+      return false;
+    },
+
+    mergeRemoteTeam(remoteTeam) {
+      if (!Array.isArray(remoteTeam) || remoteTeam.length === 0) return false;
+      let changed = false;
+      remoteTeam.forEach(m => {
+        if (!m || !m.email || m.email === 'all') return;
+        const exists = TEAM_USERS.find(u => u.email.toLowerCase() === m.email.toLowerCase());
+        if (!exists) {
+          TEAM_USERS.push({
+            id: m.email,
+            email: m.email,
+            name: m.name,
+            shortName: m.shortName || m.name.split(' ')[0],
+            role: m.role || 'Miembro',
+            avatar: m.avatar || '',
+            initials: m.initials || getInitials(m.name),
+            color: m.color || '#C8A87A'
+          });
+          changed = true;
+        }
+      });
+      if (changed) {
+        saveTeamUsers(TEAM_USERS);
+      }
+      return changed;
     },
 
     mergeRemoteProjects(remoteProjects, shouldRender = false) {
@@ -557,7 +595,7 @@
         }
 
         if (shouldRender) {
-          renderProjectsSidebar();
+          renderSystemsSidebar();
           renderMainView();
           renderUserDock();
         }
@@ -689,97 +727,237 @@
   }
 
   // ─── Renderizado de Sidebar y Métricas ─────────────────────────
-  function renderProjectsSidebar() {
-    const listEl = document.getElementById('projects-nav-list');
-    const badgeEl = document.getElementById('projects-total-badge');
+  function ensureDefaultSystem() {
+    if (!Array.isArray(AppState.systems) || AppState.systems.length === 0) {
+      const defaultSys = {
+        id: 'sys-general',
+        name: '01. Sistema General',
+        desc: 'Núcleo general del ecosistema CNTXT',
+        code: 'GEN',
+        color: '#C8A87A',
+        icon: 'layers',
+        order: 0
+      };
+      AppState.systems = [defaultSys];
+      Storage.saveSystems(AppState.systems);
+    }
+
+    const firstSysId = AppState.systems[0].id;
+    let projectsModified = false;
+    AppState.projects.forEach(p => {
+      if (!p.systemId || !AppState.systems.some(s => s.id === p.systemId)) {
+        p.systemId = firstSysId;
+        projectsModified = true;
+      }
+    });
+    if (projectsModified) {
+      Storage.saveProjects(AppState.projects);
+    }
+  }
+
+  function renderSystemsSidebar() {
+    ensureDefaultSystem();
+
+    const listEl = document.getElementById('systems-nav-list') || document.getElementById('projects-nav-list');
+    const badgeEl = document.getElementById('systems-total-badge') || document.getElementById('projects-total-badge');
     if (!listEl) return;
 
     listEl.innerHTML = '';
-    badgeEl.textContent = AppState.projects.length;
+    if (badgeEl) badgeEl.textContent = AppState.systems.length;
 
-    if (AppState.projects.length === 0) {
+    if (AppState.systems.length === 0) {
       listEl.innerHTML = `
         <div style="padding: 24px 12px; text-align: center; color: var(--text-muted); font-size: 11px; font-family: var(--font-label); border: 1px dashed rgba(255,255,255,0.08); border-radius: var(--radius-md); margin: 6px 0;">
-          No hay proyectos activos
+          No hay sistemas activos
         </div>
       `;
       renderGlobalStats();
       return;
     }
 
-    AppState.projects.forEach(proj => {
-      const item = document.createElement('div');
-      item.className = `project-nav-item ${proj.id === AppState.activeProjectId ? 'active' : ''}`;
-      
-      const allTasks = proj.tasks || [];
-      const isUserFiltered = AppState.filters.assignee !== 'all';
-      const tasks = isUserFiltered ? allTasks.filter(t => t.assignee === AppState.filters.assignee) : allTasks;
-      const totalTasks = tasks.length;
-      const completedTasks = tasks.filter(t => t.completed).length;
-      const progressPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-      const projColor = proj.color || 'var(--color-primary)';
+    AppState.systems.forEach(sys => {
+      const sysProjects = AppState.projects.filter(p => p.systemId === sys.id);
+      const isExpanded = AppState.expandedSystemIds.has(sys.id) || AppState.expandedSystemIds.size === 0;
+      if (AppState.expandedSystemIds.size === 0) {
+        AppState.expandedSystemIds.add(sys.id);
+      }
 
-      item.innerHTML = `
-        <div class="project-nav-item-top">
-          <span class="project-nav-dot" style="background-color: ${projColor};"></span>
-          <div class="project-nav-info">
-            <div class="project-nav-name" title="${proj.name}">${proj.name}</div>
-            <div class="project-nav-meta">
-              <span>${proj.category || 'General'}</span>
-              <span>·</span>
-              <span>${completedTasks}/${totalTasks}</span>
+      const hasActiveProject = sysProjects.some(p => p.id === AppState.activeProjectId);
+
+      const groupEl = document.createElement('div');
+      groupEl.className = `system-nav-group ${isExpanded ? 'expanded' : ''} ${hasActiveProject ? 'active-system' : ''}`;
+      groupEl.id = `system-group-${sys.id}`;
+
+      const sysColor = sys.color || '#C8A87A';
+
+      groupEl.innerHTML = `
+        <div class="system-nav-header">
+          <div class="system-header-left">
+            <span class="system-chevron">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </span>
+            <span class="system-color-indicator" style="background-color: ${sysColor}; color: ${sysColor};"></span>
+            ${sys.code ? `<span class="system-code-tag">${sys.code}</span>` : ''}
+            <span class="system-name-text" title="${sys.name}">${sys.name}</span>
+          </div>
+          <div class="system-header-right">
+            <span class="system-projects-badge">${sysProjects.length} proy</span>
+            <div class="system-quick-actions">
+              <button type="button" class="btn-system-action btn-add-project-to-sys" title="Agregar proyecto a ${sys.name}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12h14"></path>
+                </svg>
+              </button>
+              <button type="button" class="btn-system-action btn-edit-sys" title="Editar sistema">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <button type="button" class="btn-system-action btn-delete-sys" title="Eliminar sistema">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
             </div>
           </div>
-          <span class="project-nav-badge">${totalTasks}</span>
-          <div class="project-nav-actions">
-            <button type="button" class="btn-nav-action btn-nav-edit" title="Editar proyecto">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-            </button>
-            <button type="button" class="btn-nav-action btn-nav-delete" title="Eliminar proyecto">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-            </button>
-          </div>
         </div>
-        <div class="project-nav-progress-wrap" title="${progressPct}% completado (${completedTasks}/${totalTasks} tareas)">
-          <div class="project-nav-progress-bar" style="width: ${progressPct}%; background-color: ${projColor};"></div>
+        <div class="system-projects-list" id="sys-projects-${sys.id}">
         </div>
       `;
 
-      const btnEdit = item.querySelector('.btn-nav-edit');
-      if (btnEdit) {
-        btnEdit.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openProjectModal(proj.id);
-        });
-      }
-
-      const btnDelete = item.querySelector('.btn-nav-delete');
-      if (btnDelete) {
-        btnDelete.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openDeleteProjectModal(proj.id);
-        });
-      }
-
-      item.addEventListener('click', () => {
-        if (AppState.activeProjectId !== proj.id) {
-          AppState.activeProjectId = proj.id;
-          renderProjectsSidebar();
-          renderMainView();
+      // Header click toggles accordion
+      const headerEl = groupEl.querySelector('.system-nav-header');
+      headerEl.addEventListener('click', (e) => {
+        if (e.target.closest('.system-quick-actions')) return;
+        if (groupEl.classList.contains('expanded')) {
+          groupEl.classList.remove('expanded');
+          AppState.expandedSystemIds.delete(sys.id);
+        } else {
+          groupEl.classList.add('expanded');
+          AppState.expandedSystemIds.add(sys.id);
         }
       });
 
-      listEl.appendChild(item);
+      // Quick action buttons
+      const btnAddProj = groupEl.querySelector('.btn-add-project-to-sys');
+      if (btnAddProj) {
+        btnAddProj.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openProjectModal(null, sys.id);
+        });
+      }
+
+      const btnEditSys = groupEl.querySelector('.btn-edit-sys');
+      if (btnEditSys) {
+        btnEditSys.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openSystemModal(sys);
+        });
+      }
+
+      const btnDeleteSys = groupEl.querySelector('.btn-delete-sys');
+      if (btnDeleteSys) {
+        btnDeleteSys.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeleteSystemModal(sys);
+        });
+      }
+
+      // Render projects inside this system
+      const projContainer = groupEl.querySelector('.system-projects-list');
+
+      if (sysProjects.length === 0) {
+        const emptyHint = document.createElement('div');
+        emptyHint.className = 'empty-system-hint';
+        emptyHint.textContent = '+ Agregar proyecto a este sistema';
+        emptyHint.addEventListener('click', () => {
+          openProjectModal(null, sys.id);
+        });
+        projContainer.appendChild(emptyHint);
+      } else {
+        sysProjects.forEach(proj => {
+          const item = document.createElement('div');
+          item.className = `project-nav-item ${proj.id === AppState.activeProjectId ? 'active' : ''}`;
+
+          const allTasks = proj.tasks || [];
+          const isUserFiltered = AppState.filters.assignee !== 'all';
+          const tasks = isUserFiltered ? allTasks.filter(t => t.assignee === AppState.filters.assignee) : allTasks;
+          const totalTasks = tasks.length;
+          const completedTasks = tasks.filter(t => t.completed).length;
+          const progressPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+          const projColor = proj.color || 'var(--color-primary)';
+
+          item.innerHTML = `
+            <div class="project-nav-item-top">
+              <span class="project-nav-dot" style="background-color: ${projColor};"></span>
+              <div class="project-nav-info">
+                <div class="project-nav-name" title="${proj.name}">${proj.name}</div>
+                <div class="project-nav-meta">
+                  <span>${proj.category || 'General'}</span>
+                  <span>·</span>
+                  <span>${completedTasks}/${totalTasks}</span>
+                </div>
+              </div>
+              <span class="project-nav-badge">${totalTasks}</span>
+              <div class="project-nav-actions">
+                <button type="button" class="btn-nav-action btn-nav-edit" title="Editar proyecto">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button type="button" class="btn-nav-action btn-nav-delete" title="Eliminar proyecto">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="project-nav-progress-wrap" title="${progressPct}% completado (${completedTasks}/${totalTasks} tareas)">
+              <div class="project-nav-progress-bar" style="width: ${progressPct}%; background-color: ${projColor};"></div>
+            </div>
+          `;
+
+          const btnEditProj = item.querySelector('.btn-nav-edit');
+          if (btnEditProj) {
+            btnEditProj.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openProjectModal(proj.id);
+            });
+          }
+
+          const btnDeleteProj = item.querySelector('.btn-nav-delete');
+          if (btnDeleteProj) {
+            btnDeleteProj.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openDeleteProjectModal(proj.id);
+            });
+          }
+
+          item.addEventListener('click', () => {
+            AppState.activeProjectId = proj.id;
+            AppState.activeSystemId = sys.id;
+            renderSystemsSidebar();
+            renderMainView();
+          });
+
+          projContainer.appendChild(item);
+        });
+      }
+
+      listEl.appendChild(groupEl);
     });
 
     renderGlobalStats();
   }
+
+  // Alias para retrocompatibilidad
+  const renderProjectsSidebar = renderSystemsSidebar;
 
   function renderGlobalStats() {
     let allTasks = 0;
@@ -1826,19 +2004,168 @@
   }
 
   // ─── Modal de Proyecto (Crear / Editar) ────────────────────────
-  function openProjectModal(projectId = null) {
+  // ─── Modal de Sistema (Crear / Editar / Eliminar) ─────────────
+  function openSystemModal(system = null) {
+    const modal = document.getElementById('modal-system');
+    const titleEl = document.getElementById('modal-system-title');
+    const idField = document.getElementById('system-id-field');
+    const nameInput = document.getElementById('system-name-input');
+    const codeInput = document.getElementById('system-code-input');
+    const descInput = document.getElementById('system-desc-input');
+    const colorInput = document.getElementById('system-color-input');
+    if (!modal) return;
+
+    if (system) {
+      if (titleEl) titleEl.textContent = 'Editar Sistema';
+      if (idField) idField.value = system.id;
+      if (nameInput) nameInput.value = system.name || '';
+      if (codeInput) codeInput.value = system.code || '';
+      if (descInput) descInput.value = system.desc || '';
+      if (colorInput) colorInput.value = system.color || '#C8A87A';
+    } else {
+      if (titleEl) titleEl.textContent = 'Crear Nuevo Sistema';
+      if (idField) idField.value = '';
+      if (nameInput) nameInput.value = '';
+      if (codeInput) codeInput.value = '';
+      if (descInput) descInput.value = '';
+      if (colorInput) colorInput.value = '#C8A87A';
+    }
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    if (nameInput) setTimeout(() => nameInput.focus(), 80);
+  }
+
+  function closeSystemModal() {
+    const modal = document.getElementById('modal-system');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function saveSystemFromModal(e) {
+    e.preventDefault();
+    const idField = document.getElementById('system-id-field');
+    const editingId = idField ? idField.value.trim() : '';
+
+    const name = document.getElementById('system-name-input').value.trim();
+    const code = document.getElementById('system-code-input').value.trim().toUpperCase();
+    const desc = document.getElementById('system-desc-input').value.trim();
+    const color = document.getElementById('system-color-input').value;
+
+    if (!name) {
+      showToast('Escribe un nombre para el sistema', 'error');
+      return;
+    }
+
+    if (editingId) {
+      const sys = AppState.systems.find(s => s.id === editingId);
+      if (sys) {
+        sys.name = name;
+        sys.code = code;
+        sys.desc = desc;
+        sys.color = color;
+      }
+      showToast(`Sistema "${name}" actualizado`, 'success');
+    } else {
+      const newSys = {
+        id: 'sys-' + Date.now(),
+        name,
+        code,
+        desc,
+        color,
+        icon: 'layers',
+        order: AppState.systems.length
+      };
+      AppState.systems.push(newSys);
+      AppState.expandedSystemIds.add(newSys.id);
+      AppState.activeSystemId = newSys.id;
+      showToast(`Nuevo Sistema "${name}" creado`, 'success');
+    }
+
+    Storage.saveSystems(AppState.systems);
+    closeSystemModal();
+    renderSystemsSidebar();
+    renderMainView();
+  }
+
+  function openDeleteSystemModal(system) {
+    const modal = document.getElementById('modal-delete-system');
+    const nameEl = document.getElementById('delete-system-name');
+    if (!modal || !system) return;
+
+    if (AppState.systems.length <= 1) {
+      showToast('Debes mantener al menos un sistema activo en el ecosistema', 'error');
+      return;
+    }
+
+    AppState.pendingSystemToDelete = system;
+    if (nameEl) nameEl.textContent = `"${system.name}"`;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDeleteSystemModal() {
+    const modal = document.getElementById('modal-delete-system');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    AppState.pendingSystemToDelete = null;
+  }
+
+  function confirmDeleteSystem() {
+    const sys = AppState.pendingSystemToDelete;
+    if (!sys) return;
+
+    AppState.systems = AppState.systems.filter(s => s.id !== sys.id);
+    const fallbackSysId = AppState.systems[0].id;
+
+    // Reasignar proyectos al sistema de respaldo
+    AppState.projects.forEach(p => {
+      if (p.systemId === sys.id) {
+        p.systemId = fallbackSysId;
+      }
+    });
+
+    Storage.saveSystems(AppState.systems);
+    Storage.saveProjects(AppState.projects);
+
+    closeDeleteSystemModal();
+    renderSystemsSidebar();
+    renderMainView();
+    showToast(`Sistema "${sys.name}" eliminado. Sus proyectos fueron preservados.`, 'info');
+  }
+
+  function openProjectModal(projectId = null, defaultSystemId = null) {
+    ensureDefaultSystem();
     const modal = document.getElementById('modal-project');
     const form = document.getElementById('form-project');
     const titleEl = document.getElementById('modal-project-title');
     const submitBtn = document.getElementById('btn-save-project');
     const idField = document.getElementById('project-id-field');
+    const sysSelect = document.getElementById('project-system-select');
 
     form.reset();
+
+    // Poblar selector de sistemas
+    if (sysSelect) {
+      sysSelect.innerHTML = '';
+      AppState.systems.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.code ? '[' + s.code + '] ' : ''}${s.name}`;
+        sysSelect.appendChild(opt);
+      });
+    }
 
     if (projectId) {
       const proj = AppState.projects.find(p => p.id === projectId);
       if (proj) {
         if (idField) idField.value = proj.id;
+        if (sysSelect) sysSelect.value = proj.systemId || (AppState.systems[0] && AppState.systems[0].id);
         document.getElementById('project-name-input').value = proj.name || '';
         document.getElementById('project-desc-input').value = proj.desc || '';
         document.getElementById('project-category-select').value = proj.category || 'OPERACIONES';
@@ -1848,12 +2175,17 @@
       }
     } else {
       if (idField) idField.value = '';
+      if (sysSelect) {
+        sysSelect.value = defaultSystemId || (AppState.activeSystemId) || (AppState.systems[0] && AppState.systems[0].id);
+      }
       if (titleEl) titleEl.textContent = 'Crear Nuevo Proyecto';
       if (submitBtn) submitBtn.textContent = 'Crear Proyecto';
     }
 
     modal.classList.add('open');
-    document.getElementById('project-name-input').focus();
+    modal.setAttribute('aria-hidden', 'false');
+    const nameInput = document.getElementById('project-name-input');
+    if (nameInput) setTimeout(() => nameInput.focus(), 80);
   }
 
   function closeProjectModal() {
@@ -1865,6 +2197,8 @@
     const idField = document.getElementById('project-id-field');
     const editingId = idField ? idField.value.trim() : '';
 
+    const sysSelect = document.getElementById('project-system-select');
+    const systemId = sysSelect ? sysSelect.value : (AppState.systems[0] && AppState.systems[0].id);
     const name = document.getElementById('project-name-input').value.trim();
     const desc = document.getElementById('project-desc-input').value.trim();
     const category = document.getElementById('project-category-select').value;
@@ -1882,6 +2216,7 @@
         showToast('Proyecto no encontrado', 'error');
         return;
       }
+      proj.systemId = systemId;
       proj.name = name;
       proj.desc = desc;
       proj.category = category;
@@ -1896,6 +2231,7 @@
       // Modo Creación
       const newProj = {
         id: 'proj-' + Date.now(),
+        systemId,
         name,
         desc,
         category,
@@ -3146,8 +3482,13 @@
 
   // ─── Arranque de la App ───────────────────────────────────────
   function initApp() {
+    AppState.systems = Storage.loadSystems();
     AppState.projects = Storage.loadProjects();
+    ensureDefaultSystem();
     AppState.activeProjectId = AppState.projects[0] ? AppState.projects[0].id : null;
+    if (AppState.projects[0]) {
+      AppState.activeSystemId = AppState.projects[0].systemId;
+    }
 
     initEvents();
     setupUserDockInteractions();

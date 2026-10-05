@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad, ChecklistProject
+from .models import Empresa, Contacto, Proyecto, PerfilUsuario, PulsoRelacional, Actividad, ChecklistProject, ChecklistSystem, TasksTeamMember
 
 
 # ─────────────────────────────────────────────────────────────
@@ -131,12 +131,27 @@ class ActividadAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False  # Solo lectura
 
+# ─────────────────────────────────────────────────────────────
+# Tasks & Checklist Admin
+# ─────────────────────────────────────────────────────────────
+
+@admin.register(ChecklistSystem)
+class ChecklistSystemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'code', 'color', 'proyectos_count', 'order', 'is_archived', 'updated_at']
+    list_filter = ['is_archived', 'created_at', 'updated_at']
+    search_fields = ['id', 'name', 'desc', 'code']
+    readonly_fields = ['created_at', 'updated_at']
+    ordering = ['order', '-updated_at']
+
+    def proyectos_count(self, obj):
+        return obj.proyectos.filter(is_archived=False).count()
+    proyectos_count.short_description = "Proyectos"
 
 
 @admin.register(ChecklistProject)
 class ChecklistProjectAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'category', 'color', 'task_count_display', 'created_by', 'is_archived', 'updated_at']
-    list_filter = ['category', 'is_archived', 'created_at', 'updated_at']
+    list_display = ['id', 'name', 'sistema', 'category', 'color', 'task_count_display', 'created_by', 'is_archived', 'updated_at']
+    list_filter = ['sistema', 'category', 'is_archived', 'created_at', 'updated_at']
     search_fields = ['id', 'name', 'desc']
     readonly_fields = ['created_at', 'updated_at']
     ordering = ['-updated_at']
@@ -146,3 +161,12 @@ class ChecklistProjectAdmin(admin.ModelAdmin):
         completed = sum(1 for t in tasks if isinstance(t, dict) and t.get('completed'))
         return f"{completed}/{len(tasks)} completadas"
     task_count_display.short_description = "Tareas"
+
+
+@admin.register(TasksTeamMember)
+class TasksTeamMemberAdmin(admin.ModelAdmin):
+    list_display = ['email', 'name', 'role', 'color', 'is_active', 'updated_at']
+    list_filter = ['role', 'is_active', 'created_at']
+    search_fields = ['id', 'name', 'email', 'role']
+    readonly_fields = ['created_at', 'updated_at']
+    ordering = ['name']

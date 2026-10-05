@@ -721,19 +721,97 @@ class Actividad(TimeStampedModel):
 
 
 # ─────────────────────────────────────────────────────────────
-# Módulo de Checklist y Tareas Jerárquicas (Tasks)
+
 # ─────────────────────────────────────────────────────────────
+# Módulo de Sistemas, Proyectos y Tareas Jerárquicas (Tasks)
+# ─────────────────────────────────────────────────────────────
+
+class ChecklistSystem(TimeStampedModel):
+    """
+    Modelo de Sistema en el ecosistema CNTXT Tasks & Checklist.
+    Un Sistema agrupa proyectos relacionados (Jerarquía: Sistemas -> Proyectos -> Tareas).
+    """
+    id = models.CharField(
+        max_length=100,
+        primary_key=True,
+        help_text=_("Identificador único del sistema (e.g. sys-1728157000000 o UUID)")
+    )
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Nombre del Sistema")
+    )
+    desc = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("Descripción")
+    )
+    code = models.CharField(
+        max_length=50,
+        blank=True,
+        default="",
+        verbose_name=_("Código o Sigla")
+    )
+    color = models.CharField(
+        max_length=50,
+        blank=True,
+        default="#C8A87A",
+        verbose_name=_("Color Distintivo")
+    )
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        default="layers",
+        verbose_name=_("Ícono")
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Orden de Visualización")
+    )
+    is_archived = models.BooleanField(
+        default=False,
+        verbose_name=_("Archivado")
+    )
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='checklist_systems',
+        verbose_name=_("Creado por")
+    )
+
+    class Meta:
+        verbose_name = _("Sistema de Gestión")
+        verbose_name_plural = _("Sistemas de Gestión")
+        ordering = ['order', '-updated_at']
+
+    def __str__(self):
+        return f"{self.name}"
+
 
 class ChecklistProject(TimeStampedModel):
     """
     Modelo de Proyecto de Checklist y Tareas Jerárquicas para el ecosistema CNTXT.
-    Sincroniza proyectos, tareas, subtareas, matrices de Eisenhower, prioridades
-    y fechas límite entre dispositivos móviles y de escritorio en la nube.
+    Pertenece a un Sistema y contiene tareas y subtareas jerárquicas.
     """
     id = models.CharField(
         max_length=100,
         primary_key=True,
         help_text=_("Identificador único del proyecto (e.g. proj-1728157000000 o UUID)")
+    )
+    sistema = models.ForeignKey(
+        ChecklistSystem,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='proyectos',
+        verbose_name=_("Sistema al que pertenece")
+    )
+    sistema_id_str = models.CharField(
+        max_length=100,
+        blank=True,
+        default="",
+        verbose_name=_("ID de Sistema en Frontend")
     )
     name = models.CharField(
         max_length=255,
@@ -789,4 +867,32 @@ class ChecklistProject(TimeStampedModel):
 
     def __str__(self):
         task_count = len(self.tasks) if isinstance(self.tasks, list) else 0
-        return f"{self.name} ({task_count} tareas)"
+        sys_name = f" [{self.sistema.name}]" if self.sistema else ""
+        return f"{self.name}{sys_name} ({task_count} tareas)"
+
+
+class TasksTeamMember(TimeStampedModel):
+    """
+    Miembro del equipo registrado para asignación y seguimiento de tareas en Tasks.
+    """
+    id = models.CharField(
+        max_length=150,
+        primary_key=True,
+        help_text=_("Correo electrónico o identificador único del miembro")
+    )
+    name = models.CharField(max_length=255, verbose_name=_("Nombre"))
+    short_name = models.CharField(max_length=100, blank=True, default="", verbose_name=_("Nombre Corto"))
+    email = models.EmailField(unique=True, verbose_name=_("Correo Electrónico"))
+    role = models.CharField(max_length=150, blank=True, default="Miembro", verbose_name=_("Rol"))
+    avatar = models.TextField(blank=True, default="", verbose_name=_("URL o Base64 de Avatar"))
+    initials = models.CharField(max_length=10, blank=True, default="", verbose_name=_("Iniciales"))
+    color = models.CharField(max_length=50, blank=True, default="#C8A87A", verbose_name=_("Color"))
+    is_active = models.BooleanField(default=True, verbose_name=_("Activo"))
+
+    class Meta:
+        verbose_name = _("Miembro de Equipo Tasks")
+        verbose_name_plural = _("Miembros de Equipo Tasks")
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name} ({self.email}) - {self.role}"
