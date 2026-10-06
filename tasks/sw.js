@@ -3,7 +3,7 @@
  * Version 2.0.0
  */
 
-const CACHE_NAME = 'cntxt-tasks-v3.5';
+const CACHE_NAME = 'cntxt-tasks-v3.8';
 const STATIC_ASSETS = [
   '/tasks/',
   '/tasks/index.html',

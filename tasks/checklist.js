@@ -11,7 +11,7 @@
     currentUser: null,
     systems: [],
     activeSystemId: null,
-    expandedSystemIds: new Set(),
+    collapsedSystemIds: new Set(),
     projects: [],
     activeProjectId: null,
     pendingSystemToDelete: null,
@@ -777,10 +777,7 @@
 
     AppState.systems.forEach(sys => {
       const sysProjects = AppState.projects.filter(p => p.systemId === sys.id);
-      const isExpanded = AppState.expandedSystemIds.has(sys.id) || AppState.expandedSystemIds.size === 0;
-      if (AppState.expandedSystemIds.size === 0) {
-        AppState.expandedSystemIds.add(sys.id);
-      }
+      const isExpanded = !AppState.collapsedSystemIds.has(sys.id);
 
       const hasActiveProject = sysProjects.some(p => p.id === AppState.activeProjectId);
 
@@ -833,12 +830,19 @@
       const headerEl = groupEl.querySelector('.system-nav-header');
       headerEl.addEventListener('click', (e) => {
         if (e.target.closest('.system-quick-actions')) return;
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.classList.contains('collapsed')) {
+          sidebar.classList.remove('collapsed');
+          const toggleBtn = document.getElementById('btn-toggle-sidebar');
+          if (toggleBtn) toggleBtn.title = 'Colapsar menú';
+          localStorage.setItem('cntxt_sidebar_collapsed', 'false');
+        }
         if (groupEl.classList.contains('expanded')) {
           groupEl.classList.remove('expanded');
-          AppState.expandedSystemIds.delete(sys.id);
+          AppState.collapsedSystemIds.add(sys.id);
         } else {
           groupEl.classList.add('expanded');
-          AppState.expandedSystemIds.add(sys.id);
+          AppState.collapsedSystemIds.delete(sys.id);
         }
       });
 
@@ -897,9 +901,7 @@
               <div class="project-nav-info">
                 <div class="project-nav-name" title="${proj.name}">${proj.name}</div>
                 <div class="project-nav-meta">
-                  <span>${proj.category || 'General'}</span>
-                  <span>·</span>
-                  <span>${completedTasks}/${totalTasks}</span>
+                  <span>${completedTasks}/${totalTasks} tareas</span>
                 </div>
               </div>
               <span class="project-nav-badge">${totalTasks}</span>
@@ -2059,6 +2061,8 @@
       return;
     }
 
+    let createdSysId = null;
+
     if (editingId) {
       const sys = AppState.systems.find(s => s.id === editingId);
       if (sys) {
@@ -2078,14 +2082,34 @@
         icon: 'layers',
         order: AppState.systems.length
       };
+      createdSysId = newSys.id;
       AppState.systems.push(newSys);
-      AppState.expandedSystemIds.add(newSys.id);
+      AppState.collapsedSystemIds.delete(newSys.id);
       AppState.activeSystemId = newSys.id;
       showToast(`Nuevo Sistema "${name}" creado`, 'success');
     }
 
     Storage.saveSystems(AppState.systems);
     closeSystemModal();
+
+    // Si el modal de proyectos está abierto, refrescar su selector de sistemas
+    const projSysSelect = document.getElementById('project-system-select');
+    if (projSysSelect) {
+      const prevVal = projSysSelect.value;
+      projSysSelect.innerHTML = '';
+      AppState.systems.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.code ? '[' + s.code + '] ' : ''}${s.name}`;
+        projSysSelect.appendChild(opt);
+      });
+      if (createdSysId) {
+        projSysSelect.value = createdSysId;
+      } else if (prevVal) {
+        projSysSelect.value = prevVal;
+      }
+    }
+
     renderSystemsSidebar();
     renderMainView();
   }
@@ -2168,7 +2192,6 @@
         if (sysSelect) sysSelect.value = proj.systemId || (AppState.systems[0] && AppState.systems[0].id);
         document.getElementById('project-name-input').value = proj.name || '';
         document.getElementById('project-desc-input').value = proj.desc || '';
-        document.getElementById('project-category-select').value = proj.category || 'OPERACIONES';
         document.getElementById('project-color-input').value = proj.color || '#C8A87A';
         if (titleEl) titleEl.textContent = 'Editar Proyecto';
         if (submitBtn) submitBtn.textContent = 'Guardar Cambios';
@@ -2201,7 +2224,6 @@
     const systemId = sysSelect ? sysSelect.value : (AppState.systems[0] && AppState.systems[0].id);
     const name = document.getElementById('project-name-input').value.trim();
     const desc = document.getElementById('project-desc-input').value.trim();
-    const category = document.getElementById('project-category-select').value;
     const color = document.getElementById('project-color-input').value;
 
     if (!name) {
@@ -2219,7 +2241,6 @@
       proj.systemId = systemId;
       proj.name = name;
       proj.desc = desc;
-      proj.category = category;
       proj.color = color;
 
       Storage.saveProjects(AppState.projects);
@@ -2234,7 +2255,7 @@
         systemId,
         name,
         desc,
-        category,
+        category: 'General',
         color,
         tasks: []
       };
@@ -2548,11 +2569,82 @@
       }
     });
 
+    // Modal Sistemas
+    const btnOpenSysModal = document.getElementById('btn-open-new-system-modal');
+    if (btnOpenSysModal) btnOpenSysModal.addEventListener('click', () => openSystemModal());
+
+    const btnCloseSysModal = document.getElementById('btn-close-system-modal');
+    if (btnCloseSysModal) btnCloseSysModal.addEventListener('click', closeSystemModal);
+
+    const btnCancelSysModal = document.getElementById('btn-cancel-system-modal');
+    if (btnCancelSysModal) btnCancelSysModal.addEventListener('click', closeSystemModal);
+
+    const formSys = document.getElementById('form-system');
+    if (formSys) formSys.addEventListener('submit', saveSystemFromModal);
+
+    const btnQuickNewSys = document.getElementById('btn-quick-new-system');
+    if (btnQuickNewSys) btnQuickNewSys.addEventListener('click', () => openSystemModal());
+
+    const modalSysEl = document.getElementById('modal-system');
+    if (modalSysEl) {
+      modalSysEl.addEventListener('click', (e) => {
+        if (e.target === modalSysEl) closeSystemModal();
+      });
+    }
+
+    // Modal Eliminar Sistema
+    const btnCloseDeleteSys = document.getElementById('btn-close-delete-system-modal');
+    if (btnCloseDeleteSys) btnCloseDeleteSys.addEventListener('click', closeDeleteSystemModal);
+
+    const btnCancelDeleteSys = document.getElementById('btn-cancel-delete-system');
+    if (btnCancelDeleteSys) btnCancelDeleteSys.addEventListener('click', closeDeleteSystemModal);
+
+    const btnConfirmDeleteSys = document.getElementById('btn-confirm-delete-system');
+    if (btnConfirmDeleteSys) btnConfirmDeleteSys.addEventListener('click', confirmDeleteSystem);
+
+    const modalDelSysEl = document.getElementById('modal-delete-system');
+    if (modalDelSysEl) {
+      modalDelSysEl.addEventListener('click', (e) => {
+        if (e.target === modalDelSysEl) closeDeleteSystemModal();
+      });
+    }
+
     // Modal Proyectos
-    document.getElementById('btn-open-new-project-modal').addEventListener('click', () => openProjectModal());
-    document.getElementById('btn-close-project-modal').addEventListener('click', closeProjectModal);
-    document.getElementById('btn-cancel-project-modal').addEventListener('click', closeProjectModal);
-    document.getElementById('form-project').addEventListener('submit', saveProjectFromModal);
+    const btnOpenNewProj = document.getElementById('btn-open-new-project-modal');
+    if (btnOpenNewProj) btnOpenNewProj.addEventListener('click', () => openProjectModal());
+
+    const btnCloseProj = document.getElementById('btn-close-project-modal');
+    if (btnCloseProj) btnCloseProj.addEventListener('click', closeProjectModal);
+
+    const btnCancelProj = document.getElementById('btn-cancel-project-modal');
+    if (btnCancelProj) btnCancelProj.addEventListener('click', closeProjectModal);
+
+    const formProj = document.getElementById('form-project');
+    if (formProj) formProj.addEventListener('submit', saveProjectFromModal);
+
+    const modalProjEl = document.getElementById('modal-project');
+    if (modalProjEl) {
+      modalProjEl.addEventListener('click', (e) => {
+        if (e.target === modalProjEl) closeProjectModal();
+      });
+    }
+
+    // Botón de sincronización manual con la nube
+    const btnHeaderSync = document.getElementById('btn-header-sync');
+    if (btnHeaderSync) {
+      btnHeaderSync.addEventListener('click', async () => {
+        btnHeaderSync.classList.add('syncing');
+        showToast('Sincronizando con la nube...', 'info');
+        try {
+          await Storage.syncWithCloud(true);
+          showToast('Sincronización en la nube completada', 'success');
+        } catch (err) {
+          showToast('Error de sincronización con la nube', 'error');
+        } finally {
+          btnHeaderSync.classList.remove('syncing');
+        }
+      });
+    }
 
     // Acciones de Proyecto en Header
     const btnEditActiveProj = document.getElementById('btn-edit-active-project');
@@ -2603,9 +2695,31 @@
 
     // Sidebar Collapse
     const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
-    if (btnToggleSidebar) {
-      btnToggleSidebar.addEventListener('click', () => {
-        document.getElementById('sidebar').classList.toggle('collapsed');
+    const sidebarEl = document.getElementById('sidebar');
+
+    if (btnToggleSidebar && sidebarEl) {
+      // Restaurar preferencia previa guardada
+      if (localStorage.getItem('cntxt_sidebar_collapsed') === 'true') {
+        sidebarEl.classList.add('collapsed');
+        btnToggleSidebar.title = 'Expandir menú';
+      }
+
+      btnToggleSidebar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isCollapsed = sidebarEl.classList.toggle('collapsed');
+        btnToggleSidebar.title = isCollapsed ? 'Expandir menú' : 'Colapsar menú';
+        localStorage.setItem('cntxt_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+      });
+    }
+
+    // Toggle para la sección entera de Sistemas & Proyectos
+    const btnToggleSysSection = document.getElementById('btn-toggle-systems-section');
+    if (btnToggleSysSection) {
+      btnToggleSysSection.addEventListener('click', () => {
+        const sectionEl = btnToggleSysSection.closest('.sidebar-section');
+        if (sectionEl) {
+          sectionEl.classList.toggle('collapsed');
+        }
       });
     }
 

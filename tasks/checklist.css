@@ -4509,3 +4509,136 @@ html, body {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+#modal-system {
+  z-index: 2100 !important;
+}
+
+#modal-delete-system {
+  z-index: 2200 !important;
+}
+
+
+/* ─── COLAPSO DE BARRA LATERAL (CNTXT TASKS 3.0) ─────────────────── */
+.sidebar {
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  overflow-x: hidden !important;
+}
+
+#btn-toggle-sidebar {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#btn-toggle-sidebar svg {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar.collapsed {
+  width: 60px !important;
+  min-width: 60px !important;
+}
+
+.sidebar.collapsed .brand-wrapper {
+  display: none !important;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center !important;
+  padding: 16px 8px !important;
+}
+
+.sidebar.collapsed #btn-toggle-sidebar {
+  margin: 0 auto !important;
+}
+
+.sidebar.collapsed #btn-toggle-sidebar svg {
+  transform: rotate(180deg) !important;
+}
+
+.sidebar.collapsed .sidebar-action-wrap {
+  display: none !important;
+}
+
+.sidebar.collapsed .sidebar-section-title {
+  display: none !important;
+}
+
+.sidebar.collapsed .sidebar-footer-stats {
+  display: none !important;
+}
+
+.sidebar.collapsed .sidebar-user-strip {
+  padding: 10px 4px !important;
+  justify-content: center !important;
+}
+
+.sidebar.collapsed .sidebar-user-strip .user-info,
+.sidebar.collapsed .sidebar-user-strip-btns {
+  display: none !important;
+}
+
+.sidebar.collapsed .user-session-card {
+  padding: 0 !important;
+  justify-content: center !important;
+}
+
+.sidebar.collapsed .system-nav-header {
+  padding: 10px 0 !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  margin: 2px 4px !important;
+}
+
+.sidebar.collapsed .system-header-right,
+.sidebar.collapsed .system-name-text,
+.sidebar.collapsed .system-code-tag,
+.sidebar.collapsed .system-chevron,
+.sidebar.collapsed .system-projects-list {
+  display: none !important;
+}
+
+.sidebar.collapsed .system-header-left {
+  justify-content: center !important;
+  width: 100% !important;
+  gap: 0 !important;
+}
+
+.sidebar.collapsed .system-color-indicator {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* ─── Colapso de la Sección Sistemas & Proyectos ─── */
+.sidebar-section-title {
+  user-select: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-section-title:hover {
+  color: var(--color-primary);
+}
+
+.section-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-section.collapsed .systems-nav-list {
+  display: none !important;
+}
+
+.sidebar-section.collapsed .section-chevron svg {
+  transform: rotate(-90deg) !important;
+}
+
+.section-chevron svg {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}

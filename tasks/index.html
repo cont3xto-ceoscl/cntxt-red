@@ -136,8 +136,15 @@
 
       <!-- Lista Jerárquica: Sistemas & Proyectos -->
       <div class="sidebar-section">
-        <div class="sidebar-section-title">
-          <span>Sistemas & Proyectos</span>
+        <div class="sidebar-section-title" id="btn-toggle-systems-section" title="Colapsar / Expandir lista de Sistemas">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="section-chevron" id="systems-section-chevron">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+            <span>Sistemas & Proyectos</span>
+          </div>
           <span class="badge-count" id="systems-total-badge">0</span>
         </div>
         <div class="systems-nav-list" id="systems-nav-list">
@@ -738,27 +745,15 @@
           <textarea id="project-desc-input" class="form-input textarea-field" rows="2" placeholder="Breve descripción del propósito estratégico..."></textarea>
         </div>
 
-        <div class="form-row">
-          <div class="form-group col-half">
-            <label for="project-category-select" class="form-label">Línea de Negocio / Área</label>
-            <select id="project-category-select" class="form-input">
-              <option value="MADE B2B">MADE B2B (Corporativo)</option>
-              <option value="MADE B2C">MADE B2C (Residencial)</option>
-              <option value="SELECT">SELECT (Alto Patrimonio)</option>
-              <option value="SHOWROOM">Showroom & Alianzas</option>
-              <option value="OPERACIONES">Operaciones & Software</option>
-            </select>
-          </div>
-          <div class="form-group col-half">
-            <label for="project-color-input" class="form-label">Color Distintivo</label>
-            <select id="project-color-input" class="form-input">
-              <option value="#C8A87A">Arena Dorado CNTXT</option>
-              <option value="#d9534f">Terracota / Carmesí</option>
-              <option value="#7e9bb6">Zafiro Suave</option>
-              <option value="#65b382">Esmeralda</option>
-              <option value="#b8956a">Champagne Oscuro</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label for="project-color-input" class="form-label">Color Distintivo</label>
+          <select id="project-color-input" class="form-input">
+            <option value="#C8A87A">Arena Dorado CNTXT</option>
+            <option value="#d9534f">Terracota / Carmesí</option>
+            <option value="#7e9bb6">Zafiro Suave</option>
+            <option value="#65b382">Esmeralda</option>
+            <option value="#b8956a">Champagne Oscuro</option>
+          </select>
         </div>
 
         <div class="modal-footer">
@@ -1079,7 +1074,7 @@
 
   <!-- Scripts -->
   <script src="config.js"></script>
-  <script src="checklist.js?v=3.5"></script>
+  <script src="checklist.js?v=3.8"></script>
 </body>
 
 </html>
