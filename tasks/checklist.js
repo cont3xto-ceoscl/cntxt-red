@@ -18,6 +18,7 @@
     currentView: 'list', // 'list' | 'calendar'
     calYear: 2026,
     calMonth: 9, // Octubre 2026 (0-indexed: 9 = Octubre)
+    okrData: null,
     filters: {
       status: 'all', // 'all' | 'pending' | 'completed' | 'overdue'
       assignee: 'all',
@@ -1839,6 +1840,23 @@
     }
   }
 
+  
+  // ─── Integración N.E.O.: Conexión a OKRs y KPIs ───────────────
+  async function fetchOkrObjectivesAndKpis() {
+    try {
+      const res = await fetch('/okr/api/objectives-kpis/?line=neo');
+      if (!res.ok) {
+        console.warn('No se pudo obtener OKRs:', res.status);
+        return;
+      }
+      const data = await res.json();
+      AppState.okrData = data;
+      console.log('✓ OKRs y KPIs cargados exitosamente para N.E.O. Tasks:', data);
+    } catch (err) {
+      console.warn('Nota: Operando offline o API de OKRs no disponible de momento:', err);
+    }
+  }
+
   function openTaskModal(taskToEdit = null, defaultDueDate = null) {
     const modal = document.getElementById('modal-task');
     const modalTitle = document.getElementById('modal-task-title');
@@ -1861,20 +1879,54 @@
       }
     });
 
-    // Llenar Objetivos Estratégicos (Enfoque Anti-Tareitis)
+    // Llenar Objetivos Estratégicos y KPIs (Integración N.E.O. OKRs & KPIs)
     objSelect.innerHTML = '<option value="">⚠️ Sin objetivo mapeado (Alerta de Tareitis)</option>';
-    const objectivesList = (proj.objectives && proj.objectives.length > 0) ? proj.objectives : [
-      'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
-      'Orquestar arquitectura modular para apps hijas del Admin Hub',
-      'Asegurar experiencia gráfica y tipográfica premium CNTXT® Casa de Diseño'
-    ];
 
-    objectivesList.forEach(obj => {
-      const opt = document.createElement('option');
-      opt.value = obj;
-      opt.textContent = `🎯 ${obj}`;
-      objSelect.appendChild(opt);
-    });
+    if (AppState.okrData && AppState.okrData.objectives && AppState.okrData.objectives.length > 0) {
+      AppState.okrData.objectives.forEach(obj => {
+        const optGroup = document.createElement('optgroup');
+        const objPrefix = obj.code ? `[${obj.code}] ` : '';
+        optGroup.label = `${objPrefix}${obj.title.length > 55 ? obj.title.substring(0, 52) + '...' : obj.title}`;
+
+        // Opción general del Objetivo Estratégico
+        const optGeneral = document.createElement('option');
+        optGeneral.value = `${objPrefix}${obj.title}`;
+        optGeneral.textContent = `🎯 ${objPrefix}Objetivo General`;
+        optGeneral.dataset.objId = obj.id;
+        optGeneral.dataset.objCode = obj.code || '';
+        optGroup.appendChild(optGeneral);
+
+        // Opciones por cada KPI asociado
+        (obj.kpis || []).forEach(kpi => {
+          const optKpi = document.createElement('option');
+          const targetStr = (kpi.target !== null && kpi.target !== undefined) ? ` · Meta: ${kpi.target}${kpi.unit || ''}` : '';
+          const krTag = kpi.kr_tag ? ` · ${kpi.kr_tag}` : '';
+          optKpi.value = `${objPrefix}KPI: ${kpi.name}`;
+          optKpi.textContent = `📊 KPI: ${kpi.name}${krTag}${targetStr}`;
+          optKpi.dataset.objId = obj.id;
+          optKpi.dataset.objCode = obj.code || '';
+          optKpi.dataset.krId = kpi.kr_id || '';
+          optKpi.dataset.kpiId = kpi.id;
+          optKpi.dataset.kpiName = kpi.name;
+          optGroup.appendChild(optKpi);
+        });
+
+        objSelect.appendChild(optGroup);
+      });
+    } else {
+      const objectivesList = (proj.objectives && proj.objectives.length > 0) ? proj.objectives : [
+        'Consolidar centralcntxt.tech con latencia <100ms y 100% uptime',
+        'Orquestar arquitectura modular para apps hijas del Admin Hub',
+        'Asegurar experiencia gráfica y tipográfica premium CNTXT® Casa de Diseño'
+      ];
+
+      objectivesList.forEach(obj => {
+        const opt = document.createElement('option');
+        opt.value = obj;
+        opt.textContent = `🎯 ${obj}`;
+        objSelect.appendChild(opt);
+      });
+    }
 
     AppState.tempSubtasks = [];
 
@@ -1952,7 +2004,13 @@
     const dueDate = document.getElementById('task-due-date-input').value;
     const dueTime = document.getElementById('task-due-time-input').value || null;
     const estimatedHours = parseFloat(document.getElementById('task-est-duration-input').value) || 2;
-    const strategicObjective = document.getElementById('task-objective-select').value || null;
+    const objSelectEl = document.getElementById('task-objective-select');
+    const strategicObjective = objSelectEl.value || null;
+    const selectedOpt = objSelectEl.options[objSelectEl.selectedIndex];
+    const okrObjectiveCode = selectedOpt ? (selectedOpt.dataset.objCode || null) : null;
+    const okrObjectiveId = selectedOpt ? (selectedOpt.dataset.objId || null) : null;
+    const okrKpiId = selectedOpt ? (selectedOpt.dataset.kpiId || null) : null;
+    const okrKpiCode = selectedOpt ? (selectedOpt.dataset.kpiCode || null) : null;
     const predecessorId = document.getElementById('task-predecessor-select').value || null;
 
     if (!title) {
@@ -1975,6 +2033,10 @@
           dueTime,
           estimatedHours,
           strategicObjective,
+          okrObjectiveCode,
+          okrObjectiveId,
+          okrKpiId,
+          okrKpiCode,
           predecessorId,
           subtasks: AppState.tempSubtasks
         };
@@ -1991,6 +2053,10 @@
         dueTime,
         estimatedHours,
         strategicObjective,
+        okrObjectiveCode,
+        okrObjectiveId,
+        okrKpiId,
+        okrKpiCode,
         completed: false,
         predecessorId,
         subtasks: AppState.tempSubtasks
@@ -3627,6 +3693,7 @@
 
     // Iniciar sincronización continua en la nube
     Storage.initCloudSync();
+    fetchOkrObjectivesAndKpis();
   }
 
   if (document.readyState === 'loading') {

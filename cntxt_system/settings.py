@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     
     # Internal Applications
     'core.apps.CoreConfig',
+    'okr.apps.OkrConfig',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'okr.context_processors.hub_url',
+                'okr.context_processors.view_mode',
             ],
         },
     },
@@ -230,3 +233,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# URL del Hub principal de CNTXT
+HUB_URL = '/'
+
+# Permitir incrustación en pestañas del hub N.E.O. en el mismo dominio
+X_FRAME_OPTIONS = 'SAMEORIGIN'

@@ -1,0 +1,56 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}OKRs{% endblock %} | CNTXT</title>
+<link rel="stylesheet" href="{% static 'okr/css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'okr/css/tailwind.css' %}">
+<script src="{% static 'okr/js/htmx.min.js' %}" defer></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        // Estado de desplegables (objetivo/KR/KPI) en un store global: sobrevive
+        // a los outerHTML swaps de htmx, así que abrir/editar/marcar algo en
+        // cualquier parte de la card no colapsa ni reabre lo que ya tenía el
+        // usuario expandido en otra parte.
+        Alpine.store('okr', { obj: {}, kr: {}, ci: {}, hist: {} });
+    });
+</script>
+<script src="{% static 'okr/js/alpine.min.js' %}" defer></script>
+<style>
+    [x-cloak]{ display:none !important; }
+    .ring-fill{ transition: stroke-dashoffset 1s cubic-bezier(0.16,1,0.3,1); }
+    @keyframes bar-grow{ from{ width:0%; } }
+    .bar-fill{ animation: bar-grow 1s cubic-bezier(0.16,1,0.3,1) both; }
+    @media (prefers-reduced-motion: reduce){
+        .bar-fill{ animation: none; }
+    }
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body class="bg-cntxt-dark text-cntxt-text min-h-screen font-sans" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <nav class="border-b border-cntxt-border bg-cntxt-card/80 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-4">
+                    <a href="{{ HUB_URL }}" class="text-sm text-cntxt-muted hover:text-cntxt-gold border border-cntxt-border rounded-lg px-3 py-1.5 transition">&larr; Volver al HUB</a>
+                    <span class="text-cntxt-gold font-display font-extrabold text-lg tracking-wider">CNTXT</span>
+                    <span class="text-cntxt-muted text-sm hidden sm:inline">| OKRs</span>
+                </div>
+                <div class="flex items-center gap-5 text-sm">
+                    <a href="/" class="text-cntxt-muted hover:text-cntxt-text transition {% block nav_seguimiento_active %}{% endblock %}">Seguimiento</a>
+                    <a href="/analytics/" class="text-cntxt-muted hover:text-cntxt-text transition {% block nav_analytics_active %}{% endblock %}">Analítica</a>
+                    <a href="/cycles/" class="text-cntxt-muted hover:text-cntxt-text transition {% block nav_cycles_active %}{% endblock %}">Ciclos</a>
+                    {% if request.user.is_authenticated %}
+                    <span class="text-cntxt-muted hidden md:inline">{{ request.user.username }}</span>
+                    <a href="{% url 'logout' %}" class="text-red-400 hover:text-red-300">Salir</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

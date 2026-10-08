@@ -1,0 +1,13 @@
+<form method="post" action="/modo/">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    {% if view_mode == 'edicion' %}
+    <button type="submit" class="flex items-center gap-2 text-xs font-mono uppercase tracking-wide px-3 py-1.5 rounded-full bg-cntxt-gold/15 text-cntxt-gold border border-cntxt-gold/30 hover:bg-cntxt-gold/25 transition">
+        <span class="w-1.5 h-1.5 rounded-full bg-cntxt-gold"></span>Edición
+    </button>
+    {% else %}
+    <button type="submit" class="flex items-center gap-2 text-xs font-mono uppercase tracking-wide px-3 py-1.5 rounded-full bg-white/5 text-cntxt-muted border border-cntxt-border hover:text-cntxt-text hover:border-cntxt-muted transition">
+        <span class="w-1.5 h-1.5 rounded-full bg-cntxt-muted"></span>Dashboard
+    </button>
+    {% endif %}
+</form>

@@ -1,0 +1,30 @@
+{% extends "okr/base.html" %}
+{% block title %}Ciclos{% endblock %}
+{% block nav_cycles_active %}text-cntxt-text font-semibold{% endblock %}
+
+{% block content %}
+<h1 class="font-display font-extrabold text-4xl text-white tracking-tight leading-none mb-2">Ciclos</h1>
+<p class="text-cntxt-muted text-sm mb-8 max-w-2xl">Un ciclo es un período de OKR (ej. "Q3 2026"). Duplicar desde un ciclo anterior clona líneas, objetivos, KRs, KPIs y acciones — con el progreso en 0 — para no volver a escribir todo a mano cada trimestre.</p>
+
+<div class="grid md:grid-cols-2 gap-8">
+  <div class="border border-cntxt-border rounded-2xl bg-cntxt-card p-6">
+    <h2 class="font-semibold text-sm mb-4">Nuevo ciclo</h2>
+    <form method="post" class="space-y-3">
+      {% csrf_token %}
+      {% include "okr/partials/_form_fields.html" %}
+      <button type="submit" class="text-xs font-mono uppercase tracking-wide px-4 py-2 rounded-lg bg-cntxt-gold text-cntxt-dark font-semibold hover:opacity-90 mt-2">Crear ciclo</button>
+    </form>
+  </div>
+
+  <div class="border border-cntxt-border rounded-2xl bg-cntxt-card p-6">
+    <h2 class="font-semibold text-sm mb-4">Ciclos existentes</h2>
+    <div class="space-y-2">
+      {% for c in cycles %}
+        {% include "okr/partials/cycle_row.html" with c=c %}
+      {% empty %}
+      <p class="text-cntxt-muted text-sm">Todavía no hay ciclos.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

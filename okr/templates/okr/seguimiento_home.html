@@ -1,0 +1,56 @@
+{% extends "okr/base.html" %}
+{% load okr_extras %}
+{% block title %}Seguimiento{% endblock %}
+{% block nav_seguimiento_active %}text-cntxt-text font-semibold{% endblock %}
+
+{% block content %}
+<div class="flex items-start justify-between flex-wrap gap-6 mb-4">
+  <div>
+    <h1 class="font-display font-extrabold text-4xl text-white tracking-tight leading-none">Seguimiento</h1>
+    <p class="text-cntxt-muted text-sm mt-1">{% if view_mode == 'edicion' %}Elige una línea para crear objetivos, Key Results, KPIs y registrar check-ins.{% else %}Elige una línea para ver sus objetivos y resultados.{% endif %}</p>
+  </div>
+  <div class="flex items-center gap-4">
+    {% if cycle and total_objectives %}
+    <div class="relative overflow-hidden text-right rounded-2xl border border-cntxt-border bg-cntxt-card px-7 py-5 border-t-2 border-t-cntxt-gold shadow-[0_0_32px_-8px_rgba(200,169,110,0.35)]">
+      <div class="absolute inset-0 pointer-events-none bg-gradient-to-bl from-cntxt-gold/10 to-transparent"></div>
+      <div class="relative">
+        <div class="font-display font-extrabold tracking-tight leading-none {% if overall_pct > 0 %}text-white{% else %}text-cntxt-muted{% endif %}">
+          {% if overall_pct > 0 %}<span class="text-5xl">{{ overall_pct }}</span><span class="text-xl align-top text-cntxt-muted">%</span>{% else %}<span class="text-5xl">—</span>{% endif %}
+        </div>
+        <div class="text-[10px] text-cntxt-muted font-mono uppercase tracking-wider mt-1">avance general</div>
+      </div>
+    </div>
+    {% endif %}
+    {% if cycles|length > 1 %}
+    <form method="get" class="flex items-center gap-2">
+      <label class="text-[11px] font-mono uppercase text-cntxt-muted">Ciclo</label>
+      <select name="cycle" onchange="this.form.submit()" class="bg-cntxt-card border border-cntxt-border rounded-lg px-3 py-2 text-sm text-cntxt-text">
+        {% for c in cycles %}
+        <option value="{{ c.id }}" {% if cycle.id == c.id %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    {% endif %}
+    {% include "okr/partials/view_mode_toggle.html" %}
+  </div>
+</div>
+
+{% if not cycle %}
+<div class="border border-dashed border-cntxt-border rounded-2xl p-12 text-center text-cntxt-muted">
+  Todavía no hay ningún ciclo. <a href="/cycles/" class="text-cntxt-gold hover:underline">Crea el primero</a> para poder cargar objetivos.
+</div>
+{% else %}
+<p class="text-cntxt-muted text-xs mb-6">{{ cycle.name }} · {{ cycle.starts_on|date:"d M" }} — {{ cycle.ends_on|date:"d M Y" }}</p>
+
+<div id="lines-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {% for entry in lines %}
+    {% include "okr/partials/line_card.html" with entry=entry %}
+  {% endfor %}
+</div>
+{% if view_mode == 'edicion' %}
+<div class="mt-4 max-w-xs">
+  {% include "okr/partials/line_new_trigger.html" %}
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

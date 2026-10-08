@@ -1,0 +1,88 @@
+{% load okr_extras %}
+{% with line_hex=objective.line_cycle_plan.line.color_hex %}
+<div class="border border-cntxt-border rounded-2xl bg-cntxt-card overflow-hidden {% if objective.is_backlog %}opacity-50{% endif %}" x-data="{ open: false }">
+  <div class="flex items-start gap-4 p-5 cursor-pointer select-none" @click="open = !open">
+    <div class="font-mono text-[11px] text-cntxt-muted mt-1 w-16 shrink-0">{{ objective.code }}</div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 flex-wrap mb-1">
+        <span class="font-semibold text-sm">{{ objective.title }}</span>
+        <span class="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full" style="background:{{ objective.priority|priority_hex }}22;color:{{ objective.priority|priority_hex }}">{{ objective.priority|priority_label }}</span>
+        {% if objective.is_backlog %}<span class="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-cntxt-muted">⏸ Backlog</span>{% endif %}
+      </div>
+      {% if objective.description %}<p class="text-xs text-cntxt-muted leading-relaxed">{{ objective.description }}</p>{% endif %}
+      {% if objective.owner_label %}<p class="text-[11px] mt-1" style="color:{{ line_hex }}">{{ objective.owner_label }}</p>{% endif %}
+      {% if objective.aligns_to %}<p class="text-[10px] text-cntxt-muted mt-1">alinea a: {{ objective.aligns_to.code }} · {{ objective.aligns_to.title }}</p>{% endif %}
+    </div>
+    <div class="shrink-0 relative w-14 h-14">
+      <svg width="56" height="56" viewBox="0 0 56 56" class="-rotate-90">
+        <circle cx="28" cy="28" r="22" fill="none" stroke="#2a2a2a" stroke-width="4"/>
+        <circle class="ring-fill" cx="28" cy="28" r="22" fill="none" stroke="{{ line_hex }}" stroke-width="4" stroke-linecap="round"
+          stroke-dasharray="{% ring_circumference %}" stroke-dashoffset="{{ objective.pct|ring_offset }}"/>
+      </svg>
+      <div class="absolute inset-0 flex items-center justify-center font-mono text-xs font-extrabold" style="color:{% if objective.pct > 0 %}{{ line_hex }}{% else %}#737373{% endif %}">{% if objective.pct > 0 %}{{ objective.pct }}%{% else %}—{% endif %}</div>
+    </div>
+    <button type="button" class="shrink-0 w-7 h-7 mt-1 rounded-full border border-cntxt-border text-cntxt-muted flex items-center justify-center transition-transform duration-300" :class="open ? 'rotate-180 bg-cntxt-gold/10 text-cntxt-gold border-cntxt-gold/30' : ''">
+      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <div x-show="open" x-transition x-cloak class="border-t border-cntxt-border p-5 space-y-3">
+    {% for kr in objective.key_results.all %}
+    <div class="kr-item border border-cntxt-border rounded-xl bg-white/[0.015]" x-data="{ krOpen: false }">
+      <div class="flex items-center gap-3 px-4 py-3 cursor-pointer select-none flex-wrap" @click="krOpen = !krOpen">
+        <span class="font-mono text-[10px] text-cntxt-muted w-full sm:w-32 shrink-0 truncate">{{ kr.tag_label }}</span>
+        <span class="flex-1 text-xs font-medium min-w-[140px]">{{ kr.text }}</span>
+        {% if kr.evolution_tag %}<span class="text-[8px] font-mono uppercase px-2 py-0.5 rounded-full bg-cntxt-gold/10 text-cntxt-gold shrink-0">{{ kr.evolution_tag|evolution_label }}</span>{% endif %}
+        {% if kr.confidence %}<span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:{{ kr.confidence|confidence_hex }}" title="{{ kr.confidence|confidence_label }}"></span>{% endif %}
+        <div class="w-full sm:w-40 shrink-0 flex items-center gap-2">
+          <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden"><div class="kr-bar-fill h-full rounded-full" style="width:{{ kr.pct }}%;background:{{ line_hex }}"></div></div>
+          <span class="font-mono text-sm font-extrabold w-10 text-right" style="color:{% if kr.pct > 0 %}{{ line_hex }}{% else %}#737373{% endif %}">{{ kr.pct }}%</span>
+        </div>
+      </div>
+      <div x-show="krOpen" x-transition x-cloak class="border-t border-cntxt-border px-4 py-4 space-y-3 text-xs" @click.stop>
+        {% if kr.status_note %}<div class="text-cntxt-muted font-mono text-[10px]">{{ kr.status_note }}</div>{% endif %}
+        {% if kr.extra_note %}<div class="text-cntxt-muted italic">{{ kr.extra_note }}</div>{% endif %}
+
+        {% if kr.confidence %}
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full" style="background:{{ kr.confidence|confidence_hex }}"></span>
+          <span class="text-cntxt-muted">{{ kr.confidence|confidence_label }}</span>
+        </div>
+        {% endif %}
+
+        <div class="space-y-2">
+          <div class="font-mono text-[9px] uppercase tracking-wider text-cntxt-muted">KPIs</div>
+          {% for kpi in kr.kpis.all %}
+          <div class="bg-white/[0.02] border border-cntxt-border rounded-lg p-3">
+            <div class="flex items-baseline justify-between gap-2 mb-1">
+              <span class="text-cntxt-text">{{ kpi.name }}</span>
+              <span class="font-mono font-extrabold" style="color:{% if kpi.pct > 0 %}{{ line_hex }}{% else %}#737373{% endif %}">{{ kpi.pct }}%</span>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-cntxt-muted mb-2">
+              <span class="font-mono">{{ kpi.current|floatformat:"-2" }}{{ kpi.unit }} / {{ kpi.target|floatformat:"-2" }}{{ kpi.unit }}</span>
+            </div>
+            <div class="h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:{{ kpi.pct }}%;background:{{ line_hex }}"></div></div>
+            {% with last=kpi.latest_checkin %}{% if last %}
+            <div class="text-[10px] text-cntxt-muted mt-2">Último check-in: {{ last.value|floatformat:"-2" }} · {{ last.created_at|date:"d M Y" }}{% if last.created_by %} · {{ last.created_by.username }}{% endif %}{% if last.note %} — “{{ last.note }}”{% endif %}</div>
+            {% endif %}{% endwith %}
+          </div>
+          {% endfor %}
+        </div>
+
+        {% if kr.action_items.all %}
+        <div class="space-y-1 border-t border-cntxt-border pt-3">
+          <div class="font-mono text-[9px] uppercase tracking-wider text-cntxt-muted mb-1">Acciones clave</div>
+          {% for action in kr.action_items.all %}
+          <div class="flex items-start gap-2 text-[11px] {% if action.is_done %}text-cntxt-muted line-through{% else %}text-cntxt-text{% endif %}">
+            <span class="mt-0.5">{% if action.is_done %}✓{% else %}·{% endif %}</span>
+            {{ action.text }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endwith %}
