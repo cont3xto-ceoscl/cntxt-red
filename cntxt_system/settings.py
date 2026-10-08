@@ -239,3 +239,8 @@ HUB_URL = '/'
 
 # Permitir incrustación en pestañas del hub N.E.O. en el mismo dominio
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# Configuración de URLs de autenticación Django
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/okr/"
+LOGOUT_REDIRECT_URL = "/login/"

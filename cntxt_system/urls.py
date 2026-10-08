@@ -15,6 +15,7 @@ def healthz(request):
 urlpatterns = [
     path('healthz/', healthz, name='healthz'),
     path('login/', auth_views.LoginView.as_view(template_name='okr/login.html'), name='login'),
+    path('accounts/login/', RedirectView.as_view(url='/login/', permanent=False)),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
     path('okr/', include('okr.urls')),
