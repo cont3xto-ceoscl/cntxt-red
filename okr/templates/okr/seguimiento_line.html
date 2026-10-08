@@ -1,0 +1,53 @@
+{% extends "okr/base.html" %}
+{% block title %}Seguimiento · {{ line.name }}{% endblock %}
+{% block nav_seguimiento_active %}text-cntxt-text font-semibold{% endblock %}
+
+{% block content %}
+<a href="/{% if cycle %}?cycle={{ cycle.id }}{% endif %}" class="inline-flex items-center gap-1 text-xs text-cntxt-muted hover:text-cntxt-gold transition mb-6">&larr; Seguimiento</a>
+
+<div class="mb-10">
+  <div class="flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <div class="flex items-center gap-3 mb-1">
+        <span class="w-2.5 h-2.5 rounded-full" style="background:{{ line.color_hex }}"></span>
+        <span class="font-mono text-[11px] uppercase tracking-wider" style="color:{{ line.color_hex }}">{{ line.name }}</span>
+      </div>
+      <h1 class="font-display font-extrabold text-4xl text-white tracking-tight leading-none">{{ line.full_name|default:line.name }}</h1>
+    </div>
+    <div class="shrink-0 flex items-center gap-5">
+      <span class="font-display font-extrabold text-6xl tracking-tight leading-none hidden sm:inline" style="color:{{ line.color_hex }}">{{ line.code|upper }}</span>
+      {% if plan %}
+      <div class="relative overflow-hidden text-right rounded-2xl border border-cntxt-border bg-cntxt-card px-7 py-5" style="border-top: 2px solid {{ line.color_hex }}; box-shadow: 0 0 32px {{ line.color_hex }}1a">
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 0% 0%, {{ line.color_hex }}14, transparent 60%)"></div>
+        <div class="relative">
+          <div class="font-display font-extrabold tracking-tight leading-none {% if plan.pct > 0 %}text-white{% else %}text-cntxt-muted{% endif %}">
+            {% if plan.pct > 0 %}<span class="text-5xl">{{ plan.pct }}</span><span class="text-xl align-top text-cntxt-muted">%</span>{% else %}<span class="text-5xl">—</span>{% endif %}
+          </div>
+          <div class="text-[10px] text-cntxt-muted font-mono uppercase tracking-wider mt-1">avance</div>
+        </div>
+      </div>
+      {% endif %}
+      {% include "okr/partials/view_mode_toggle.html" %}
+    </div>
+  </div>
+  <div class="h-0.5 rounded-full mt-6" style="background:{{ line.color_hex }}"></div>
+</div>
+
+{% if not cycle %}
+<div class="border border-dashed border-cntxt-border rounded-2xl p-12 text-center text-cntxt-muted">
+  Sin ciclo activo — crea uno en <a href="/cycles/" class="text-cntxt-gold hover:underline">Ciclos</a>.
+</div>
+{% else %}
+{% include "okr/partials/plan_summary.html" with plan=plan line=line %}
+<div id="objectives-{{ plan.id }}" class="space-y-3">
+  {% for objective in plan.objectives.all %}
+    {% include "okr/partials/objective_card.html" with objective=objective open=False %}
+  {% endfor %}
+</div>
+{% if view_mode == 'edicion' %}
+<div class="mt-3">
+  {% include "okr/partials/objective_new_trigger.html" with plan=plan %}
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

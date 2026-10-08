@@ -1,0 +1,15 @@
+<div id="cycle-row-{{ c.id }}">
+  <div class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-white/5 transition text-sm">
+    <a href="/?cycle={{ c.id }}" class="flex-1 min-w-0 truncate">{{ c.name }}</a>
+    <span class="flex items-center gap-3 text-[10px] font-mono text-cntxt-muted shrink-0">
+      <span>{{ c.starts_on|date:"d M" }}–{{ c.ends_on|date:"d M Y" }}</span>
+      {% if c.is_active %}<span class="px-2 py-0.5 rounded-full bg-cntxt-gold/10 text-cntxt-gold">activo</span>{% endif %}
+      <button type="button" hx-get="/cycles/{{ c.id }}/edit/" hx-target="#cycle-edit-slot-{{ c.id }}" hx-swap="innerHTML"
+        class="uppercase tracking-wide px-2.5 py-1 rounded-lg border border-cntxt-border text-cntxt-muted hover:text-cntxt-gold hover:border-cntxt-gold/40 transition">Editar</button>
+      <button type="button" hx-post="/cycles/{{ c.id }}/delete/" hx-target="#cycle-row-{{ c.id }}" hx-swap="outerHTML"
+        hx-confirm="¿Eliminar el ciclo &quot;{{ c.name }}&quot;? Esto borra todos los planes, objetivos, KRs, KPIs y check-ins de las 6 líneas para ese ciclo. No se puede deshacer."
+        class="uppercase tracking-wide px-2.5 py-1 rounded-lg border border-cntxt-border text-cntxt-muted hover:text-red-400 hover:border-red-400/40 transition">Eliminar</button>
+    </span>
+  </div>
+  <div id="cycle-edit-slot-{{ c.id }}"></div>
+</div>

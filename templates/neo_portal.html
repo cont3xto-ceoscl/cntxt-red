@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N.E.O. — Núcleo Estratégico Organizacional | CNTXT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-surface: #0f172a;
+      --bg-surface-elevated: #1e293b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --emerald: #10b981;
+      --emerald-light: #34d399;
+      --amber: #f59e0b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header Superior */
+    .neo-header {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .neo-branding {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .neo-back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease;
+    }
+    .neo-back-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .neo-logo-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .neo-badge-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1, #3b82f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .neo-titles h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .neo-titles p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    /* Tabs de Navegación */
+    .neo-nav-tabs {
+      display: flex;
+      align-items: center;
+      background: rgba(2, 6, 23, 0.6);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      gap: 0.25rem;
+    }
+
+    .neo-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+    }
+
+    .neo-tab i {
+      font-size: 0.95rem;
+    }
+
+    .neo-tab:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .neo-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .neo-tab.active.tab-tasks {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .neo-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .cycle-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary-light);
+    }
+    .cycle-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+    }
+
+    /* Contenedor Principal de Vista */
+    .neo-content {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .tab-pane {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      border: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    iframe.embed-app {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--bg-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Superior N.E.O. -->
+  <header class="neo-header">
+    <div class="neo-branding">
+      <a href="/" class="neo-back-btn" title="Volver al Ecosistema CNTXT">
+        <i class="fa-solid fa-arrow-left"></i> Ecosistema
+      </a>
+      <div class="neo-logo-title">
+        <div class="neo-badge-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="neo-titles">
+          <h1>N.E.O.</h1>
+          <p>Núcleo Estratégico Organizacional</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pestañas de Navegación Unificadas -->
+    <nav class="neo-nav-tabs">
+      <button class="neo-tab active" id="tab-btn-okr" onclick="switchNeoTab('okr')">
+        <i class="fa-solid fa-bullseye"></i>
+        <span>OKRs & KPIs</span>
+      </button>
+      <button class="neo-tab tab-tasks" id="tab-btn-tasks" onclick="switchNeoTab('tasks')">
+        <i class="fa-solid fa-list-check"></i>
+        <span>Tasks & Ejecución</span>
+      </button>
+    </nav>
+
+    <!-- Indicador de Estado y Acciones Rápidas -->
+    <div class="neo-actions">
+      <div class="cycle-indicator">
+        <span class="cycle-dot"></span>
+        <span>Ciclo Estratégico Activo</span>
+      </div>
+      <a href="/red/" class="neo-back-btn" title="Ir a Portal R.E.D.">
+        <i class="fa-solid fa-layer-group"></i> R.E.D.
+      </a>
+    </div>
+  </header>
+
+  <!-- Vistas Embebidas Dinámicas -->
+  <main class="neo-content">
+    <div id="pane-okr" class="tab-pane active">
+      <iframe src="/okr/" class="embed-app" id="iframe-okr" title="OKRs y KPIs"></iframe>
+    </div>
+    <div id="pane-tasks" class="tab-pane">
+      <iframe src="/tasks/" class="embed-app" id="iframe-tasks" title="Tasks y Ejecución Estratégica"></iframe>
+    </div>
+  </main>
+
+  <script>
+    function switchNeoTab(tabName) {
+      const okrBtn = document.getElementById('tab-btn-okr');
+      const tasksBtn = document.getElementById('tab-btn-tasks');
+      const okrPane = document.getElementById('pane-okr');
+      const tasksPane = document.getElementById('pane-tasks');
+
+      if (tabName === 'okr') {
+        okrBtn.classList.add('active');
+        tasksBtn.classList.remove('active');
+        okrPane.classList.add('active');
+        tasksPane.classList.remove('active');
+        history.replaceState(null, '', '#okrs');
+      } else {
+        tasksBtn.classList.add('active');
+        okrBtn.classList.remove('active');
+        tasksPane.classList.add('active');
+        okrPane.classList.remove('active');
+        history.replaceState(null, '', '#tasks');
+      }
+    }
+
+    // Manejar hash inicial
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#tasks') {
+        switchNeoTab('tasks');
+      } else {
+        switchNeoTab('okr');
+      }
+    });
+  </script>
+</body>
+</html>

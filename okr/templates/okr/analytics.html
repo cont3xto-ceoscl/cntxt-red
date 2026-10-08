@@ -1,0 +1,90 @@
+{% extends "okr/base.html" %}
+{% load okr_extras %}
+{% block title %}Analítica{% endblock %}
+{% block nav_analytics_active %}text-cntxt-text font-semibold{% endblock %}
+
+{% block content %}
+<h1 class="font-display font-extrabold text-4xl text-white tracking-tight leading-none mb-2">Analítica</h1>
+<p class="text-cntxt-muted text-sm mb-8">{% if cycle %}{{ cycle.name }}{% else %}Sin ciclo activo.{% endif %} — comparación entre líneas y lo que necesita atención.</p>
+
+{% if cycle %}
+<div class="flex flex-wrap items-end gap-10 mb-10 pb-8 border-b border-cntxt-border">
+  <div>
+    <div class="font-display font-extrabold tracking-tight leading-none {% if overall_pct > 0 %}text-white{% else %}text-cntxt-muted{% endif %}">
+      {% if overall_pct > 0 %}<span class="text-7xl">{{ overall_pct }}</span><span class="text-2xl align-top text-cntxt-muted">%</span>{% else %}<span class="text-7xl">—</span>{% endif %}
+    </div>
+    <div class="text-[11px] text-cntxt-muted font-mono uppercase tracking-wider mt-1.5">avance general del ciclo</div>
+  </div>
+  <div class="flex items-center gap-8 pb-2">
+    <div>
+      <div class="font-display text-3xl font-extrabold text-white tracking-tight">{{ total_objectives }}</div>
+      <div class="text-[10px] text-cntxt-muted font-mono uppercase tracking-wider mt-1">objetivos activos</div>
+    </div>
+    <div>
+      <div class="font-display text-3xl font-extrabold tracking-tight {% if at_risk %}text-red-400{% else %}text-white{% endif %}">{{ at_risk|length }}</div>
+      <div class="text-[10px] text-cntxt-muted font-mono uppercase tracking-wider mt-1">en riesgo</div>
+    </div>
+  </div>
+</div>
+
+<div class="border border-cntxt-border rounded-2xl bg-cntxt-card p-6 mb-10" x-data="{ showTrend: false }">
+  <div class="flex items-center justify-between mb-5">
+    <div class="font-mono text-[10px] uppercase tracking-wider text-cntxt-muted">Avance por línea</div>
+    {% if line_trend %}
+    <button type="button" @click="showTrend = !showTrend"
+      class="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wide px-2.5 py-1 rounded-lg border border-cntxt-border text-cntxt-muted hover:text-cntxt-gold hover:border-cntxt-gold/40 transition"
+      :class="showTrend ? 'bg-cntxt-gold/10 text-cntxt-gold border-cntxt-gold/30' : ''">
+      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 17 9 11 13 15 21 6"/><polyline points="15 6 21 6 21 12"/></svg>
+      <span x-text="showTrend ? 'Ocultar tendencia' : 'Ver tendencia en el tiempo'"></span>
+    </button>
+    {% endif %}
+  </div>
+  {% if lines_data %}
+  <div class="space-y-4">
+    {% for row in lines_data %}
+    <div class="flex items-center gap-4">
+      <div class="w-28 shrink-0 flex items-center gap-2 min-w-0">
+        <span class="w-2 h-2 rounded-full shrink-0" style="background:{{ row.line.color_hex }}"></span>
+        <span class="font-display font-bold text-sm text-white truncate">{{ row.line.name }}</span>
+      </div>
+      <div class="flex-1 h-5 rounded-md overflow-hidden" style="background:{{ row.line.color_hex }}1a">
+        <div class="bar-fill h-full rounded-md" style="width:{{ row.pct }}%;background:{{ row.line.color_hex }};background:linear-gradient(90deg,{{ row.line.color_hex }},color-mix(in srgb,{{ row.line.color_hex }} 45%,white));box-shadow:0 0 6px {{ row.line.color_hex }}66"></div>
+      </div>
+      <span class="font-display text-base tracking-tight font-extrabold w-12 text-right shrink-0 {% if row.pct > 0 %}text-white{% else %}text-cntxt-muted{% endif %}">{{ row.pct }}%</span>
+      <span class="font-mono text-[10px] w-12 text-right shrink-0 {% if row.delta > 0 %}text-emerald-400{% elif row.delta < 0 %}text-red-400{% else %}text-cntxt-muted{% endif %}">{% if row.delta_label %}{{ row.delta_label }}{% endif %}</span>
+      <span class="font-mono text-[10px] text-cntxt-muted w-16 text-right shrink-0">{{ row.objectives_count }} obj.</span>
+      <span class="w-8 shrink-0 text-right">
+        {% if row.at_risk_count %}<span class="text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-red-400/10 text-red-400" title="{{ row.at_risk_count }} KR en riesgo">{{ row.at_risk_count }}</span>{% endif %}
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-cntxt-muted text-sm text-center py-6">Sin líneas con objetivos en este ciclo.</p>
+  {% endif %}
+  {% if line_trend %}
+  <div x-show="showTrend" x-transition x-cloak class="mt-6 pt-6 border-t border-cntxt-border">
+    {% trend_chart line_trend %}
+    <p class="text-[10px] text-cntxt-muted font-mono mt-2">Promedio diario de avance de check-ins reales, por línea — se completa con el uso.</p>
+  </div>
+  {% endif %}
+</div>
+
+<h2 class="font-display font-bold text-xl text-white tracking-tight mb-4">En riesgo</h2>
+<p class="text-cntxt-muted text-xs mb-4 max-w-2xl">Key Results marcados en ámbar o rojo — el juicio del owner, no el cálculo matemático.</p>
+<div class="space-y-2">
+  {% for r in at_risk %}
+  <a href="/{{ r.line.code }}/{% if cycle %}?cycle={{ cycle.id }}{% endif %}" class="flex items-center gap-4 border border-cntxt-border rounded-xl bg-cntxt-card px-5 py-3 hover:border-cntxt-gold/30 transition" style="box-shadow: inset 3px 0 0 0 {{ r.line.color_hex }}">
+    <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:{{ r.kr.confidence|confidence_hex }}"></span>
+    <span class="font-mono text-[10px] text-cntxt-muted shrink-0" style="color:{{ r.line.color_hex }}">{{ r.line.code|upper }}</span>
+    <span class="text-sm flex-1">{{ r.kr.text }}</span>
+    <span class="font-display text-xl tracking-tight font-extrabold text-white shrink-0">{{ r.kr.pct }}%</span>
+  </a>
+  {% empty %}
+  <p class="text-cntxt-muted text-sm">Nada marcado en ámbar o rojo todavía.</p>
+  {% endfor %}
+</div>
+{% else %}
+<div class="border border-dashed border-cntxt-border rounded-2xl p-12 text-center text-cntxt-muted">Sin ciclo activo — crea uno en <a href="/cycles/" class="text-cntxt-gold hover:underline">Ciclos</a>.</div>
+{% endif %}
+{% endblock %}

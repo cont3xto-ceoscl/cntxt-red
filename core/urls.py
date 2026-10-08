@@ -16,6 +16,8 @@ from .views import (
     SystemStatusView,
     LegacyFrontendView,
     TasksAppView,
+    EcosystemPortalView,
+    NeoUnifiedView,
     ChecklistProjectViewSet,
     ChecklistSystemViewSet,
     TasksTeamMemberViewSet,
@@ -37,12 +39,22 @@ router.register(r'tasks/projects', ChecklistProjectViewSet, basename='tasks_proj
 router.register(r'tasks/team-members', TasksTeamMemberViewSet, basename='tasks_team_member')
 
 urlpatterns = [
-    # Frontend SPA entrypoint
-    path('', LegacyFrontendView.as_view(), name='home'),
-    # CNTXT Tasks App
+    # Portal Raíz del Ecosistema CNTXT
+    path('', EcosystemPortalView.as_view(), name='ecosystem_home'),
+
+    # Portal R.E.D. (Relaciones Estratégicas y Dinámica Comercial)
+    path('red/', LegacyFrontendView.as_view(), name='red_portal'),
+    path('red', RedirectView.as_view(url='/red/', permanent=False)),
+
+    # N.E.O. Hub Unificado (OKRs + Tasks)
+    path('NEO/', NeoUnifiedView.as_view(), name='neo_portal'),
+    path('NEO', RedirectView.as_view(url='/NEO/', permanent=False)),
+    path('neo/', NeoUnifiedView.as_view(), name='neo_portal_lower'),
+    path('neo', RedirectView.as_view(url='/NEO/', permanent=False)),
+
+    # CNTXT Tasks App (acceso directo)
     path('tasks/', TasksAppView.as_view(), name='tasks_app'),
     path('tasks', RedirectView.as_view(url='/tasks/', permanent=False)),
-
 
     # REST API — recursos del CRM
     path('api/', include(router.urls)),
@@ -60,4 +72,3 @@ urlpatterns = [
     # Sync multi-dispositivo Tasks
     path('api/tasks/sync/', TasksSyncView.as_view(), name='tasks_sync'),
 ]
-

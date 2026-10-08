@@ -1,0 +1,33 @@
+<div id="line-card-{{ entry.line.id }}" class="relative overflow-hidden border border-cntxt-border rounded-2xl bg-cntxt-card p-6 transition-colors hover:bg-white/[0.02]" style="border-top: 2px solid {{ entry.line.color_hex }}" x-data="{ showObjetivo: false }">
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 100% 0%, {{ entry.line.color_hex }}1f, transparent 60%)"></div>
+  <a href="/{{ entry.line.code }}/{% if cycle %}?cycle={{ cycle.id }}{% endif %}" class="absolute inset-0" aria-label="{% if view_mode == 'edicion' %}Entrar a{% else %}Ver{% endif %} {{ entry.line.name }}"></a>
+  <div class="relative z-10 pointer-events-none">
+    <div class="flex items-start justify-between">
+      <span class="w-3 h-3 rounded-full inline-block mt-1" style="background:{{ entry.line.color_hex }}"></span>
+      {% if view_mode == 'edicion' %}
+      <button type="button" hx-get="/systems/{{ entry.line.id }}/edit/" hx-target="#line-edit-slot-{{ entry.line.id }}" hx-swap="innerHTML"
+        class="pointer-events-auto text-[10px] font-mono uppercase tracking-wide px-2.5 py-1 rounded-lg border border-cntxt-border text-cntxt-muted hover:text-cntxt-gold hover:border-cntxt-gold/40 transition">Editar</button>
+      {% endif %}
+    </div>
+    <h2 class="font-display font-extrabold text-lg text-white tracking-tight mt-3">{{ entry.line.name }}</h2>
+    <p class="text-xs text-cntxt-muted mt-1">{{ entry.line.full_name|default:entry.line.name }}</p>
+    {% if entry.plan and entry.plan.summary_text %}
+    <div class="mt-4">
+      <button type="button" @click="showObjetivo = !showObjetivo"
+        class="pointer-events-auto flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wide px-2.5 py-1 rounded-lg border border-cntxt-border text-cntxt-muted hover:text-cntxt-gold hover:border-cntxt-gold/40 transition"
+        :class="showObjetivo ? 'bg-cntxt-gold/10 text-cntxt-gold border-cntxt-gold/30' : ''">
+        <svg viewBox="0 0 24 24" width="8" height="8" fill="none" stroke="currentColor" stroke-width="3" class="transition-transform duration-300 shrink-0" :class="showObjetivo ? 'rotate-90' : ''"><polyline points="9 6 15 12 9 18"/></svg>
+        <span>Objetivo del ciclo</span>
+      </button>
+      <p x-show="showObjetivo" x-transition x-cloak class="text-xs text-cntxt-text/80 leading-relaxed mt-1.5">{{ entry.plan.summary_text }}</p>
+    </div>
+    {% endif %}
+    <div class="mt-7">
+      <div class="font-display font-extrabold tracking-tight leading-none {% if entry.plan and entry.plan.pct > 0 %}text-white{% else %}text-cntxt-muted{% endif %}">
+        {% if entry.plan and entry.plan.pct > 0 %}<span class="text-5xl">{{ entry.plan.pct }}</span><span class="text-lg align-top text-cntxt-muted">%</span>{% else %}<span class="text-5xl">—</span>{% endif %}
+      </div>
+      <div class="text-[10px] text-cntxt-muted font-mono uppercase tracking-wider mt-1.5">avance</div>
+    </div>
+    {% if view_mode == 'edicion' %}<div id="line-edit-slot-{{ entry.line.id }}" class="mt-4 relative z-10 pointer-events-auto"></div>{% endif %}
+  </div>
+</div>

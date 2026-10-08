@@ -765,3 +765,23 @@ class TasksSyncView(APIView):
 
         # Retornar estado consolidado completo
         return self.get(request, *args, **kwargs)
+
+
+class EcosystemPortalView(View):
+    """Serve el portal principal del ecosistema centralcntxt.tech."""
+    def get(self, request, *args, **kwargs):
+        portal_file = settings.BASE_DIR / 'templates' / 'portal_ecosistema.html'
+        if portal_file.exists():
+            with open(portal_file, 'r', encoding='utf-8') as f:
+                return HttpResponse(f.read(), content_type='text/html')
+        return LegacyFrontendView().get(request, *args, **kwargs)
+
+
+class NeoUnifiedView(View):
+    """Serve el hub unificado N.E.O. (OKRs + Tasks)."""
+    def get(self, request, *args, **kwargs):
+        neo_file = settings.BASE_DIR / 'templates' / 'neo_portal.html'
+        if neo_file.exists():
+            with open(neo_file, 'r', encoding='utf-8') as f:
+                return HttpResponse(f.read(), content_type='text/html')
+        return JsonResponse({'error': 'N.E.O. portal template not found'}, status=404)
