@@ -236,3 +236,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # URL del Hub principal de CNTXT
 HUB_URL = '/'
+
+# Permitir incrustación en pestañas del hub N.E.O. en el mismo dominio
+X_FRAME_OPTIONS = 'SAMEORIGIN'
